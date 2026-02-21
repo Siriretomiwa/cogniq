@@ -4,404 +4,233 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>CognIQ — Master Any Subject</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    /* ── TOKENS ── */
-    :root {
-      --bg:       #07080f;
-      --bg2:      #0d0f1a;
-      --surface:  #111320;
-      --surface2: #181b2e;
-      --border:   #1e2235;
-      --border2:  #252840;
-      --blue:     #2e7cf6;
-      --blue-dim: rgba(46,124,246,0.12);
-      --blue-glow:rgba(46,124,246,0.25);
-      --cyan:     #00d4ff;
-      --gold:     #f5c842;
-      --red:      #ff5c5c;
-      --green:    #34d98b;
-      --text:     #e4e6f0;
-      --text-2:   #8890b0;
-      --text-3:   #4a5070;
-      --r:        14px;
-      --r-sm:     9px;
-    }
+    :root{--bg:#06060e;--bg2:#0c0c1a;--surface:#0f0f20;--surface2:#161628;--border:#1e1e35;--border2:#28284a;--v1:#7c6af7;--v2:#9d4edd;--v3:#c77dff;--cyan:#6af7c2;--gold:#f7c26a;--red:#f76a6a;--green:#6af7a0;--text:#eeeef8;--text-2:#8888b0;--text-3:#44446a;--glow:rgba(124,106,247,.35);--glow2:rgba(124,106,247,.12);--r:18px;--r-sm:11px;}
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{height:100%;overflow:hidden;}
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:'Instrument Sans',sans-serif;
-      font-size:15px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-
-    /* grid bg */
-    body::before{
-      content:'';position:fixed;inset:0;
-      background-image:
-        linear-gradient(rgba(46,124,246,0.03) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(46,124,246,0.03) 1px,transparent 1px);
-      background-size:40px 40px;
-      pointer-events:none;z-index:0;
-    }
-
-    #app{
-      position:relative;z-index:1;
-      width:100%;max-width:500px;
-      height:100%;
-      display:flex;flex-direction:column;
-      overflow:hidden;
-    }
-
-    /* ── SCREENS ── */
-    .screen{display:none;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden;}
-    .screen.active{display:flex;animation:fadeUp .35s ease;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
-    /* ── SCROLLABLE CONTENT ── */
-    .scroll-body{flex:1;overflow-y:auto;padding:20px 18px 100px;}
+    body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;display:flex;flex-direction:column;align-items:center;}
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.18;pointer-events:none;z-index:0;animation:orbFloat 12s ease-in-out infinite;}
+    .orb1{width:400px;height:400px;background:var(--v1);top:-150px;right:-100px;animation-delay:0s;}
+    .orb2{width:300px;height:300px;background:var(--v2);bottom:-100px;left:-80px;animation-delay:-4s;}
+    .orb3{width:200px;height:200px;background:var(--cyan);top:40%;left:20%;opacity:.08;animation-delay:-8s;}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-30px) scale(1.05);}66%{transform:translate(-15px,20px) scale(.95);}}
+    #app{position:relative;z-index:1;width:100%;max-width:500px;height:100%;display:flex;flex-direction:column;overflow:hidden;}
+    .screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+    .screen.active{display:flex;}
+    .screen.slide-in{animation:slideIn .38s cubic-bezier(.22,1,.36,1);}
+    .screen.slide-back{animation:slideBack .35s cubic-bezier(.22,1,.36,1);}
+    @keyframes slideIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes slideBack{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    .scroll-body{flex:1;overflow-y:auto;padding:20px 18px 110px;}
     .scroll-body::-webkit-scrollbar{width:3px;}
     .scroll-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-
-    /* ── TOP BAR ── */
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:16px 18px 12px;
-      border-bottom:1px solid var(--border);
-      background:var(--bg);
-      position:sticky;top:0;z-index:20;
-      flex-shrink:0;
-    }
-    .topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);}
-    .topbar-logo span{color:var(--blue);}
-
-    /* ── USAGE PILL ── */
-    .usage-pill{
-      display:flex;align-items:center;gap:6px;
-      padding:5px 10px;border-radius:20px;
-      border:1px solid var(--border2);
-      background:var(--surface);
-      font-size:11px;font-weight:600;color:var(--text-2);
-    }
-    .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 12px;border-bottom:1px solid var(--border);background:rgba(6,6,14,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:20;flex-shrink:0;}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;}
+    .logo em{font-style:normal;color:var(--v1);}
+    .usage-pill{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;font-weight:600;color:var(--text-2);transition:all .3s;}
+    .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s;}
     .usage-dot.warn{background:var(--gold);}
-    .usage-dot.over{background:var(--red);}
-
-    /* ── BOTTOM NAV ── */
-    .bottom-nav{
-      display:none;
-      border-top:1px solid var(--border);
-      background:var(--bg);
-      position:sticky;bottom:0;z-index:20;
-      flex-shrink:0;
-    }
+    .usage-dot.over{background:var(--red);animation:blink 1s infinite;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .bottom-nav{display:none;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);position:sticky;bottom:0;z-index:20;flex-shrink:0;}
     .bottom-nav.show{display:flex;}
-    .nav-btn{
-      flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-      padding:11px 4px 13px;border:none;background:none;
-      font-family:'Instrument Sans',sans-serif;
-      color:var(--text-3);cursor:pointer;transition:color .2s;
-    }
-    .nav-btn.active{color:var(--blue);}
-    .nav-icon{font-size:19px;}
-    .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
-
-    /* ── BUTTONS ── */
-    .btn{
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      width:100%;padding:15px 18px;border-radius:var(--r-sm);border:none;
-      font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:600;
-      cursor:pointer;transition:all .18s;
-    }
-    .btn-blue{background:var(--blue);color:#fff;}
-    .btn-blue:hover{background:#3d88ff;transform:translateY(-1px);}
-    .btn-blue:active{transform:translateY(0);}
+    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px 14px;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .2s;position:relative;}
+    .nav-btn.active{color:var(--v1);}
+    .nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--v1);border-radius:0 0 2px 2px;box-shadow:0 0 10px var(--glow);}
+    .nav-icon{font-size:20px;}
+    .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
+    .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 20px;border-radius:var(--r-sm);border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
+    .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;}
+    .btn-primary{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 4px 24px rgba(124,106,247,.4);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,106,247,.5);}
+    .btn-primary:active{transform:translateY(0);}
     .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
-    .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+    .btn-outline:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
     .btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
-    .btn-ghost:hover{color:var(--text);}
-    .btn-sm{padding:9px 14px;font-size:13px;width:auto;border-radius:8px;}
-    .btn-icon{width:42px;height:42px;padding:0;border-radius:10px;flex-shrink:0;}
-    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(255,92,92,.3);}
-
-    /* ── INPUTS ── */
-    .field{display:flex;flex-direction:column;gap:5px;}
-    .field label{font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;}
-    input[type=text],input[type=email],textarea,select{
-      width:100%;background:var(--surface2);border:1px solid var(--border2);
-      border-radius:var(--r-sm);padding:13px 15px;
-      color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:15px;
-      outline:none;transition:border-color .2s;
-    }
-    input:focus,textarea:focus{border-color:var(--blue);}
+    .btn-ghost:hover{color:var(--text);border-color:var(--border2);}
+    .btn-sm{padding:10px 16px;font-size:13px;width:auto;border-radius:9px;}
+    .btn-icon{width:44px;height:44px;padding:0;border-radius:12px;flex-shrink:0;}
+    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(247,106,106,.3);}
+    .field{display:flex;flex-direction:column;gap:6px;}
+    .field label{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;}
+    input[type=text],input[type=email],textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:all .2s;}
+    input:focus,textarea:focus{border-color:var(--v1);box-shadow:0 0 0 3px rgba(124,106,247,.12);}
     textarea{resize:vertical;min-height:110px;}
     ::placeholder{color:var(--text-3);}
-
-    /* ── CARDS ── */
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
-    .card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px;}
-
-    /* ── STAT GRID ── */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:border-color .2s;}
+    .card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px;}
+    .glow-card{background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(157,78,221,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;}
+    .glow-card::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(124,106,247,.15),transparent 70%);pointer-events:none;}
     .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-    .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 10px;text-align:center;}
-    .stat-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.5px;color:var(--blue);}
-    .stat-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
-
-    /* ── UPLOAD ── */
-    .drop-zone{
-      border:2px dashed var(--border2);border-radius:var(--r);
-      padding:30px 18px;text-align:center;cursor:pointer;
-      transition:all .2s;background:var(--surface);
-    }
-    .drop-zone:hover,.drop-zone.over{border-color:var(--blue);background:var(--blue-dim);}
-    .drop-icon{font-size:34px;margin-bottom:10px;}
-    .drop-title{font-weight:700;font-size:16px;margin-bottom:4px;}
-    .drop-sub{font-size:13px;color:var(--text-2);}
+    .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 10px;text-align:center;transition:all .2s;cursor:default;}
+    .stat-box:hover{border-color:var(--v1);transform:translateY(-2px);}
+    .stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--v1);}
+    .stat-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:3px;}
+    .drop-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:32px 18px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface);}
+    .drop-zone:hover,.drop-zone.over{border-color:var(--v1);background:var(--glow2);box-shadow:0 0 30px rgba(124,106,247,.1);}
+    .drop-icon{font-size:38px;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+    .drop-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;}
+    .drop-sub{font-size:13px;color:var(--text-2);margin-top:6px;}
     #fileInput{display:none;}
-    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;}
+    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;animation:fadeIn .3s ease;}
     .file-row-info{flex:1;min-width:0;}
     .file-row-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .file-row-size{font-size:11px;color:var(--text-2);margin-top:2px;}
-    .file-row-del{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:15px;padding:3px;}
-
-    /* ── FIELD TAGS ── */
+    .file-row-del{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;padding:3px;}
     .field-tags{display:flex;flex-wrap:wrap;gap:8px;}
-    .ftag{
-      padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;
-      background:var(--surface2);border:1px solid var(--border2);
-      cursor:pointer;transition:all .18s;color:var(--text-2);
-    }
-    .ftag:hover,.ftag.sel{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
-
-    /* ── PROGRESS BAR ── */
+    .ftag{padding:8px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:all .18s;color:var(--text-2);}
+    .ftag:hover,.ftag.sel{background:var(--glow2);border-color:var(--v1);color:var(--v1);box-shadow:0 0 12px rgba(124,106,247,.15);}
     .prog-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
-    .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;transition:width .6s ease;}
-
-    /* ── MODE PILLS ── */
-    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;}
-    .mode-pill{flex:1;text-align:center;padding:9px 6px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Instrument Sans',sans-serif;transition:all .18s;}
-    .mode-pill.active{background:var(--blue);color:#fff;}
-
-    /* ── SCORE RING ── */
-    .ring-wrap{position:relative;width:96px;height:96px;flex-shrink:0;}
-    .ring-wrap svg{transform:rotate(-90deg);}
-    .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--blue);}
-
-    /* ── QUESTION CARD ── */
-    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-    .q-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-    .q-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);}
+    .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--v1),var(--cyan));transition:width .7s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(124,106,247,.6);}
+    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:4px;}
+    .mode-pill{flex:1;text-align:center;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .22s;}
+    .mode-pill.active{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 2px 12px rgba(124,106,247,.4);}
+    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 40px rgba(0,0,0,.4);}
+    .q-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(124,106,247,.06),transparent);}
+    .q-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--v1);}
     .q-meta{font-size:11px;color:var(--text-3);}
-    .q-body{padding:18px;}
-    .q-text{font-size:15px;line-height:1.65;font-weight:500;margin-bottom:18px;}
-    .opts{display:flex;flex-direction:column;gap:9px;}
-    .opt{
-      display:flex;align-items:flex-start;gap:11px;
-      padding:13px 14px;border-radius:var(--r-sm);
-      border:1px solid var(--border);cursor:pointer;
-      transition:all .18s;background:var(--surface2);
-    }
-    .opt:hover{border-color:var(--blue);}
-    .opt.correct{border-color:var(--green);background:rgba(52,217,139,.08);}
-    .opt.wrong{border-color:var(--red);background:rgba(255,92,92,.08);}
-    .opt-letter{
-      width:26px;height:26px;border-radius:7px;
-      background:var(--border);display:flex;align-items:center;justify-content:center;
-      font-size:11px;font-weight:700;flex-shrink:0;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
-    }
+    .q-body{padding:20px;}
+    .q-text{font-size:15px;line-height:1.7;font-weight:500;margin-bottom:20px;}
+    .opts{display:flex;flex-direction:column;gap:10px;}
+    .opt{display:flex;align-items:flex-start;gap:12px;padding:14px 15px;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--surface2);animation:fadeUp .3s ease both;}
+    .opt:nth-child(1){animation-delay:.05s}.opt:nth-child(2){animation-delay:.1s}.opt:nth-child(3){animation-delay:.15s}.opt:nth-child(4){animation-delay:.2s}
+    .opt:hover{border-color:var(--v1);background:var(--glow2);transform:translateX(3px);}
+    .opt.correct{border-color:var(--green);background:rgba(106,247,160,.08);transform:none;}
+    .opt.wrong{border-color:var(--red);background:rgba(247,106,106,.08);}
     .opt.correct .opt-letter{background:var(--green);color:#000;}
     .opt.wrong .opt-letter{background:var(--red);color:#fff;}
-    .opt-text{font-size:14px;line-height:1.5;flex:1;padding-top:3px;}
-
-    /* ── FEEDBACK ── */
-    .feedback{margin-top:14px;padding:13px 15px;border-radius:var(--r-sm);font-size:13px;line-height:1.6;display:none;}
-    .feedback.show{display:block;}
-    .feedback.ok{background:rgba(52,217,139,.1);border:1px solid rgba(52,217,139,.4);color:#6af5b0;}
-    .feedback.bad{background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.4);color:#ffaaaa;}
-
-    /* ── WRITTEN ANSWER ── */
-    .written-area{margin-top:4px;}
-    .written-area textarea{min-height:100px;}
-    .submit-btn-wrap{margin-top:10px;}
-
-    /* ── CHAT ── */
+    .opt-letter{width:28px;height:28px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;letter-spacing:.5px;transition:all .2s;}
+    .opt-text{font-size:14px;line-height:1.55;flex:1;padding-top:4px;}
+    .feedback{margin-top:16px;padding:14px 16px;border-radius:var(--r-sm);font-size:13px;line-height:1.65;display:none;}
+    .feedback.show{display:block;animation:fadeUp .3s ease;}
+    .feedback.ok{background:rgba(106,247,160,.08);border:1px solid rgba(106,247,160,.3);color:#8ff5b8;}
+    .feedback.bad{background:rgba(247,106,106,.08);border:1px solid rgba(247,106,106,.3);color:#ffb8b8;}
     .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:16px 18px;}
     .chat-body::-webkit-scrollbar{width:3px;}
     .chat-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-    .msg{display:flex;flex-direction:column;gap:3px;max-width:86%;animation:fadeUp .25s ease;}
+    .msg{display:flex;flex-direction:column;gap:4px;max-width:87%;animation:fadeUp .3s ease;}
     .msg.ai{align-self:flex-start;}
     .msg.user{align-self:flex-end;}
-    .msg-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 3px;}
+    .msg-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 4px;}
     .msg.user .msg-name{text-align:right;}
-    .msg-bub{padding:12px 15px;border-radius:13px;font-size:14px;line-height:1.65;}
+    .msg-bub{padding:13px 16px;border-radius:14px;font-size:14px;line-height:1.65;}
     .msg.ai .msg-bub{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px;}
-    .msg.user .msg-bub{background:var(--blue);color:#fff;border-bottom-right-radius:3px;}
-    .chat-input-bar{display:flex;gap:8px;align-items:flex-end;padding:10px 18px 20px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;}
-    .chat-input-bar textarea{min-height:44px;max-height:110px;padding:12px 14px;resize:none;flex:1;}
-
-    /* ── TOPIC CHIPS ── */
-    .topic-wrap{display:flex;flex-wrap:wrap;gap:7px;}
-    .topic-chip{padding:7px 13px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .18s;}
-    .topic-chip:hover{border-color:var(--blue);color:var(--blue);}
-
-    /* ── ONBOARDING ── */
-    .onboard-step{display:none;flex-direction:column;gap:20px;padding:24px 18px 40px;}
-    .onboard-step.active{display:flex;animation:fadeUp .35s ease;}
-    .step-indicator{display:flex;gap:6px;justify-content:center;margin-bottom:4px;}
-    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);}
-    .step-dot.active{background:var(--blue);width:20px;border-radius:3px;}
-    .ob-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.5px;line-height:1.1;}
-    .ob-sub{font-size:14px;color:var(--text-2);line-height:1.6;}
-
-    /* ── UPGRADE WALL ── */
-    .upgrade-overlay{
-      position:fixed;inset:0;z-index:100;
-      background:rgba(7,8,15,.92);
-      display:none;align-items:flex-end;justify-content:center;
-      backdrop-filter:blur(8px);
-    }
+    .msg.user .msg-bub{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;border-bottom-right-radius:3px;box-shadow:0 4px 16px rgba(124,106,247,.35);}
+    .chat-bar{display:flex;gap:10px;align-items:flex-end;padding:12px 18px 22px;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);flex-shrink:0;}
+    .chat-bar textarea{min-height:46px;max-height:120px;padding:13px 15px;resize:none;flex:1;}
+    .topic-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+    .topic-chip{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .18s;}
+    .topic-chip:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
+    .ob-step{display:none;flex-direction:column;gap:22px;padding:24px 18px 50px;animation:fadeUp .4s ease;}
+    .ob-step.active{display:flex;}
+    .step-dots{display:flex;gap:6px;justify-content:center;}
+    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;}
+    .step-dot.active{background:var(--v1);width:22px;border-radius:3px;box-shadow:0 0 8px var(--glow);}
+    .ob-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);}
+    .ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,8vw,40px);line-height:1.08;letter-spacing:-.5px;}
+    .ob-title em{font-style:normal;color:var(--v1);}
+    .ob-sub{font-size:15px;color:var(--text-2);line-height:1.65;}
+    .feat-row{display:flex;gap:13px;align-items:flex-start;animation:fadeUp .4s ease both;}
+    .feat-icon{width:40px;height:40px;border-radius:11px;background:var(--glow2);border:1px solid rgba(124,106,247,.25);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .feat-title{font-weight:600;font-size:14px;}
+    .feat-sub{color:var(--text-2);font-size:13px;line-height:1.5;margin-top:2px;}
+    .upgrade-overlay{position:fixed;inset:0;z-index:100;background:rgba(6,6,14,.85);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(12px);}
     .upgrade-overlay.show{display:flex;}
-    .upgrade-sheet{
-      width:100%;max-width:500px;
-      background:var(--bg2);
-      border:1px solid var(--border2);
-      border-bottom:none;
-      border-radius:20px 20px 0 0;
-      padding:32px 24px 40px;
-      animation:slideUp .3s ease;
-    }
+    .upgrade-sheet{width:100%;max-width:500px;background:var(--bg2);border:1px solid var(--border2);border-bottom:none;border-radius:24px 24px 0 0;padding:32px 24px 44px;animation:slideUp .35s cubic-bezier(.22,1,.36,1);}
     @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:16px;}
-    .upgrade-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.5px;line-height:1.1;margin-bottom:10px;}
-    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:24px;}
-    .upgrade-perks{display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
-    .perk{display:flex;align-items:center;gap:10px;font-size:14px;}
+    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;background:rgba(247,194,106,.1);border:1px solid rgba(247,194,106,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:18px;}
+    .upgrade-title{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;letter-spacing:-.3px;line-height:1.1;margin-bottom:10px;}
+    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:22px;}
+    .perk{display:flex;align-items:center;gap:10px;font-size:14px;padding:4px 0;}
     .perk-icon{color:var(--green);font-size:16px;flex-shrink:0;}
-
-    /* ── LOADING ── */
-    .loading{display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:14px;padding:16px 0;}
-    .spin{width:17px;height:17px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    .loading{display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:14px;padding:20px 0;}
+    .spin{width:18px;height:18px;flex-shrink:0;border:2px solid var(--border2);border-top-color:var(--v1);border-radius:50%;animation:spin .7s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg);}}
-    .dots{display:flex;gap:4px;align-items:center;}
-    .dots span{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:dp 1.2s ease-in-out infinite;}
-    .dots span:nth-child(2){animation-delay:.2s;}
-    .dots span:nth-child(3){animation-delay:.4s;}
+    .dots{display:flex;gap:5px;align-items:center;}
+    .dots span{width:7px;height:7px;border-radius:50%;background:var(--v1);animation:dp 1.2s ease-in-out infinite;}
+    .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
     @keyframes dp{0%,80%,100%{transform:scale(.5);opacity:.3;}40%{transform:scale(1);opacity:1;}}
-
-    /* ── UTILS ── */
     .gap-8{display:flex;flex-direction:column;gap:8px;}
     .gap-12{display:flex;flex-direction:column;gap:12px;}
     .gap-16{display:flex;flex-direction:column;gap:16px;}
     .gap-20{display:flex;flex-direction:column;gap:20px;}
-    .row{display:flex;gap:10px;align-items:center;}
-    .sec-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.5px;color:var(--text);}
-    .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);}
+    .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.2px;}
     .dim{color:var(--text-2);font-size:13px;}
-    .accent{color:var(--blue);}
-    .success{color:var(--green);}
-    .warn-text{color:var(--gold);}
-    .divider{height:1px;background:var(--border);margin:4px 0;}
   </style>
 </head>
 <body>
+<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 <div id="app">
 
-  <!-- ══════════════════════════════════
-       ONBOARDING (first-time users)
-  ══════════════════════════════════ -->
+  <!-- ONBOARDING -->
   <div class="screen active" id="screen-onboard">
     <div style="flex:1;overflow-y:auto;">
-
-      <!-- Step 1: Welcome -->
-      <div class="onboard-step active" id="ob1">
-        <div style="padding-top:16px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:28px;">Cogn<span style="color:var(--blue)">IQ</span></div>
-          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:12px;">Cognitive Mastery Engine</div>
-          <div class="ob-title">Master any<br/>subject.<br/><span style="color:var(--blue)">Any field.</span></div>
-          <p class="ob-sub" style="margin-top:14px;">Upload your materials — notes, slides, textbooks. CognIQ builds a personalized AI training system tailored exactly to your course.</p>
+      <div class="ob-step active" id="ob1">
+        <div style="padding-top:10px;">
+          <div class="logo" style="font-size:26px;margin-bottom:28px;">Cogn<em>IQ</em></div>
+          <div class="ob-tag" style="margin-bottom:14px;">Cognitive Mastery Engine</div>
+          <div class="ob-title">Master any<br/>subject.<br/><em>Any field.</em></div>
+          <p class="ob-sub" style="margin-top:16px;">Upload your materials. Get diagnosed. Train with AI that adapts to exactly what you need to know.</p>
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔬</div>
-            <div><div style="font-weight:600;font-size:14px;">Any subject, any level</div><div class="dim" style="margin-top:2px;">Law, Medicine, Engineering, Finance, Sciences — CognIQ adapts completely.</div></div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div>
-            <div><div style="font-weight:600;font-size:14px;">Exam + Mastery modes</div><div class="dim" style="margin-top:2px;">Train for your exact exam format or build deep conceptual understanding.</div></div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧠</div>
-            <div><div style="font-weight:600;font-size:14px;">AI that knows your gaps</div><div class="dim" style="margin-top:2px;">Tracks what you know, where you're weak, and adapts every session.</div></div>
-          </div>
+        <div class="gap-12" style="margin-top:4px;">
+          <div class="feat-row" style="animation-delay:.1s"><div class="feat-icon">🔬</div><div><div class="feat-title">Any subject, any level</div><div class="feat-sub">Law, Medicine, Engineering, Finance, Sciences — fully adapts to your field.</div></div></div>
+          <div class="feat-row" style="animation-delay:.18s"><div class="feat-icon">⚡</div><div><div class="feat-title">Exam + Mastery modes</div><div class="feat-sub">Train for your exact exam format or build deep understanding that lasts.</div></div></div>
+          <div class="feat-row" style="animation-delay:.26s"><div class="feat-icon">🧠</div><div><div class="feat-title">AI that knows your gaps</div><div class="feat-sub">Tracks weak areas, adapts every session, never repeats what you already know.</div></div></div>
         </div>
-        <div class="gap-8" style="margin-top:8px;">
-          <button class="btn btn-blue" onclick="obNext(2)">Get Started →</button>
+        <div class="gap-8" style="animation:fadeUp .4s .34s ease both;">
+          <button class="btn btn-primary" onclick="obGo(2)">Get Started →</button>
           <button class="btn btn-ghost" onclick="skipOnboard()">I already have an account</button>
         </div>
-        <div class="step-indicator"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+        <div class="step-dots"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
       </div>
 
-      <!-- Step 2: Subject setup -->
-      <div class="onboard-step" id="ob2">
-        <div class="step-indicator"><div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
-        <div>
-          <div class="ob-title">What are you<br/>studying?</div>
-          <p class="ob-sub" style="margin-top:10px;">Tell us your subject and how much time you have. CognIQ will build your learning plan around it.</p>
-        </div>
+      <div class="ob-step" id="ob2">
+        <div class="step-dots"><div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
+        <div><div class="ob-title">What are you<br/>studying?</div><p class="ob-sub" style="margin-top:10px;">Tell us your subject, exam format, and timeline.</p></div>
         <div class="gap-16">
-          <div class="field">
-            <label>Subject or Course Name</label>
-            <input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Constitutional Law, CFA Level 1..."/>
-          </div>
+          <div class="field"><label>Subject or Course Name</label><input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Contract Law, CFA Level 1..."/></div>
           <div>
-            <div class="label" style="margin-bottom:10px;">Or pick your field</div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Or pick your field</div>
             <div class="field-tags" id="fieldTags">
               <div class="ftag" onclick="pickField(this,'Medicine & Health Sciences')">🏥 Medicine</div>
               <div class="ftag" onclick="pickField(this,'Law & Legal Studies')">⚖️ Law</div>
               <div class="ftag" onclick="pickField(this,'Engineering')">⚙️ Engineering</div>
-              <div class="ftag" onclick="pickField(this,'Food Microbiology')">🔬 Microbiology</div>
+              <div class="ftag" onclick="pickField(this,'Food Science & Microbiology')">🔬 Microbiology</div>
               <div class="ftag" onclick="pickField(this,'Finance & Accounting')">📈 Finance</div>
-              <div class="ftag" onclick="pickField(this,'Computer Science')">💻 Computer Science</div>
+              <div class="ftag" onclick="pickField(this,'Computer Science')">💻 CS / Tech</div>
               <div class="ftag" onclick="pickField(this,'Business & Management')">💼 Business</div>
               <div class="ftag" onclick="pickField(this,'Pharmacy & Pharmacology')">💊 Pharmacy</div>
-              <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
               <div class="ftag" onclick="pickField(this,'Psychology & Neuroscience')">🧠 Psychology</div>
+              <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
               <div class="ftag" onclick="pickField(this,'Other')">✦ Other</div>
             </div>
           </div>
-          <div class="field">
-            <label>Days Until Your Exam</label>
-            <input type="text" id="ob-days" placeholder="e.g. 60" value="60"/>
-          </div>
-          <div class="field">
-            <label>Exam Format (helps tailor questions)</label>
-            <div class="field-tags" id="examFormatTags" style="margin-top:6px;">
-              <div class="ftag" onclick="toggleFormat(this,'MCQ')">MCQ</div>
-              <div class="ftag" onclick="toggleFormat(this,'Written Essays')">Written Essays</div>
-              <div class="ftag" onclick="toggleFormat(this,'Case Studies')">Case Studies</div>
-              <div class="ftag" onclick="toggleFormat(this,'True / False')">True / False</div>
-              <div class="ftag" onclick="toggleFormat(this,'Viva / Oral')">Viva / Oral</div>
-              <div class="ftag" onclick="toggleFormat(this,'Practical')">Practical</div>
+          <div class="field"><label>Days Until Your Exam</label><input type="text" id="ob-days" placeholder="60" value="60"/></div>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Exam Format (select all that apply)</div>
+            <div class="field-tags" id="fmtTags">
+              <div class="ftag" onclick="toggleFmt(this,'MCQ')">MCQ</div>
+              <div class="ftag" onclick="toggleFmt(this,'Written Essays')">Written Essays</div>
+              <div class="ftag" onclick="toggleFmt(this,'Case Studies')">Case Studies</div>
+              <div class="ftag" onclick="toggleFmt(this,'True / False')">True / False</div>
+              <div class="ftag" onclick="toggleFmt(this,'Viva / Oral')">Viva / Oral</div>
+              <div class="ftag" onclick="toggleFmt(this,'Practical')">Practical</div>
             </div>
           </div>
         </div>
         <div class="gap-8">
-          <button class="btn btn-blue" onclick="obNext(3)">Continue →</button>
-          <button class="btn btn-ghost btn-sm" onclick="obNext(1)" style="width:100%">← Back</button>
+          <button class="btn btn-primary" onclick="obGo(3)">Continue →</button>
+          <button class="btn btn-ghost btn-sm" onclick="obGo(1)" style="width:100%">← Back</button>
         </div>
       </div>
 
-      <!-- Step 3: Upload -->
-      <div class="onboard-step" id="ob3">
-        <div class="step-indicator"><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div></div>
-        <div>
-          <div class="ob-title">Upload your<br/>materials</div>
-          <p class="ob-sub" style="margin-top:10px;">Upload notes, slides, or textbook excerpts. The more you give, the more personalized your training. You can also skip and use AI's general knowledge.</p>
-        </div>
+      <div class="ob-step" id="ob3">
+        <div class="step-dots"><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div></div>
+        <div><div class="ob-title">Upload your<br/>materials</div><p class="ob-sub" style="margin-top:10px;">The more you upload, the more personalised your training. Or skip and let the AI use its own knowledge.</p></div>
         <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
           <div class="drop-icon">📚</div>
           <div class="drop-title">Tap to upload files</div>
@@ -409,706 +238,322 @@
         </div>
         <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)"/>
         <div id="fileListWrap" style="display:none" class="gap-8">
-          <div class="label">Uploaded Files</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);">Uploaded Files</div>
           <div class="gap-8" id="fileList"></div>
         </div>
-        <div class="field">
-          <label>Paste Syllabus or Key Topics (optional)</label>
-          <textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or any key content here..."></textarea>
-        </div>
+        <div class="field"><label>Paste Syllabus or Key Topics (optional)</label><textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or key content here — this greatly improves question quality..."></textarea></div>
         <div class="gap-8">
-          <button class="btn btn-blue" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
+          <button class="btn btn-primary" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
           <button class="btn btn-ghost btn-sm" onclick="skipAndLaunch()" style="width:100%">Skip — Use AI general knowledge</button>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- ══════════════════════════════════
-       DASHBOARD
-  ══════════════════════════════════ -->
+  <!-- DASHBOARD -->
   <div class="screen" id="screen-dash">
-    <div class="topbar">
-      <div class="topbar-logo">Cogn<span>IQ</span></div>
-      <div class="usage-pill">
-        <div class="usage-dot" id="usageDot"></div>
-        <span id="usageText">20 free left</span>
-      </div>
-    </div>
+    <div class="topbar"><div class="logo">Cogn<em>IQ</em></div><div class="usage-pill"><div class="usage-dot" id="usageDot"></div><span id="usageText">20 free</span></div></div>
     <div class="scroll-body gap-20">
-
-      <!-- Subject banner -->
-      <div style="background:var(--blue-dim);border:1px solid rgba(46,124,246,.2);border-radius:var(--r);padding:16px 18px;">
-        <div class="label" style="margin-bottom:4px;color:var(--blue);">Active Subject</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;" id="dashSubject">Advanced Food Microbiology</div>
-        <div class="dim" style="margin-top:4px;" id="dashMeta">60 days left · MCQ, Essays, Case Studies</div>
+      <div class="glow-card" style="animation:fadeUp .4s ease;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--v3);margin-bottom:6px;">Active Subject</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.3px;line-height:1.2;" id="dashSubject">Your Subject</div>
+        <div class="dim" style="margin-top:6px;" id="dashMeta">60 days left</div>
       </div>
-
-      <!-- Mode -->
-      <div class="mode-pills">
-        <button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button>
-        <button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button>
-      </div>
-
-      <!-- Stats -->
-      <div class="stat-grid">
+      <div class="mode-pills" style="animation:fadeUp .4s .06s ease both;"><button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button><button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button></div>
+      <div class="stat-grid" style="animation:fadeUp .4s .1s ease both;">
         <div class="stat-box"><div class="stat-val" id="dsTopics">0</div><div class="stat-lbl">Topics</div></div>
         <div class="stat-box"><div class="stat-val" id="dsScore" style="color:var(--cyan)">—</div><div class="stat-lbl">Avg Score</div></div>
         <div class="stat-box"><div class="stat-val" id="dsQs">0</div><div class="stat-lbl">Questions</div></div>
       </div>
-
-      <!-- Progress -->
-      <div class="card">
-        <div class="card-title">Session Progress</div>
+      <div class="card" style="animation:fadeUp .4s .14s ease both;">
+        <div class="card-label">Overall Progress</div>
         <div class="prog-wrap"><div class="prog-fill" id="dashProg" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;">
-          <span class="dim" id="dashProgPct">0% mastered</span>
-          <span class="dim" id="dashProgTopics">0 / 0 topics</span>
-        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;"><span class="dim" id="dashProgPct">0% mastered</span><span class="dim" id="dashProgTopics">0 / 0 topics</span></div>
       </div>
-
-      <!-- Actions -->
-      <div class="gap-8">
-        <button class="btn btn-blue" onclick="goTo('train')">⚡ Start Practice Session</button>
-        <button class="btn btn-outline" onclick="goTo('tutor')">💬 Ask AI Tutor</button>
+      <div class="gap-8" style="animation:fadeUp .4s .18s ease both;">
+        <button class="btn btn-primary" onclick="goTo('train','slide')">⚡ Start Practice Session</button>
+        <button class="btn btn-outline" onclick="goTo('tutor','slide')">💬 Ask AI Tutor</button>
       </div>
-
-      <!-- Topic map -->
-      <div id="topicMapWrap" style="display:none">
-        <div class="sec-title" style="margin-bottom:12px;">Topic Map</div>
-        <div class="topic-wrap" id="topicMap"></div>
-      </div>
-
-      <!-- Change subject -->
-      <button class="btn btn-ghost btn-sm" onclick="changeSubject()" style="width:100%;margin-top:4px;">↩ Change Subject / Upload New Materials</button>
-
+      <div id="topicMapWrap" style="display:none;animation:fadeUp .4s .22s ease both;"><div class="sec-title" style="margin-bottom:12px;">Topic Map</div><div class="topic-wrap" id="topicMap"></div></div>
+      <button class="btn btn-ghost btn-sm" onclick="changeSubject()" style="width:100%;animation:fadeUp .4s .26s ease both;">↩ Change Subject / Upload New Materials</button>
     </div>
     <nav class="bottom-nav show">
-      <button class="nav-btn active" id="nav-dash" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" id="nav-train" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" id="nav-tutor" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" id="nav-settings" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+      <button class="nav-btn active" id="nav-dash" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" id="nav-train" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" id="nav-tutor" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" id="nav-settings" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
     </nav>
   </div>
 
-  <!-- ══════════════════════════════════
-       TRAIN
-  ══════════════════════════════════ -->
+  <!-- TRAIN -->
   <div class="screen" id="screen-train">
     <div class="topbar">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dash')">←</button>
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')">←</button>
       <div style="flex:1;margin:0 12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
-          <span class="dim" id="trainLabel">Question 1</span>
-          <span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span>
-        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span class="dim" id="trainLabel">Question 1</span><span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span></div>
         <div class="prog-wrap"><div class="prog-fill" id="trainProg" style="width:5%"></div></div>
       </div>
       <div class="usage-pill" style="font-size:10px;" id="trainUsagePill">20 left</div>
     </div>
-    <div id="qArea" style="flex:1;overflow-y:auto;padding:16px 18px 20px;display:flex;flex-direction:column;gap:14px;">
-      <div class="loading"><div class="spin"></div>Generating question...</div>
-    </div>
-    <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:12px 18px 20px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;">
-      <button class="btn btn-blue" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
-      <button class="btn btn-ghost" onclick="goTo('dash')">End Session</button>
+    <div id="qArea" style="flex:1;overflow-y:auto;padding:18px 18px 20px;display:flex;flex-direction:column;gap:14px;"><div class="loading"><div class="spin"></div>Generating your first question...</div></div>
+    <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:12px 18px 20px;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);flex-shrink:0;">
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
+      <button class="btn btn-ghost" onclick="goTo('dash','back')">End Session</button>
     </div>
     <nav class="bottom-nav show">
-      <button class="nav-btn" id="nav-dash2" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn active" id="nav-train2"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn active"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
     </nav>
   </div>
 
-  <!-- ══════════════════════════════════
-       TUTOR
-  ══════════════════════════════════ -->
+  <!-- TUTOR -->
   <div class="screen" id="screen-tutor">
     <div class="topbar">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dash')">←</button>
-      <div style="flex:1;margin-left:10px;">
-        <div style="font-weight:700;font-size:15px;">AI Tutor</div>
-        <div class="dim" style="font-size:11px;" id="tutorSubLabel">Advanced Food Microbiology</div>
-      </div>
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')">←</button>
+      <div style="flex:1;margin-left:10px;"><div style="font-weight:700;font-size:15px;">AI Tutor</div><div class="dim" style="font-size:11px;" id="tutorSubLabel">Your subject</div></div>
       <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
     </div>
     <div class="chat-body" id="chatBody">
-      <div class="msg ai">
-        <div class="msg-name">CognIQ Tutor</div>
-        <div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject. Ask me anything — concept explanations, case walkthroughs, exam strategies, or tricky mechanisms. What would you like to explore?</div>
-      </div>
+      <div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject and exam. Ask me anything — concept explanations, case walkthroughs, exam strategy, or tricky mechanisms. What would you like to explore?</div></div>
     </div>
-    <div class="chat-input-bar">
-      <textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea>
-      <button class="btn btn-icon btn-blue" onclick="sendMsg()">↑</button>
-    </div>
+    <div class="chat-bar"><textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea><button class="btn btn-icon btn-primary" onclick="sendMsg()">↑</button></div>
     <nav class="bottom-nav show">
-      <button class="nav-btn" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
       <button class="nav-btn active"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+      <button class="nav-btn" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
     </nav>
   </div>
 
-  <!-- ══════════════════════════════════
-       SETTINGS
-  ══════════════════════════════════ -->
+  <!-- SETTINGS -->
   <div class="screen" id="screen-settings">
-    <div class="topbar">
-      <div class="topbar-logo">Cogn<span>IQ</span></div>
-      <div class="label">Settings</div>
-    </div>
+    <div class="topbar"><div class="logo">Cogn<em>IQ</em></div><div style="font-size:12px;font-weight:600;color:var(--text-2);">Settings</div></div>
     <div class="scroll-body gap-20">
+      <div class="card gap-16"><div class="card-label">📅 Exam Countdown</div><div class="field"><label>Days Until Exam</label><input type="text" id="set-days" placeholder="60"/></div><button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button></div>
+      <div class="card gap-16"><div class="card-label">🎯 Subject</div><div class="field"><label>Subject Name</label><input type="text" id="set-subject"/></div><button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button></div>
       <div class="card gap-16">
-        <div class="card-title">📅 Exam Countdown</div>
-        <div class="field">
-          <label>Days Until Exam</label>
-          <input type="text" id="set-days" placeholder="60"/>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button>
+        <div class="card-label">📊 Usage</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span class="dim">Questions used</span><span style="font-weight:600;" id="set-q-used">0 / 20 free</span></div>
+        <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%"></div></div>
+        <button class="btn btn-primary btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
       </div>
-      <div class="card gap-16">
-        <div class="card-title">🎯 Subject & Format</div>
-        <div class="field">
-          <label>Subject Name</label>
-          <input type="text" id="set-subject"/>
-        </div>
-        <button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button>
-      </div>
-      <div class="card gap-16">
-        <div class="card-title">📊 Usage</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span class="dim">Questions used</span>
-          <span style="font-weight:700;" id="set-q-used">0 / 20 free</span>
-        </div>
-        <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div></div>
-        <button class="btn btn-blue btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
-      </div>
-      <div class="card">
-        <div class="card-title">🗄️ Data</div>
-        <p class="dim" style="margin-bottom:12px;">Reset all progress, topics, and uploaded materials.</p>
-        <button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button>
-      </div>
+      <div class="card"><div class="card-label">🗄️ Data</div><p class="dim" style="margin-bottom:14px;">Reset all progress, topics, and uploaded materials.</p><button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button></div>
     </div>
     <nav class="bottom-nav show">
-      <button class="nav-btn" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
       <button class="nav-btn active"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
     </nav>
   </div>
 
-  <!-- ══════════════════════════════════
-       UPGRADE OVERLAY
-  ══════════════════════════════════ -->
+  <!-- UPGRADE -->
   <div class="upgrade-overlay" id="upgradeOverlay">
     <div class="upgrade-sheet">
       <div class="upgrade-badge">⭐ Upgrade to Pro</div>
       <div class="upgrade-title">You've hit your<br/>free limit.</div>
-      <div class="upgrade-sub">You've used your 20 free questions. Join the waitlist to get early access to CognIQ Pro — unlimited training, all subjects, all modes.</div>
-      <div class="upgrade-perks">
+      <div class="upgrade-sub">Join the waitlist to get early access to CognIQ Pro — unlimited training, all subjects, all modes.</div>
+      <div class="gap-8" style="margin-bottom:22px;">
         <div class="perk"><span class="perk-icon">✓</span><span>Unlimited practice questions</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Unlimited AI tutor messages</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive profiling</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive profiling & analytics</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Written answer AI grading</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Viva / oral simulation mode</span></div>
       </div>
-      <div class="field" style="margin-bottom:12px;">
-        <label>Your Email</label>
-        <input type="email" id="upgradeEmail" placeholder="you@email.com"/>
-      </div>
-      <button class="btn btn-blue" onclick="joinWaitlist()">Join Waitlist — It's Free</button>
+      <div class="field" style="margin-bottom:12px;"><label>Your Email</label><input type="email" id="upgradeEmail" placeholder="you@email.com"/></div>
+      <button class="btn btn-primary" onclick="joinWaitlist()">Join Waitlist — It's Free</button>
       <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeUpgrade()">Maybe Later</button>
     </div>
   </div>
 
-</div><!-- end #app -->
-
+</div>
 <script>
-// ═══════════════════════════════
-// STATE
-// ═══════════════════════════════
-const FREE_Q_LIMIT = 20;
-const FREE_MSG_LIMIT = 10;
+const FREE_Q=20,FREE_MSG=10;
+const D={subject:localStorage.getItem('ciq_subject')||'',topics:JSON.parse(localStorage.getItem('ciq_topics')||'[]'),content:localStorage.getItem('ciq_content')||'',mode:localStorage.getItem('ciq_mode')||'exam',days:parseInt(localStorage.getItem('ciq_days')||'60'),fmt:JSON.parse(localStorage.getItem('ciq_fmt')||'["MCQ"]'),qUsed:parseInt(localStorage.getItem('ciq_qused')||'0'),msgUsed:parseInt(localStorage.getItem('ciq_msgused')||'0'),onboarded:localStorage.getItem('ciq_onboarded')==='1',scores:JSON.parse(localStorage.getItem('ciq_scores')||'[]'),totalQs:parseInt(localStorage.getItem('ciq_qs')||'0'),sScore:0,sTotal:0,qCount:0,currentQ:null,answered:false,chatHistory:[],obFmts:[]};
+const save=(k,v)=>localStorage.setItem(k,typeof v==='object'?JSON.stringify(v):String(v));
 
-const D = {
-  subject:    localStorage.getItem('ciq_subject') || '',
-  topics:     JSON.parse(localStorage.getItem('ciq_topics') || '[]'),
-  content:    localStorage.getItem('ciq_content') || '',
-  mode:       localStorage.getItem('ciq_mode') || 'exam',
-  days:       parseInt(localStorage.getItem('ciq_days') || '60'),
-  examFmt:    JSON.parse(localStorage.getItem('ciq_fmt') || '["MCQ"]'),
-  qUsed:      parseInt(localStorage.getItem('ciq_qused') || '0'),
-  msgUsed:    parseInt(localStorage.getItem('ciq_msgused') || '0'),
-  onboarded:  localStorage.getItem('ciq_onboarded') === '1',
-  scores:     JSON.parse(localStorage.getItem('ciq_scores') || '[]'),
-  totalQs:    parseInt(localStorage.getItem('ciq_qs') || '0'),
-  // session
-  sScore: 0, sTotal: 0, qCount: 0,
-  currentQ: null, answered: false,
-  chatHistory: [],
-  obFormats: []
-};
-
-function save(k, v) { localStorage.setItem(k, typeof v === 'object' ? JSON.stringify(v) : String(v)); }
-
-// ═══════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════
-function goTo(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  if (name === 'dash') refreshDash();
-  if (name === 'train') initTrain();
-  if (name === 'settings') loadSettings();
-  if (name === 'tutor') { document.getElementById('tutorSubLabel').textContent = D.subject; }
+function goTo(name,dir){
+  const cur=document.querySelector('.screen.active');
+  const nxt=document.getElementById('screen-'+name);
+  if(!nxt||cur===nxt)return;
+  cur.classList.remove('active');
+  nxt.classList.add('active');
+  nxt.classList.remove('slide-in','slide-back');
+  void nxt.offsetWidth;
+  if(dir==='slide')nxt.classList.add('slide-in');
+  else if(dir==='back')nxt.classList.add('slide-back');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  ['dash','train','tutor','settings'].forEach(n=>{const b=document.getElementById('nav-'+n);if(b&&n===name)b.classList.add('active');});
+  if(name==='dash')refreshDash();
+  if(name==='train')initTrain();
+  if(name==='settings')loadSettings();
+  if(name==='tutor')document.getElementById('tutorSubLabel').textContent=D.subject;
 }
 
-// ═══════════════════════════════
-// ONBOARDING
-// ═══════════════════════════════
-function obNext(step) {
-  if (step === 3) {
-    const sub = document.getElementById('ob-subject').value.trim();
-    if (!sub) { alert('Please enter your subject name.'); return; }
-    D.subject = sub;
-    D.days = parseInt(document.getElementById('ob-days').value) || 60;
-    D.examFmt = D.obFormats.length ? D.obFormats : ['MCQ'];
-    save('ciq_subject', D.subject);
-    save('ciq_days', D.days);
-    save('ciq_fmt', D.examFmt);
-  }
-  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('ob' + step).classList.add('active');
+function obGo(step){
+  if(step===3){const sub=document.getElementById('ob-subject').value.trim();if(!sub){alert('Please enter your subject name first.');return;}D.subject=sub;D.days=parseInt(document.getElementById('ob-days').value)||60;D.fmt=D.obFmts.length?D.obFmts:['MCQ'];save('ciq_subject',D.subject);save('ciq_days',D.days);save('ciq_fmt',D.fmt);}
+  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('ob'+step).classList.add('active');
 }
+function pickField(el,val){document.querySelectorAll('#fieldTags .ftag').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');document.getElementById('ob-subject').value=val;}
+function toggleFmt(el,fmt){el.classList.toggle('sel');D.obFmts=D.obFmts.includes(fmt)?D.obFmts.filter(f=>f!==fmt):[...D.obFmts,fmt];}
 
-function pickField(el, val) {
-  document.querySelectorAll('#fieldTags .ftag').forEach(t => t.classList.remove('sel'));
-  el.classList.add('sel');
-  document.getElementById('ob-subject').value = val;
+async function buildAndLaunch(){
+  const btn=document.getElementById('buildBtn');
+  btn.disabled=true;btn.innerHTML='<div class="spin"></div> Building Knowledge Map...';
+  const syl=document.getElementById('ob-syllabus').value;
+  let content=`Subject: ${D.subject}\nExam formats: ${D.fmt.join(', ')}\n\n`;
+  if(syl)content+=`Syllabus/Topics:\n${syl}\n\n`;
+  for(const file of uploadedFiles){try{const text=await readText(file);content+=`\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;}catch(e){content+=`\n--- ${file.name} --- [binary file]\n`;}}
+  D.content=content;save('ciq_content',content);
+  try{const raw=await callAI(`From this course material for "${D.subject}", extract 8-14 main topics/chapters as a JSON array of short strings. Return ONLY the JSON array, nothing else.\n\nContent:\n${content.substring(0,3000)}`);const s=raw.indexOf('['),e=raw.lastIndexOf(']');D.topics=JSON.parse(raw.substring(s,e+1));}
+  catch(e){D.topics=defaultTopics(D.subject);}
+  save('ciq_topics',D.topics);save('ciq_onboarded','1');D.onboarded=true;
+  btn.innerHTML='✅ Knowledge Map Built!';btn.style.background='linear-gradient(135deg,var(--green),#3ab87a)';
+  setTimeout(()=>goTo('dash','slide'),1000);
 }
+function skipAndLaunch(){D.content='';D.topics=defaultTopics(D.subject||'General Study');save('ciq_content','');save('ciq_topics',D.topics);save('ciq_onboarded','1');D.onboarded=true;goTo('dash','slide');}
+function skipOnboard(){if(D.onboarded&&D.subject)goTo('dash','slide');else obGo(2);}
+function changeSubject(){document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));document.getElementById('ob2').classList.add('active');document.querySelector('.screen.active').classList.remove('active');const o=document.getElementById('screen-onboard');o.classList.add('active','slide-back');}
+function defaultTopics(s){return[`${s} — Foundations & Core Concepts`,`${s} — Key Mechanisms & Processes`,`${s} — Classification & Taxonomy`,`${s} — Applied Principles`,`${s} — Case Studies & Scenarios`,`${s} — Regulations & Standards`,`${s} — Analytical Methods`,`${s} — Current Issues & Debates`];}
 
-function toggleFormat(el, fmt) {
-  el.classList.toggle('sel');
-  if (D.obFormats.includes(fmt)) D.obFormats = D.obFormats.filter(f => f !== fmt);
-  else D.obFormats.push(fmt);
+let uploadedFiles=[];
+function handleFiles(f){uploadedFiles=[...uploadedFiles,...Array.from(f).slice(0,10)];renderFiles();}
+function renderFiles(){const wrap=document.getElementById('fileListWrap');if(!uploadedFiles.length){wrap.style.display='none';return;}wrap.style.display='flex';const icons={pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};document.getElementById('fileList').innerHTML=uploadedFiles.map((f,i)=>`<div class="file-row"><span style="font-size:20px">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span><div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-row-del" onclick="removeFile(${i})">✕</button></div>`).join('');}
+function removeFile(i){uploadedFiles.splice(i,1);renderFiles();}
+function readText(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file);});}
+
+function refreshDash(){
+  document.getElementById('dashSubject').textContent=D.subject||'No subject set';
+  document.getElementById('dashMeta').textContent=`${D.days} days left · ${D.fmt.join(', ')}`;
+  document.getElementById('dsTopics').textContent=D.topics.length;
+  document.getElementById('dsQs').textContent=D.totalQs;
+  document.getElementById('examPill').classList.toggle('active',D.mode==='exam');
+  document.getElementById('mastPill').classList.toggle('active',D.mode==='mastery');
+  if(D.scores.length){const avg=Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);document.getElementById('dsScore').textContent=avg+'%';const pct=Math.min(100,D.totalQs*2);document.getElementById('dashProg').style.width=pct+'%';document.getElementById('dashProgPct').textContent=pct+'% mastered';document.getElementById('dashProgTopics').textContent=`${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;}
+  if(D.topics.length){document.getElementById('topicMapWrap').style.display='block';document.getElementById('topicMap').innerHTML=D.topics.map(t=>`<div class="topic-chip">${t}</div>`).join('');}
+  updateUsage();
 }
+function setMode(m){D.mode=m;save('ciq_mode',m);refreshDash();}
+function updateUsage(){const left=Math.max(0,FREE_Q-D.qUsed);document.getElementById('usageText').textContent=left>0?`${left} free`:'Limit reached';document.getElementById('usageDot').className='usage-dot'+(left===0?' over':left<=5?' warn':'');document.getElementById('trainUsagePill').textContent=left>0?`${left} left`:'⚠ Limit';}
 
-async function buildAndLaunch() {
-  const btn = document.getElementById('buildBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spin"></div> Building Knowledge Map...';
+async function initTrain(){D.sScore=0;D.sTotal=0;D.qCount=0;D.answered=false;document.getElementById('trainScore').textContent='0 / 0';document.getElementById('trainLabel').textContent='Question 1';document.getElementById('trainProg').style.width='5%';document.getElementById('trainActions').style.display='none';updateUsage();await genQ();}
 
-  const syl = document.getElementById('ob-syllabus').value;
-  let content = `Subject: ${D.subject}\nExam formats: ${D.examFmt.join(', ')}\n\n`;
-  if (syl) content += `Syllabus/Topics:\n${syl}\n\n`;
-
-  for (const file of uploadedFiles) {
-    try {
-      const text = await readText(file);
-      content += `\n--- ${file.name} ---\n${text.substring(0, 6000)}\n`;
-    } catch(e) { content += `\n--- ${file.name} --- [binary file]\n`; }
-  }
-  D.content = content;
-  save('ciq_content', content);
-
-  try {
-    const raw = await ai(`From this course material for "${D.subject}", extract 8-14 main topics/chapters. Return ONLY a valid JSON array of short topic names. No markdown, no explanation. Example: ["Topic One","Topic Two"]\n\nContent:\n${content.substring(0,3000)}`);
-    D.topics = JSON.parse(raw.replace(/```json|```/g,'').trim());
-  } catch(e) {
-    D.topics = generateDefaultTopics(D.subject);
-  }
-  save('ciq_topics', D.topics);
-  finishOnboard();
-}
-
-function skipAndLaunch() {
-  D.content = '';
-  D.topics = generateDefaultTopics(D.subject || 'General Study');
-  save('ciq_content', '');
-  save('ciq_topics', D.topics);
-  finishOnboard();
-}
-
-function skipOnboard() {
-  if (D.onboarded && D.subject) { goTo('dash'); }
-  else { obNext(2); }
-}
-
-function finishOnboard() {
-  save('ciq_onboarded', '1');
-  D.onboarded = true;
-  goTo('dash');
-}
-
-function changeSubject() {
-  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
-  document.getElementById('ob2').classList.add('active');
-  goTo('onboard');
-}
-
-function generateDefaultTopics(subject) {
-  // Generic fallback topics — AI will personalize questions anyway
-  return [
-    `${subject} — Foundations & Core Concepts`,
-    `${subject} — Key Mechanisms & Processes`,
-    `${subject} — Classification & Taxonomy`,
-    `${subject} — Applied Principles`,
-    `${subject} — Case Studies & Scenarios`,
-    `${subject} — Regulations & Standards`,
-    `${subject} — Analytical Methods`,
-    `${subject} — Current Issues & Debates`
-  ];
-}
-
-// ═══════════════════════════════
-// FILE UPLOAD
-// ═══════════════════════════════
-let uploadedFiles = [];
-function handleFiles(f) {
-  uploadedFiles = [...uploadedFiles, ...Array.from(f).slice(0, 10)];
-  renderFileList();
-}
-function renderFileList() {
-  const wrap = document.getElementById('fileListWrap');
-  if (!uploadedFiles.length) { wrap.style.display = 'none'; return; }
-  wrap.style.display = 'flex';
-  const icons = {pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};
-  document.getElementById('fileList').innerHTML = uploadedFiles.map((f,i) => `
-    <div class="file-row">
-      <span style="font-size:18px;">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span>
-      <div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div>
-      <button class="file-row-del" onclick="removeFile(${i})">✕</button>
-    </div>`).join('');
-}
-function removeFile(i) { uploadedFiles.splice(i,1); renderFileList(); }
-function readText(file) {
-  return new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file); });
-}
-
-// ═══════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════
-function refreshDash() {
-  document.getElementById('dashSubject').textContent = D.subject || 'No subject set';
-  document.getElementById('dashMeta').textContent = `${D.days} days left · ${D.examFmt.join(', ')}`;
-  document.getElementById('dsTopics').textContent = D.topics.length;
-  document.getElementById('dsQs').textContent = D.totalQs;
-  document.getElementById('examPill').classList.toggle('active', D.mode==='exam');
-  document.getElementById('mastPill').classList.toggle('active', D.mode==='mastery');
-  if (D.scores.length) {
-    const avg = Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);
-    document.getElementById('dsScore').textContent = avg+'%';
-    const pct = Math.min(100, D.totalQs * 2);
-    document.getElementById('dashProg').style.width = pct+'%';
-    document.getElementById('dashProgPct').textContent = pct+'% mastered';
-    document.getElementById('dashProgTopics').textContent = `${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;
-  }
-  if (D.topics.length) {
-    document.getElementById('topicMapWrap').style.display = 'block';
-    document.getElementById('topicMap').innerHTML = D.topics.map(t=>`<div class="topic-chip">${t}</div>`).join('');
-  }
-  updateUsageUI();
-}
-
-function setMode(m) { D.mode=m; save('ciq_mode',m); refreshDash(); }
-
-function updateUsageUI() {
-  const left = Math.max(0, FREE_Q_LIMIT - D.qUsed);
-  const pct = Math.min(100,(D.qUsed/FREE_Q_LIMIT)*100);
-  const dot = document.getElementById('usageDot');
-  document.getElementById('usageText').textContent = left > 0 ? `${left} free left` : 'Limit reached';
-  dot.className = 'usage-dot' + (left===0?' over':left<=5?' warn':'');
-  document.getElementById('trainUsagePill').textContent = left > 0 ? `${left} left` : '⚠ Limit';
-}
-
-// ═══════════════════════════════
-// TRAINING
-// ═══════════════════════════════
-async function initTrain() {
-  D.sScore=0; D.sTotal=0; D.qCount=0; D.answered=false;
-  document.getElementById('trainScore').textContent='0 / 0';
-  document.getElementById('trainLabel').textContent='Question 1';
-  document.getElementById('trainProg').style.width='5%';
-  document.getElementById('trainActions').style.display='none';
-  updateUsageUI();
-  await genQ();
-}
-
-async function genQ() {
-  if (D.qUsed >= FREE_Q_LIMIT) { showUpgrade(); return; }
-  D.answered = false;
+async function genQ(){
+  if(D.qUsed>=FREE_Q){showUpgrade();return;}
+  D.answered=false;
   document.getElementById('trainActions').style.display='none';
   document.getElementById('nextBtn').style.display='none';
-  const qArea = document.getElementById('qArea');
-  qArea.innerHTML = '<div class="loading"><div class="spin"></div>Generating question...</div>';
+  const qArea=document.getElementById('qArea');
+  qArea.innerHTML='<div class="loading"><div class="spin"></div>Generating question from your materials...</div>';
   D.qCount++;
-  document.getElementById('trainLabel').textContent = `Question ${D.qCount}`;
-  document.getElementById('trainProg').style.width = Math.min(100,D.qCount*10)+'%';
+  document.getElementById('trainLabel').textContent=`Question ${D.qCount}`;
+  document.getElementById('trainProg').style.width=Math.min(100,D.qCount*10)+'%';
 
-  const topic = D.topics.length ? D.topics[Math.floor(Math.random()*D.topics.length)] : D.subject;
-  const fmt = D.examFmt[Math.floor(Math.random()*D.examFmt.length)] || 'MCQ';
-  const isMastery = D.mode === 'mastery';
+  const topic=D.topics.length?D.topics[Math.floor(Math.random()*D.topics.length)]:D.subject;
+  const isMastery=D.mode==='mastery';
+  const isTF=D.fmt.includes('True / False')&&Math.random()<0.3;
+  const modeInstr=isMastery?'Generate a MASTERY-level question requiring deep reasoning, analysis, application to novel scenarios, or synthesis. Avoid simple recall.':'Generate a precise EXAM-style question that tests real understanding.';
+  const typeInstr=isTF?'Return type "truefalse". Options must be exactly ["True","False"]. Correct is 0 (True) or 1 (False).':'Return type "mcq". Provide exactly 4 options. Only one is correct.';
+  const contentInstr=D.content?`You MUST base this question specifically on the student's own course materials below. Use specific facts, mechanisms, organisms, cases, or principles from this content:\n\n${D.content.substring(0,4000)}`:`Subject: "${D.subject}". Use your expert knowledge to generate a specific, high-quality question on: ${topic}`;
 
-  const modePrompt = isMastery
-    ? 'Generate a MASTERY-level question requiring deep reasoning, analysis, application to novel scenarios, or synthesis across concepts. Avoid simple recall.'
-    : `Generate an EXAM-style question. Be precise, exam-appropriate, and test understanding not just memory.`;
-
-  const typeInstruction = fmt === 'True / False'
-    ? 'Use type "truefalse" with options ["True","False"] and correct as 0 or 1.'
-    : 'Use type "mcq" with exactly 4 options.';
-
-  const contentHint = D.content
-    ? `You MUST base this question on the following course content from the student's own materials. Do not generate generic questions — use specific facts, concepts, organisms, processes, or cases from this content:\n\n${D.content.substring(0,4000)}`
-    : `The subject is "${D.subject}". Use your expert knowledge to generate a high-quality, specific question on the topic: ${topic}.`;
-
-  const prompt = `You are an expert examiner for "${D.subject}".
+  const prompt=`You are an expert examiner for "${D.subject}".
 Topic: ${topic}
-${modePrompt}
-${contentHint}
+${modeInstr}
+${contentInstr}
+${typeInstr}
+CRITICAL: Your entire response must be a single valid JSON object. Start with { and end with }. No text before or after.
+{"type":"mcq","question":"write the complete question here","options":["A: first option","B: second option","C: third option","D: fourth option"],"correct":0,"explanation":"Explain clearly why the correct answer is right and why each wrong option is incorrect."}`;
 
-${typeInstruction}
-
-IMPORTANT: Return ONLY a raw JSON object. No markdown, no backticks, no explanation before or after. Start your response with { and end with }.
-
-{
-  "type": "mcq",
-  "question": "write the full question here",
-  "options": ["A: first option", "B: second option", "C: third option", "D: fourth option"],
-  "correct": 0,
-  "explanation": "Explain clearly why the correct answer is right, and briefly why each wrong option is incorrect."
-}`;
-
-  // Try up to 2 times before giving a real error message
-  let lastError = '';
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const raw = await ai(prompt);
-      // Robust JSON extraction — find the outermost { }
-      const start = raw.indexOf('{');
-      const end = raw.lastIndexOf('}');
-      if (start === -1 || end === -1) throw new Error('No JSON object found in response');
-      const jsonStr = raw.substring(start, end + 1);
-      const q = JSON.parse(jsonStr);
-      // Validate the parsed object has required fields
-      if (!q.question || !q.options || q.options.length < 2 || q.correct === undefined) {
-        throw new Error('Invalid question structure');
-      }
-      renderQ(qArea, q, topic);
-      return; // success — exit
-    } catch(e) {
-      lastError = e.message;
-      if (attempt < 2) {
-        // Brief pause before retry
-        await new Promise(r => setTimeout(r, 800));
-        qArea.innerHTML = '<div class="loading"><div class="spin"></div>Retrying...</div>';
-      }
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      const raw=await callAI(prompt);
+      const start=raw.indexOf('{'),end=raw.lastIndexOf('}');
+      if(start===-1||end===-1)throw new Error('No JSON found in response');
+      const q=JSON.parse(raw.substring(start,end+1));
+      if(!q.question||!Array.isArray(q.options)||q.options.length<2||q.correct===undefined)throw new Error('Invalid question structure');
+      renderQ(qArea,q,topic);return;
+    }catch(e){
+      if(attempt<3){await new Promise(r=>setTimeout(r,600));qArea.innerHTML=`<div class="loading"><div class="spin"></div>Retrying (${attempt+1}/3)...</div>`;}
+      else{qArea.innerHTML=`<div style="background:rgba(247,106,106,.07);border:1px solid rgba(247,106,106,.25);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;animation:fadeUp .3s ease;"><div style="font-weight:700;color:var(--red);font-size:16px;">⚠ Could not generate question</div><div class="dim" style="line-height:1.65;">Error: <code style="font-size:12px;color:var(--text-2);background:var(--surface2);padding:2px 6px;border-radius:4px;">${e.message}</code></div><div class="dim">Check that your <strong>ANTHROPIC_API_KEY</strong> environment variable is set in Vercel and redeploy.</div><button class="btn btn-outline btn-sm" onclick="genQ()" style="width:100%">↻ Try Again</button></div>`;D.qCount--;}
     }
   }
-
-  // Both attempts failed — show honest error, not silent demo
-  qArea.innerHTML = `
-    <div style="background:rgba(255,92,92,.08);border:1px solid rgba(255,92,92,.25);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:12px;">
-      <div style="font-weight:700;color:var(--red);">⚠ Could not generate question</div>
-      <div class="dim" style="font-size:13px;line-height:1.6;">The AI returned an unexpected response. This usually means the API key isn't configured in Vercel, or there's a network issue.<br><br>Error: <code style="font-size:11px;color:var(--text-2);">${lastError}</code></div>
-      <button class="btn btn-outline btn-sm" onclick="genQ()" style="width:100%;margin-top:4px;">Try Again</button>
-    </div>`;
-  // Don't increment question count on failure
-  D.qCount--;
 }
 
-function renderQ(container, q, topic) {
-  D.currentQ = q;
-  const letters = ['A','B','C','D'];
-  container.innerHTML = `
-    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:2px;">${topic||D.subject}</div>
-    <div class="q-card">
-      <div class="q-head">
-        <div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div>
-        <div class="q-meta">Q${D.qCount}</div>
-      </div>
-      <div class="q-body">
-        <div class="q-text">${q.question}</div>
-        <div class="opts" id="opts">
-          ${q.options.map((opt,i)=>`
-            <div class="opt" id="opt${i}" onclick="pick(${i})">
-              <div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):letters[i]}</div>
-              <div class="opt-text">${opt}</div>
-            </div>`).join('')}
-        </div>
-        <div class="feedback" id="fb"></div>
-      </div>
-    </div>`;
+function renderQ(container,q,topic){
+  D.currentQ=q;const L=['A','B','C','D'];
+  container.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:4px;animation:fadeIn .3s ease;">${topic||D.subject}</div><div class="q-card"><div class="q-head"><div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div><div class="q-meta">Q${D.qCount}</div></div><div class="q-body"><div class="q-text">${q.question}</div><div class="opts" id="opts">${q.options.map((opt,i)=>`<div class="opt" id="opt${i}" onclick="pick(${i})"><div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):L[i]}</div><div class="opt-text">${opt}</div></div>`).join('')}</div><div class="feedback" id="fb"></div></div></div>`;
 }
 
-
-
-function pick(i) {
-  if (D.answered) return;
-  D.answered = true; D.sTotal++;
-  const correct = i === D.currentQ.correct;
-  if (correct) D.sScore++;
-
-  // Track usage & scores
-  D.qUsed++; D.totalQs++;
-  D.scores.push(correct ? 100 : 0);
-  if (D.scores.length > 100) D.scores.shift();
-  save('ciq_qused', D.qUsed);
-  save('ciq_qs', D.totalQs);
-  save('ciq_scores', D.scores);
-
+function pick(i){
+  if(D.answered)return;
+  D.answered=true;D.sTotal++;
+  const ok=i===D.currentQ.correct;
+  if(ok)D.sScore++;
+  D.qUsed++;D.totalQs++;D.scores.push(ok?100:0);
+  if(D.scores.length>100)D.scores.shift();
+  save('ciq_qused',D.qUsed);save('ciq_qs',D.totalQs);save('ciq_scores',D.scores);
   document.getElementById('trainScore').textContent=`${D.sScore} / ${D.sTotal}`;
-  updateUsageUI();
-
-  document.querySelectorAll('.opt').forEach((el,idx)=>{
-    if(idx===D.currentQ.correct) el.classList.add('correct');
-    else if(idx===i&&!correct) el.classList.add('wrong');
-  });
+  updateUsage();
+  document.querySelectorAll('.opt').forEach((el,idx)=>{if(idx===D.currentQ.correct)el.classList.add('correct');else if(idx===i&&!ok)el.classList.add('wrong');});
   const fb=document.getElementById('fb');
-  fb.className=`feedback show ${correct?'ok':'bad'}`;
-  fb.innerHTML=correct
-    ?`✅ <strong>Correct!</strong> ${D.currentQ.explanation}`
-    :`❌ <strong>Incorrect.</strong> Correct answer: <strong>${D.currentQ.options[D.currentQ.correct]}</strong><br><br>${D.currentQ.explanation}`;
-
+  fb.className=`feedback show ${ok?'ok':'bad'}`;
+  fb.innerHTML=ok?`✅ <strong>Correct!</strong> ${D.currentQ.explanation}`:`❌ <strong>Incorrect.</strong> Correct: <strong>${D.currentQ.options[D.currentQ.correct]}</strong><br><br>${D.currentQ.explanation}`;
   document.getElementById('trainActions').style.display='flex';
   document.getElementById('nextBtn').style.display='flex';
 }
+async function nextQ(){if(D.qUsed>=FREE_Q){showUpgrade();return;}await genQ();}
 
-async function nextQ() {
-  if (D.qUsed >= FREE_Q_LIMIT) { showUpgrade(); return; }
-  await genQ();
-}
-
-// ═══════════════════════════════
-// TUTOR CHAT
-// ═══════════════════════════════
-function chatKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} }
-
-async function sendMsg() {
-  if (D.msgUsed >= FREE_MSG_LIMIT) { showUpgrade(); return; }
-  const inp = document.getElementById('chatInput');
-  const text = inp.value.trim();
-  if (!text) return;
-  inp.value='';
-  addBubble('user',text);
-  D.chatHistory.push({role:'user',content:text});
-
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+async function sendMsg(){
+  if(D.msgUsed>=FREE_MSG){showUpgrade();return;}
+  const inp=document.getElementById('chatInput');
+  const text=inp.value.trim();if(!text)return;inp.value='';
+  addBub('user',text);D.chatHistory.push({role:'user',content:text});
   const tid='t'+Date.now();
-  const el=document.createElement('div');
-  el.className='msg ai';el.id=tid;
+  const el=document.createElement('div');el.className='msg ai';el.id=tid;
   el.innerHTML=`<div class="msg-name">CognIQ Tutor</div><div class="msg-bub"><div class="dots"><span></span><span></span><span></span></div></div>`;
-  document.getElementById('chatBody').appendChild(el);
-  scrollChat();
-
-  const sys=`You are an expert tutor for "${D.subject}". The student has ${D.days} days until their exam. Exam formats: ${D.examFmt.join(', ')}.
-Be educational, clear, and help the student truly understand — not just memorize. Adapt your explanations to the level and style appropriate for ${D.subject}.
-Use examples, mechanisms, analogies, and real-world context where relevant.${D.content?`\n\nCourse context (from student's own materials):\n${D.content.substring(0,3000)}`:''}`;
-
-  try {
-    const reply = await aiChat(sys, D.chatHistory.slice(-8));
-    document.getElementById(tid)?.remove();
-    D.chatHistory.push({role:'assistant',content:reply});
-    D.msgUsed++;
-    save('ciq_msgused', D.msgUsed);
-    addBubble('ai',reply);
-  } catch(e) {
-    document.getElementById(tid)?.remove();
-    addBubble('ai','Something went wrong. Please try again.');
-  }
+  document.getElementById('chatBody').appendChild(el);scrollChat();
+  const sys=`You are an expert tutor for "${D.subject}". The student has ${D.days} days until their exam covering: ${D.fmt.join(', ')}. Be educational, clear, and help the student truly understand — not just memorize. Use specific examples, mechanisms, and real-world context.${D.content?`\n\nStudent's course materials:\n${D.content.substring(0,3500)}`:''}`;
+  try{const reply=await callAIChat(sys,D.chatHistory.slice(-10));document.getElementById(tid)?.remove();D.chatHistory.push({role:'assistant',content:reply});D.msgUsed++;save('ciq_msgused',D.msgUsed);addBub('ai',reply);}
+  catch(e){document.getElementById(tid)?.remove();addBub('ai',`Sorry, something went wrong: ${e.message}`);}
 }
-
-function addBubble(role, text) {
-  const body=document.getElementById('chatBody');
-  const d=document.createElement('div');
-  d.className=`msg ${role}`;
-  const formatted = text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  d.innerHTML=`<div class="msg-name">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bub">${formatted}</div>`;
-  body.appendChild(d);scrollChat();
-}
+function addBub(role,text){const body=document.getElementById('chatBody');const d=document.createElement('div');d.className=`msg ${role}`;d.innerHTML=`<div class="msg-name">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bub">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;body.appendChild(d);scrollChat();}
 function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
-function clearChat(){
-  D.chatHistory=[];
-  document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;
-}
+function clearChat(){D.chatHistory=[];document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;}
 
-// ═══════════════════════════════
-// UPGRADE WALL
-// ═══════════════════════════════
-function showUpgrade() {
-  document.getElementById('upgradeOverlay').classList.add('show');
-}
-function closeUpgrade() {
-  document.getElementById('upgradeOverlay').classList.remove('show');
-}
-function joinWaitlist() {
-  const email = document.getElementById('upgradeEmail').value.trim();
-  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
-  // Store locally for now (replace with a backend call later)
-  const list = JSON.parse(localStorage.getItem('ciq_waitlist') || '[]');
-  list.push({email, subject: D.subject, date: new Date().toISOString()});
-  save('ciq_waitlist', list);
-  document.getElementById('upgradeOverlay').innerHTML = `
-    <div class="upgrade-sheet" style="text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">🎉</div>
-      <div class="upgrade-title">You're on the list!</div>
-      <div class="upgrade-sub" style="margin-top:8px;">We'll email you at <strong>${email}</strong> when Pro launches. You'll get early access and a founder discount.</div>
-      <button class="btn btn-blue" style="margin-top:24px;" onclick="closeUpgrade()">Continue Learning</button>
-    </div>`;
-}
+function showUpgrade(){document.getElementById('upgradeOverlay').classList.add('show');}
+function closeUpgrade(){document.getElementById('upgradeOverlay').classList.remove('show');}
+function joinWaitlist(){const email=document.getElementById('upgradeEmail').value.trim();if(!email||!email.includes('@')){alert('Please enter a valid email.');return;}const list=JSON.parse(localStorage.getItem('ciq_waitlist')||'[]');list.push({email,subject:D.subject,date:new Date().toISOString()});save('ciq_waitlist',list);document.getElementById('upgradeOverlay').innerHTML=`<div class="upgrade-sheet" style="text-align:center;"><div style="font-size:52px;margin-bottom:18px;">🎉</div><div class="upgrade-title">You're on the list!</div><div class="upgrade-sub" style="margin-top:10px;">We'll email <strong>${email}</strong> when Pro launches.</div><button class="btn btn-primary" style="margin-top:28px;" onclick="closeUpgrade()">Continue Learning</button></div>`;}
 
-// ═══════════════════════════════
-// SETTINGS
-// ═══════════════════════════════
-function loadSettings() {
-  document.getElementById('set-days').value = D.days;
-  document.getElementById('set-subject').value = D.subject;
-  const used = D.qUsed;
-  document.getElementById('set-q-used').textContent = `${used} / ${FREE_Q_LIMIT} free`;
-  document.getElementById('set-usage-bar').style.width = Math.min(100,(used/FREE_Q_LIMIT)*100)+'%';
-}
-function saveDays() { D.days=parseInt(document.getElementById('set-days').value)||60; save('ciq_days',D.days); alert('✅ Saved!'); }
-function saveSubject() { D.subject=document.getElementById('set-subject').value; save('ciq_subject',D.subject); alert('✅ Saved!'); }
-function resetAll() { if(confirm('Reset everything? This cannot be undone.')) { localStorage.clear(); location.reload(); } }
+function loadSettings(){document.getElementById('set-days').value=D.days;document.getElementById('set-subject').value=D.subject;document.getElementById('set-q-used').textContent=`${D.qUsed} / ${FREE_Q} free`;document.getElementById('set-usage-bar').style.width=Math.min(100,(D.qUsed/FREE_Q)*100)+'%';}
+function saveDays(){D.days=parseInt(document.getElementById('set-days').value)||60;save('ciq_days',D.days);alert('✅ Saved!');}
+function saveSubject(){D.subject=document.getElementById('set-subject').value;save('ciq_subject',D.subject);alert('✅ Saved!');}
+function resetAll(){if(confirm('Reset everything? Cannot be undone.')){localStorage.clear();location.reload();}}
 
-// ═══════════════════════════════
-// AI API (server-side proxy)
-// ═══════════════════════════════
-async function ai(prompt) {
-  const r = await fetch('/api/chat',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-  });
-  const d = await r.json();
-  if(!r.ok) throw new Error(d.error || d.details?.error?.message || r.status);
+async function callAI(prompt){
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:1024})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);
+  if(!d.content?.[0]?.text)throw new Error('Empty response from AI');
   return d.content[0].text;
 }
-async function aiChat(system, messages) {
-  const r = await fetch('/api/chat',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,system,messages})
-  });
-  const d = await r.json();
-  if(!r.ok) throw new Error(d.error || d.details?.error?.message || r.status);
+async function callAIChat(system,messages){
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,messages,max_tokens:1500})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);
+  if(!d.content?.[0]?.text)throw new Error('Empty response from AI');
   return d.content[0].text;
 }
 
-// ═══════════════════════════════
-// INIT
-// ═══════════════════════════════
-(function init() {
-  // Drag-and-drop
-  const zone = document.getElementById('dropZone');
+(function init(){
+  const zone=document.getElementById('dropZone');
   zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
   zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
   zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');handleFiles(e.dataTransfer.files);});
-
-  // Route: if already onboarded, go straight to dashboard
-  if (D.onboarded && D.subject) {
-    goTo('dash');
-  }
-  // else: stay on onboarding screen (already active)
+  if(D.onboarded&&D.subject)goTo('dash','slide');
 })();
 </script>
 </body>
