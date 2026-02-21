@@ -1,693 +1,1102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>CognIQ — Cognitive Mastery Engine</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>CognIQ — Master Any Subject</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <style>
+    /* ── TOKENS ── */
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface2: #1a1a26;
-      --border: #2a2a3d;
-      --accent: #7c6af7;
-      --accent2: #f7c26a;
-      --accent3: #6af7c2;
-      --text: #e8e8f0;
-      --text-dim: #7a7a9a;
-      --danger: #f76a6a;
-      --success: #6af7a0;
-      --radius: 16px;
-      --radius-sm: 10px;
+      --bg:       #07080f;
+      --bg2:      #0d0f1a;
+      --surface:  #111320;
+      --surface2: #181b2e;
+      --border:   #1e2235;
+      --border2:  #252840;
+      --blue:     #2e7cf6;
+      --blue-dim: rgba(46,124,246,0.12);
+      --blue-glow:rgba(46,124,246,0.25);
+      --cyan:     #00d4ff;
+      --gold:     #f5c842;
+      --red:      #ff5c5c;
+      --green:    #34d98b;
+      --text:     #e4e6f0;
+      --text-2:   #8890b0;
+      --text-3:   #4a5070;
+      --r:        14px;
+      --r-sm:     9px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      min-height: 100vh;
-      overflow-x: hidden;
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+    html,body{height:100%;overflow:hidden;}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Instrument Sans',sans-serif;
+      font-size:15px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
     }
-    #app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
-    .screen { display: none; flex-direction: column; flex: 1; padding: 24px 20px 32px; animation: fadeUp 0.4s ease; }
-    .screen.active { display: flex; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-    .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 0; position: sticky; top: 0; z-index: 10; background: linear-gradient(to bottom, var(--bg) 80%, transparent); }
-    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
-    .logo span { color: var(--accent); }
-    .badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
-    .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--accent3); letter-spacing: 0.08em; text-transform: uppercase; }
-    .hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent3); }
-    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(32px, 8vw, 42px); line-height: 1.05; letter-spacing: -1px; }
-    h1 em { font-style: normal; color: var(--accent); }
-    h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.3px; }
-    h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-    .card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 12px; }
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; }
-    .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--accent); }
-    .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 16px 20px; border-radius: var(--radius-sm); border: none; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-primary { background: var(--accent); color: white; }
-    .btn-primary:hover { background: #9180ff; }
-    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
-    .btn-sm { padding: 10px 16px; font-size: 13px; width: auto; border-radius: 8px; }
-    .btn-icon { width: 44px; height: 44px; padding: 0; border-radius: 12px; flex-shrink: 0; }
-    .input-group { display: flex; flex-direction: column; gap: 6px; }
-    .input-group label { font-size: 13px; color: var(--text-dim); font-weight: 500; }
-    input[type=text], input[type=password], textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
-    input:focus, textarea:focus { border-color: var(--accent); }
-    textarea { resize: vertical; min-height: 120px; }
-    .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); }
-    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(124,106,247,0.05); }
-    .upload-icon { font-size: 36px; margin-bottom: 12px; }
-    .upload-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
-    .upload-sub { font-size: 13px; color: var(--text-dim); }
-    #fileInput { display: none; }
-    .file-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-    .file-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
-    .file-icon { font-size: 20px; flex-shrink: 0; }
-    .file-info { flex: 1; min-width: 0; }
-    .file-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .file-size { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-    .file-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 4px; }
-    .chat-area { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px; }
-    .msg { display: flex; flex-direction: column; gap: 4px; max-width: 88%; animation: fadeUp 0.3s ease; }
-    .msg.ai { align-self: flex-start; }
-    .msg.user { align-self: flex-end; }
-    .msg-bubble { padding: 14px 16px; border-radius: 14px; font-size: 14px; line-height: 1.6; }
-    .msg.ai .msg-bubble { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-    .msg.user .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
-    .msg-sender { font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px; }
-    .msg.user .msg-sender { text-align: right; }
-    .input-bar { display: flex; gap: 10px; align-items: flex-end; padding-top: 12px; border-top: 1px solid var(--border); }
-    .input-bar textarea { min-height: 48px; max-height: 120px; padding: 13px 16px; resize: none; flex: 1; }
-    .mode-pills { display: flex; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
-    .mode-pill { flex: 1; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text-dim); border: none; background: none; font-family: 'DM Sans', sans-serif; }
-    .mode-pill.active { background: var(--accent); color: white; }
-    .progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent3)); transition: width 0.6s ease; }
-    .question-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    .question-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .question-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
-    .question-num { font-size: 12px; color: var(--text-dim); }
-    .question-body { padding: 20px; }
-    .question-text { font-size: 15px; line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
-    .options { display: flex; flex-direction: column; gap: 10px; }
-    .option { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--surface2); }
-    .option:hover { border-color: var(--accent); }
-    .option.selected { border-color: var(--accent); background: rgba(124,106,247,0.12); }
-    .option.correct { border-color: var(--success); background: rgba(106,247,160,0.1); }
-    .option.wrong { border-color: var(--danger); background: rgba(247,106,106,0.1); }
-    .option-letter { width: 28px; height: 28px; border-radius: 8px; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; font-family: 'Syne', sans-serif; }
-    .option-text { font-size: 14px; line-height: 1.5; flex: 1; padding-top: 3px; }
-    .feedback-box { margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6; display: none; }
-    .feedback-box.show { display: block; }
-    .feedback-box.correct-fb { background: rgba(106,247,160,0.1); border: 1px solid var(--success); color: var(--success); }
-    .feedback-box.wrong-fb { background: rgba(247,106,106,0.1); border: 1px solid var(--danger); color: #ffaaaa; }
-    .bottom-nav { display: flex; border-top: 1px solid var(--border); background: var(--surface); position: sticky; bottom: 0; z-index: 10; }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; cursor: pointer; transition: color 0.2s; color: var(--text-dim); border: none; background: none; font-family: 'DM Sans', sans-serif; }
-    .nav-item.active { color: var(--accent); }
-    .nav-icon { font-size: 20px; }
-    .nav-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-    .topic-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip { padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
-    .chip.selected { background: rgba(124,106,247,0.15); border-color: var(--accent); color: var(--accent); }
-    .score-ring { position: relative; width: 100px; height: 100px; }
-    .score-ring svg { transform: rotate(-90deg); }
-    .score-ring-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent); }
-    .gap-12 { display: flex; flex-direction: column; gap: 12px; }
-    .gap-16 { display: flex; flex-direction: column; gap: 16px; }
-    .gap-20 { display: flex; flex-direction: column; gap: 20px; }
-    .text-dim { color: var(--text-dim); font-size: 13px; }
-    .text-accent { color: var(--accent); }
-    .text-success { color: var(--success); }
-    .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.3px; margin-bottom: 4px; }
-    .loading { display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: 14px; padding: 20px 0; }
-    .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .dot-pulse { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-    .dot-pulse span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
-    .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
-    .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes pulse { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
-    .setup-banner { background: rgba(247,194,106,0.1); border: 1px solid rgba(247,194,106,0.3); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--accent2); line-height: 1.5; }
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* grid bg */
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:
+        linear-gradient(rgba(46,124,246,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(46,124,246,0.03) 1px,transparent 1px);
+      background-size:40px 40px;
+      pointer-events:none;z-index:0;
+    }
+
+    #app{
+      position:relative;z-index:1;
+      width:100%;max-width:500px;
+      height:100%;
+      display:flex;flex-direction:column;
+      overflow:hidden;
+    }
+
+    /* ── SCREENS ── */
+    .screen{display:none;flex-direction:column;flex:1;overflow-y:auto;overflow-x:hidden;}
+    .screen.active{display:flex;animation:fadeUp .35s ease;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+    /* ── SCROLLABLE CONTENT ── */
+    .scroll-body{flex:1;overflow-y:auto;padding:20px 18px 100px;}
+    .scroll-body::-webkit-scrollbar{width:3px;}
+    .scroll-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+    /* ── TOP BAR ── */
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 18px 12px;
+      border-bottom:1px solid var(--border);
+      background:var(--bg);
+      position:sticky;top:0;z-index:20;
+      flex-shrink:0;
+    }
+    .topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);}
+    .topbar-logo span{color:var(--blue);}
+
+    /* ── USAGE PILL ── */
+    .usage-pill{
+      display:flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:20px;
+      border:1px solid var(--border2);
+      background:var(--surface);
+      font-size:11px;font-weight:600;color:var(--text-2);
+    }
+    .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+    .usage-dot.warn{background:var(--gold);}
+    .usage-dot.over{background:var(--red);}
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav{
+      display:none;
+      border-top:1px solid var(--border);
+      background:var(--bg);
+      position:sticky;bottom:0;z-index:20;
+      flex-shrink:0;
+    }
+    .bottom-nav.show{display:flex;}
+    .nav-btn{
+      flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+      padding:11px 4px 13px;border:none;background:none;
+      font-family:'Instrument Sans',sans-serif;
+      color:var(--text-3);cursor:pointer;transition:color .2s;
+    }
+    .nav-btn.active{color:var(--blue);}
+    .nav-icon{font-size:19px;}
+    .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+
+    /* ── BUTTONS ── */
+    .btn{
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;padding:15px 18px;border-radius:var(--r-sm);border:none;
+      font-family:'Instrument Sans',sans-serif;font-size:15px;font-weight:600;
+      cursor:pointer;transition:all .18s;
+    }
+    .btn-blue{background:var(--blue);color:#fff;}
+    .btn-blue:hover{background:#3d88ff;transform:translateY(-1px);}
+    .btn-blue:active{transform:translateY(0);}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+    .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
+    .btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
+    .btn-ghost:hover{color:var(--text);}
+    .btn-sm{padding:9px 14px;font-size:13px;width:auto;border-radius:8px;}
+    .btn-icon{width:42px;height:42px;padding:0;border-radius:10px;flex-shrink:0;}
+    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(255,92,92,.3);}
+
+    /* ── INPUTS ── */
+    .field{display:flex;flex-direction:column;gap:5px;}
+    .field label{font-size:12px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;}
+    input[type=text],input[type=email],textarea,select{
+      width:100%;background:var(--surface2);border:1px solid var(--border2);
+      border-radius:var(--r-sm);padding:13px 15px;
+      color:var(--text);font-family:'Instrument Sans',sans-serif;font-size:15px;
+      outline:none;transition:border-color .2s;
+    }
+    input:focus,textarea:focus{border-color:var(--blue);}
+    textarea{resize:vertical;min-height:110px;}
+    ::placeholder{color:var(--text-3);}
+
+    /* ── CARDS ── */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
+    .card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px;}
+
+    /* ── STAT GRID ── */
+    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 10px;text-align:center;}
+    .stat-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.5px;color:var(--blue);}
+    .stat-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+    /* ── UPLOAD ── */
+    .drop-zone{
+      border:2px dashed var(--border2);border-radius:var(--r);
+      padding:30px 18px;text-align:center;cursor:pointer;
+      transition:all .2s;background:var(--surface);
+    }
+    .drop-zone:hover,.drop-zone.over{border-color:var(--blue);background:var(--blue-dim);}
+    .drop-icon{font-size:34px;margin-bottom:10px;}
+    .drop-title{font-weight:700;font-size:16px;margin-bottom:4px;}
+    .drop-sub{font-size:13px;color:var(--text-2);}
+    #fileInput{display:none;}
+    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;}
+    .file-row-info{flex:1;min-width:0;}
+    .file-row-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .file-row-size{font-size:11px;color:var(--text-2);margin-top:2px;}
+    .file-row-del{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:15px;padding:3px;}
+
+    /* ── FIELD TAGS ── */
+    .field-tags{display:flex;flex-wrap:wrap;gap:8px;}
+    .ftag{
+      padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;
+      background:var(--surface2);border:1px solid var(--border2);
+      cursor:pointer;transition:all .18s;color:var(--text-2);
+    }
+    .ftag:hover,.ftag.sel{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+
+    /* ── PROGRESS BAR ── */
+    .prog-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+    .prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;transition:width .6s ease;}
+
+    /* ── MODE PILLS ── */
+    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:4px;}
+    .mode-pill{flex:1;text-align:center;padding:9px 6px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Instrument Sans',sans-serif;transition:all .18s;}
+    .mode-pill.active{background:var(--blue);color:#fff;}
+
+    /* ── SCORE RING ── */
+    .ring-wrap{position:relative;width:96px;height:96px;flex-shrink:0;}
+    .ring-wrap svg{transform:rotate(-90deg);}
+    .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--blue);}
+
+    /* ── QUESTION CARD ── */
+    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+    .q-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+    .q-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);}
+    .q-meta{font-size:11px;color:var(--text-3);}
+    .q-body{padding:18px;}
+    .q-text{font-size:15px;line-height:1.65;font-weight:500;margin-bottom:18px;}
+    .opts{display:flex;flex-direction:column;gap:9px;}
+    .opt{
+      display:flex;align-items:flex-start;gap:11px;
+      padding:13px 14px;border-radius:var(--r-sm);
+      border:1px solid var(--border);cursor:pointer;
+      transition:all .18s;background:var(--surface2);
+    }
+    .opt:hover{border-color:var(--blue);}
+    .opt.correct{border-color:var(--green);background:rgba(52,217,139,.08);}
+    .opt.wrong{border-color:var(--red);background:rgba(255,92,92,.08);}
+    .opt-letter{
+      width:26px;height:26px;border-radius:7px;
+      background:var(--border);display:flex;align-items:center;justify-content:center;
+      font-size:11px;font-weight:700;flex-shrink:0;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
+    }
+    .opt.correct .opt-letter{background:var(--green);color:#000;}
+    .opt.wrong .opt-letter{background:var(--red);color:#fff;}
+    .opt-text{font-size:14px;line-height:1.5;flex:1;padding-top:3px;}
+
+    /* ── FEEDBACK ── */
+    .feedback{margin-top:14px;padding:13px 15px;border-radius:var(--r-sm);font-size:13px;line-height:1.6;display:none;}
+    .feedback.show{display:block;}
+    .feedback.ok{background:rgba(52,217,139,.1);border:1px solid rgba(52,217,139,.4);color:#6af5b0;}
+    .feedback.bad{background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.4);color:#ffaaaa;}
+
+    /* ── WRITTEN ANSWER ── */
+    .written-area{margin-top:4px;}
+    .written-area textarea{min-height:100px;}
+    .submit-btn-wrap{margin-top:10px;}
+
+    /* ── CHAT ── */
+    .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:16px 18px;}
+    .chat-body::-webkit-scrollbar{width:3px;}
+    .chat-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+    .msg{display:flex;flex-direction:column;gap:3px;max-width:86%;animation:fadeUp .25s ease;}
+    .msg.ai{align-self:flex-start;}
+    .msg.user{align-self:flex-end;}
+    .msg-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 3px;}
+    .msg.user .msg-name{text-align:right;}
+    .msg-bub{padding:12px 15px;border-radius:13px;font-size:14px;line-height:1.65;}
+    .msg.ai .msg-bub{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px;}
+    .msg.user .msg-bub{background:var(--blue);color:#fff;border-bottom-right-radius:3px;}
+    .chat-input-bar{display:flex;gap:8px;align-items:flex-end;padding:10px 18px 20px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;}
+    .chat-input-bar textarea{min-height:44px;max-height:110px;padding:12px 14px;resize:none;flex:1;}
+
+    /* ── TOPIC CHIPS ── */
+    .topic-wrap{display:flex;flex-wrap:wrap;gap:7px;}
+    .topic-chip{padding:7px 13px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .18s;}
+    .topic-chip:hover{border-color:var(--blue);color:var(--blue);}
+
+    /* ── ONBOARDING ── */
+    .onboard-step{display:none;flex-direction:column;gap:20px;padding:24px 18px 40px;}
+    .onboard-step.active{display:flex;animation:fadeUp .35s ease;}
+    .step-indicator{display:flex;gap:6px;justify-content:center;margin-bottom:4px;}
+    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);}
+    .step-dot.active{background:var(--blue);width:20px;border-radius:3px;}
+    .ob-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.5px;line-height:1.1;}
+    .ob-sub{font-size:14px;color:var(--text-2);line-height:1.6;}
+
+    /* ── UPGRADE WALL ── */
+    .upgrade-overlay{
+      position:fixed;inset:0;z-index:100;
+      background:rgba(7,8,15,.92);
+      display:none;align-items:flex-end;justify-content:center;
+      backdrop-filter:blur(8px);
+    }
+    .upgrade-overlay.show{display:flex;}
+    .upgrade-sheet{
+      width:100%;max-width:500px;
+      background:var(--bg2);
+      border:1px solid var(--border2);
+      border-bottom:none;
+      border-radius:20px 20px 0 0;
+      padding:32px 24px 40px;
+      animation:slideUp .3s ease;
+    }
+    @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:16px;}
+    .upgrade-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.5px;line-height:1.1;margin-bottom:10px;}
+    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:24px;}
+    .upgrade-perks{display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+    .perk{display:flex;align-items:center;gap:10px;font-size:14px;}
+    .perk-icon{color:var(--green);font-size:16px;flex-shrink:0;}
+
+    /* ── LOADING ── */
+    .loading{display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:14px;padding:16px 0;}
+    .spin{width:17px;height:17px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .dots{display:flex;gap:4px;align-items:center;}
+    .dots span{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:dp 1.2s ease-in-out infinite;}
+    .dots span:nth-child(2){animation-delay:.2s;}
+    .dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes dp{0%,80%,100%{transform:scale(.5);opacity:.3;}40%{transform:scale(1);opacity:1;}}
+
+    /* ── UTILS ── */
+    .gap-8{display:flex;flex-direction:column;gap:8px;}
+    .gap-12{display:flex;flex-direction:column;gap:12px;}
+    .gap-16{display:flex;flex-direction:column;gap:16px;}
+    .gap-20{display:flex;flex-direction:column;gap:20px;}
+    .row{display:flex;gap:10px;align-items:center;}
+    .sec-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.5px;color:var(--text);}
+    .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);}
+    .dim{color:var(--text-2);font-size:13px;}
+    .accent{color:var(--blue);}
+    .success{color:var(--green);}
+    .warn-text{color:var(--gold);}
+    .divider{height:1px;background:var(--border);margin:4px 0;}
   </style>
 </head>
 <body>
 <div id="app">
 
-  <div class="top-bar" id="topBar" style="display:none">
-    <div class="logo">Cogn<span>IQ</span></div>
-    <div class="badge" id="dayBadge">Day 1 of 60</div>
-  </div>
+  <!-- ══════════════════════════════════
+       ONBOARDING (first-time users)
+  ══════════════════════════════════ -->
+  <div class="screen active" id="screen-onboard">
+    <div style="flex:1;overflow-y:auto;">
 
-  <!-- HOME -->
-  <div class="screen active" id="screen-home">
-    <div style="flex:1; display:flex; flex-direction:column; gap:32px; padding-top:8px;">
-      <div>
-        <div class="logo" style="font-size:26px; margin-bottom:24px;">Cogn<span style="color:var(--accent)">IQ</span></div>
-        <div class="hero-tag">Cognitive Mastery Engine</div>
-        <h1 style="margin-top:12px;">Master what<br/>you <em>actually</em><br/>need to know.</h1>
-        <p style="color:var(--text-dim); font-size:15px; line-height:1.6; margin-top:16px; max-width:340px;">Upload your materials. Get diagnosed. Train with AI that knows exactly where you're weak.</p>
-      </div>
-      <div id="setupBanner" class="setup-banner">
-        <strong>⚙️ Setup needed:</strong> Add your Anthropic API key in Settings to activate the full AI engine.
-      </div>
-      <div class="gap-12">
-        <button class="btn btn-primary" onclick="goTo('upload')">📂 Upload My Materials</button>
-        <button class="btn btn-secondary" onclick="goTo('dashboard')">📊 Go to Dashboard</button>
-        <button class="btn btn-ghost" onclick="goTo('settings')">⚙️ Settings & API Key</button>
-      </div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" id="homeTopics">0</div><div class="stat-label">Topics</div></div>
-        <div class="stat-card"><div class="stat-num" id="homeScore">—</div><div class="stat-label">Avg Score</div></div>
-        <div class="stat-card"><div class="stat-num" id="homeDays">60</div><div class="stat-label">Days Left</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- UPLOAD -->
-  <div class="screen" id="screen-upload">
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-      <button class="btn btn-icon btn-ghost" onclick="goBack()">←</button>
-      <h2>Upload Materials</h2>
-    </div>
-    <div class="gap-20" style="flex:1">
-      <p class="text-dim">Upload your notes, slides, or textbooks. The AI will build your personal knowledge map.</p>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-        <div class="upload-icon">📚</div>
-        <div class="upload-title">Tap to upload files</div>
-        <div class="upload-sub" style="margin-top:6px;">PDF, DOCX, PPTX, TXT supported</div>
-      </div>
-      <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)">
-      <div id="fileListWrap" style="display:none">
-        <div class="card-label">Uploaded Files</div>
-        <div class="file-list" id="fileList"></div>
-      </div>
-      <div class="input-group">
-        <label>Subject / Course Name</label>
-        <input type="text" id="subjectName" placeholder="e.g. Advanced Food Microbiology" value="Advanced Food Microbiology">
-      </div>
-      <div class="input-group">
-        <label>Paste your syllabus or key topics (recommended)</label>
-        <textarea id="syllabusText" placeholder="Paste your syllabus here, or list the main topics you need to cover..."></textarea>
-      </div>
-      <button class="btn btn-primary" onclick="processUpload()" id="processBtn" disabled>
-        🧠 Build My Knowledge Map
-      </button>
-    </div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div class="screen" id="screen-dashboard">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
-      <h2>Dashboard</h2>
-      <div class="badge" id="modeTag">Exam Mode</div>
-    </div>
-    <div class="gap-16" style="flex:1">
-      <div class="mode-pills">
-        <button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button>
-        <button class="mode-pill" id="masteryPill" onclick="setMode('mastery')">🧠 Mastery Mode</button>
-      </div>
-      <div class="card">
-        <div class="card-label">Overall Progress</div>
-        <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
-        <div style="display:flex; justify-content:space-between; margin-top:8px;">
-          <span class="text-dim" id="progressPct">0% complete</span>
-          <span class="text-dim" id="progressLabel">0 / 0 topics</span>
+      <!-- Step 1: Welcome -->
+      <div class="onboard-step active" id="ob1">
+        <div style="padding-top:16px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;margin-bottom:28px;">Cogn<span style="color:var(--blue)">IQ</span></div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);margin-bottom:12px;">Cognitive Mastery Engine</div>
+          <div class="ob-title">Master any<br/>subject.<br/><span style="color:var(--blue)">Any field.</span></div>
+          <p class="ob-sub" style="margin-top:14px;">Upload your materials — notes, slides, textbooks. CognIQ builds a personalized AI training system tailored exactly to your course.</p>
         </div>
-      </div>
-      <div style="display:flex; gap:12px;">
-        <div class="card" style="flex:1; align-items:center; display:flex; flex-direction:column; gap:8px;">
-          <div class="card-label">Avg Score</div>
-          <div class="score-ring">
-            <svg viewBox="0 0 100 100" width="100" height="100">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="8"/>
-              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--accent)" stroke-width="8"
-                stroke-dasharray="251" stroke-dashoffset="251" id="scoreRingCircle"
-                stroke-linecap="round" style="transition:stroke-dashoffset 1s ease"/>
-            </svg>
-            <div class="score-ring-num" id="scoreRingNum">—</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔬</div>
+            <div><div style="font-weight:600;font-size:14px;">Any subject, any level</div><div class="dim" style="margin-top:2px;">Law, Medicine, Engineering, Finance, Sciences — CognIQ adapts completely.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div>
+            <div><div style="font-weight:600;font-size:14px;">Exam + Mastery modes</div><div class="dim" style="margin-top:2px;">Train for your exact exam format or build deep conceptual understanding.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:36px;height:36px;border-radius:9px;background:var(--blue-dim);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🧠</div>
+            <div><div style="font-weight:600;font-size:14px;">AI that knows your gaps</div><div class="dim" style="margin-top:2px;">Tracks what you know, where you're weak, and adapts every session.</div></div>
           </div>
         </div>
-        <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
-          <div class="stat-card"><div class="stat-num text-success" id="statStrong">0</div><div class="stat-label">Strong Areas</div></div>
-          <div class="stat-card"><div class="stat-num" style="color:var(--danger)" id="statWeak">0</div><div class="stat-label">Weak Areas</div></div>
-          <div class="stat-card"><div class="stat-num" id="statQs">0</div><div class="stat-label">Questions Done</div></div>
+        <div class="gap-8" style="margin-top:8px;">
+          <button class="btn btn-blue" onclick="obNext(2)">Get Started →</button>
+          <button class="btn btn-ghost" onclick="skipOnboard()">I already have an account</button>
+        </div>
+        <div class="step-indicator"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+      </div>
+
+      <!-- Step 2: Subject setup -->
+      <div class="onboard-step" id="ob2">
+        <div class="step-indicator"><div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
+        <div>
+          <div class="ob-title">What are you<br/>studying?</div>
+          <p class="ob-sub" style="margin-top:10px;">Tell us your subject and how much time you have. CognIQ will build your learning plan around it.</p>
+        </div>
+        <div class="gap-16">
+          <div class="field">
+            <label>Subject or Course Name</label>
+            <input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Constitutional Law, CFA Level 1..."/>
+          </div>
+          <div>
+            <div class="label" style="margin-bottom:10px;">Or pick your field</div>
+            <div class="field-tags" id="fieldTags">
+              <div class="ftag" onclick="pickField(this,'Medicine & Health Sciences')">🏥 Medicine</div>
+              <div class="ftag" onclick="pickField(this,'Law & Legal Studies')">⚖️ Law</div>
+              <div class="ftag" onclick="pickField(this,'Engineering')">⚙️ Engineering</div>
+              <div class="ftag" onclick="pickField(this,'Food Microbiology')">🔬 Microbiology</div>
+              <div class="ftag" onclick="pickField(this,'Finance & Accounting')">📈 Finance</div>
+              <div class="ftag" onclick="pickField(this,'Computer Science')">💻 Computer Science</div>
+              <div class="ftag" onclick="pickField(this,'Business & Management')">💼 Business</div>
+              <div class="ftag" onclick="pickField(this,'Pharmacy & Pharmacology')">💊 Pharmacy</div>
+              <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
+              <div class="ftag" onclick="pickField(this,'Psychology & Neuroscience')">🧠 Psychology</div>
+              <div class="ftag" onclick="pickField(this,'Other')">✦ Other</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Days Until Your Exam</label>
+            <input type="text" id="ob-days" placeholder="e.g. 60" value="60"/>
+          </div>
+          <div class="field">
+            <label>Exam Format (helps tailor questions)</label>
+            <div class="field-tags" id="examFormatTags" style="margin-top:6px;">
+              <div class="ftag" onclick="toggleFormat(this,'MCQ')">MCQ</div>
+              <div class="ftag" onclick="toggleFormat(this,'Written Essays')">Written Essays</div>
+              <div class="ftag" onclick="toggleFormat(this,'Case Studies')">Case Studies</div>
+              <div class="ftag" onclick="toggleFormat(this,'True / False')">True / False</div>
+              <div class="ftag" onclick="toggleFormat(this,'Viva / Oral')">Viva / Oral</div>
+              <div class="ftag" onclick="toggleFormat(this,'Practical')">Practical</div>
+            </div>
+          </div>
+        </div>
+        <div class="gap-8">
+          <button class="btn btn-blue" onclick="obNext(3)">Continue →</button>
+          <button class="btn btn-ghost btn-sm" onclick="obNext(1)" style="width:100%">← Back</button>
         </div>
       </div>
-      <div class="section-title">Start Training</div>
-      <div class="gap-12">
-        <button class="btn btn-primary" onclick="goTo('train')">⚡ Start Practice Session</button>
-        <button class="btn btn-secondary" onclick="goTo('tutor')">💬 Ask AI Tutor</button>
+
+      <!-- Step 3: Upload -->
+      <div class="onboard-step" id="ob3">
+        <div class="step-indicator"><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div></div>
+        <div>
+          <div class="ob-title">Upload your<br/>materials</div>
+          <p class="ob-sub" style="margin-top:10px;">Upload notes, slides, or textbook excerpts. The more you give, the more personalized your training. You can also skip and use AI's general knowledge.</p>
+        </div>
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="drop-icon">📚</div>
+          <div class="drop-title">Tap to upload files</div>
+          <div class="drop-sub">PDF, DOCX, PPTX, TXT — up to 10 files</div>
+        </div>
+        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)"/>
+        <div id="fileListWrap" style="display:none" class="gap-8">
+          <div class="label">Uploaded Files</div>
+          <div class="gap-8" id="fileList"></div>
+        </div>
+        <div class="field">
+          <label>Paste Syllabus or Key Topics (optional)</label>
+          <textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or any key content here..."></textarea>
+        </div>
+        <div class="gap-8">
+          <button class="btn btn-blue" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
+          <button class="btn btn-ghost btn-sm" onclick="skipAndLaunch()" style="width:100%">Skip — Use AI general knowledge</button>
+        </div>
       </div>
-      <div id="topicsSection" style="display:none">
-        <div class="section-title" style="margin-bottom:12px;">Topic Map</div>
-        <div class="topic-chips" id="topicChips"></div>
-      </div>
+
     </div>
   </div>
 
-  <!-- TRAIN -->
+  <!-- ══════════════════════════════════
+       DASHBOARD
+  ══════════════════════════════════ -->
+  <div class="screen" id="screen-dash">
+    <div class="topbar">
+      <div class="topbar-logo">Cogn<span>IQ</span></div>
+      <div class="usage-pill">
+        <div class="usage-dot" id="usageDot"></div>
+        <span id="usageText">20 free left</span>
+      </div>
+    </div>
+    <div class="scroll-body gap-20">
+
+      <!-- Subject banner -->
+      <div style="background:var(--blue-dim);border:1px solid rgba(46,124,246,.2);border-radius:var(--r);padding:16px 18px;">
+        <div class="label" style="margin-bottom:4px;color:var(--blue);">Active Subject</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;" id="dashSubject">Advanced Food Microbiology</div>
+        <div class="dim" style="margin-top:4px;" id="dashMeta">60 days left · MCQ, Essays, Case Studies</div>
+      </div>
+
+      <!-- Mode -->
+      <div class="mode-pills">
+        <button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button>
+        <button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val" id="dsTopics">0</div><div class="stat-lbl">Topics</div></div>
+        <div class="stat-box"><div class="stat-val" id="dsScore" style="color:var(--cyan)">—</div><div class="stat-lbl">Avg Score</div></div>
+        <div class="stat-box"><div class="stat-val" id="dsQs">0</div><div class="stat-lbl">Questions</div></div>
+      </div>
+
+      <!-- Progress -->
+      <div class="card">
+        <div class="card-title">Session Progress</div>
+        <div class="prog-wrap"><div class="prog-fill" id="dashProg" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;">
+          <span class="dim" id="dashProgPct">0% mastered</span>
+          <span class="dim" id="dashProgTopics">0 / 0 topics</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="gap-8">
+        <button class="btn btn-blue" onclick="goTo('train')">⚡ Start Practice Session</button>
+        <button class="btn btn-outline" onclick="goTo('tutor')">💬 Ask AI Tutor</button>
+      </div>
+
+      <!-- Topic map -->
+      <div id="topicMapWrap" style="display:none">
+        <div class="sec-title" style="margin-bottom:12px;">Topic Map</div>
+        <div class="topic-wrap" id="topicMap"></div>
+      </div>
+
+      <!-- Change subject -->
+      <button class="btn btn-ghost btn-sm" onclick="changeSubject()" style="width:100%;margin-top:4px;">↩ Change Subject / Upload New Materials</button>
+
+    </div>
+    <nav class="bottom-nav show">
+      <button class="nav-btn active" id="nav-dash" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" id="nav-train" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" id="nav-tutor" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" id="nav-settings" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TRAIN
+  ══════════════════════════════════ -->
   <div class="screen" id="screen-train">
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dashboard')">←</button>
-      <div style="flex:1">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="text-dim" id="trainLabel">Question 1</span>
-          <span class="text-dim" id="trainScore">Score: 0</span>
+    <div class="topbar">
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dash')">←</button>
+      <div style="flex:1;margin:0 12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+          <span class="dim" id="trainLabel">Question 1</span>
+          <span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span>
         </div>
-        <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="trainProgress" style="width:10%"></div></div>
+        <div class="prog-wrap"><div class="prog-fill" id="trainProg" style="width:5%"></div></div>
       </div>
+      <div class="usage-pill" style="font-size:10px;" id="trainUsagePill">20 left</div>
     </div>
-    <div id="questionArea" style="flex:1; display:flex; flex-direction:column; gap:16px; overflow-y:auto; padding-bottom:16px;">
-      <div class="loading"><div class="spinner"></div>Generating your first question...</div>
+    <div id="qArea" style="flex:1;overflow-y:auto;padding:16px 18px 20px;display:flex;flex-direction:column;gap:14px;">
+      <div class="loading"><div class="spin"></div>Generating question...</div>
     </div>
-    <div id="trainActions" style="display:none; flex-direction:column; gap:10px; padding-top:12px; border-top:1px solid var(--border);">
-      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
-      <button class="btn btn-ghost btn-sm" onclick="goTo('dashboard')" style="width:100%">End Session</button>
+    <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:12px 18px 20px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;">
+      <button class="btn btn-blue" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
+      <button class="btn btn-ghost" onclick="goTo('dash')">End Session</button>
     </div>
+    <nav class="bottom-nav show">
+      <button class="nav-btn" id="nav-dash2" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn active" id="nav-train2"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
   </div>
 
-  <!-- TUTOR -->
-  <div class="screen" id="screen-tutor" style="padding-bottom:0;">
-    <div style="display:flex; align-items:center; gap:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dashboard')">←</button>
-      <div><h3>AI Tutor</h3><div class="text-dim" style="font-size:12px;">Ask anything about your course</div></div>
-      <button class="btn btn-sm btn-ghost" onclick="clearChat()" style="margin-left:auto">Clear</button>
+  <!-- ══════════════════════════════════
+       TUTOR
+  ══════════════════════════════════ -->
+  <div class="screen" id="screen-tutor">
+    <div class="topbar">
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dash')">←</button>
+      <div style="flex:1;margin-left:10px;">
+        <div style="font-weight:700;font-size:15px;">AI Tutor</div>
+        <div class="dim" style="font-size:11px;" id="tutorSubLabel">Advanced Food Microbiology</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
     </div>
-    <div class="chat-area" id="chatArea" style="padding-top:16px;">
+    <div class="chat-body" id="chatBody">
       <div class="msg ai">
-        <div class="msg-sender">CognIQ Tutor</div>
-        <div class="msg-bubble">Hello! I'm your AI tutor for <strong id="tutorSubject">Advanced Food Microbiology</strong>. Ask me anything — concept explanations, case study analysis, exam prep, or tricky topics. What would you like to explore?</div>
+        <div class="msg-name">CognIQ Tutor</div>
+        <div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject. Ask me anything — concept explanations, case walkthroughs, exam strategies, or tricky mechanisms. What would you like to explore?</div>
       </div>
     </div>
-    <div class="input-bar" style="padding:12px 0 24px;">
-      <textarea id="chatInput" placeholder="Ask a question..." rows="1" onkeydown="handleChatKey(event)"></textarea>
-      <button class="btn btn-icon btn-primary" onclick="sendChat()">↑</button>
+    <div class="chat-input-bar">
+      <textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea>
+      <button class="btn btn-icon btn-blue" onclick="sendMsg()">↑</button>
     </div>
+    <nav class="bottom-nav show">
+      <button class="nav-btn" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn active"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
   </div>
 
-  <!-- SETTINGS -->
+  <!-- ══════════════════════════════════
+       SETTINGS
+  ══════════════════════════════════ -->
   <div class="screen" id="screen-settings">
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-      <button class="btn btn-icon btn-ghost" onclick="goBack()">←</button>
-      <h2>Settings</h2>
+    <div class="topbar">
+      <div class="topbar-logo">Cogn<span>IQ</span></div>
+      <div class="label">Settings</div>
     </div>
-    <div class="gap-20" style="flex:1">
+    <div class="scroll-body gap-20">
       <div class="card gap-16">
-        <div class="card-label">🔑 Anthropic API Key</div>
-        <div class="input-group">
-          <label>API Key</label>
-          <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
-          <span class="text-dim">Get yours free at <strong>console.anthropic.com</strong> → API Keys</span>
+        <div class="card-title">📅 Exam Countdown</div>
+        <div class="field">
+          <label>Days Until Exam</label>
+          <input type="text" id="set-days" placeholder="60"/>
         </div>
-        <button class="btn btn-primary" onclick="saveApiKey()">Save API Key</button>
+        <button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button>
       </div>
       <div class="card gap-16">
-        <div class="card-label">📅 Exam Countdown</div>
-        <div class="input-group">
-          <label>Days until exam</label>
-          <input type="text" id="examDaysInput" placeholder="60" />
-        </div>
-        <button class="btn btn-secondary" onclick="saveExamDays()">Save</button>
-      </div>
-      <div class="card gap-16">
-        <div class="card-label">🎯 Subject</div>
-        <div class="input-group">
+        <div class="card-title">🎯 Subject & Format</div>
+        <div class="field">
           <label>Subject Name</label>
-          <input type="text" id="settingsSubject" />
+          <input type="text" id="set-subject"/>
         </div>
-        <button class="btn btn-secondary" onclick="saveSubject()">Save</button>
+        <button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button>
+      </div>
+      <div class="card gap-16">
+        <div class="card-title">📊 Usage</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="dim">Questions used</span>
+          <span style="font-weight:700;" id="set-q-used">0 / 20 free</span>
+        </div>
+        <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%;background:linear-gradient(90deg,var(--blue),var(--cyan));"></div></div>
+        <button class="btn btn-blue btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
       </div>
       <div class="card">
-        <div class="card-label">📊 Study Data</div>
-        <p class="text-dim" style="margin-bottom:12px;">Reset all progress and uploaded materials.</p>
-        <button class="btn btn-ghost" onclick="resetData()" style="color:var(--danger);border-color:var(--danger)">🗑 Reset All Data</button>
+        <div class="card-title">🗄️ Data</div>
+        <p class="dim" style="margin-bottom:12px;">Reset all progress, topics, and uploaded materials.</p>
+        <button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button>
       </div>
+    </div>
+    <nav class="bottom-nav show">
+      <button class="nav-btn" onclick="goTo('dash')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+      <button class="nav-btn" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+      <button class="nav-btn active"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════
+       UPGRADE OVERLAY
+  ══════════════════════════════════ -->
+  <div class="upgrade-overlay" id="upgradeOverlay">
+    <div class="upgrade-sheet">
+      <div class="upgrade-badge">⭐ Upgrade to Pro</div>
+      <div class="upgrade-title">You've hit your<br/>free limit.</div>
+      <div class="upgrade-sub">You've used your 20 free questions. Join the waitlist to get early access to CognIQ Pro — unlimited training, all subjects, all modes.</div>
+      <div class="upgrade-perks">
+        <div class="perk"><span class="perk-icon">✓</span><span>Unlimited practice questions</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Unlimited AI tutor messages</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive profiling</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Written answer AI grading</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Viva / oral simulation mode</span></div>
+      </div>
+      <div class="field" style="margin-bottom:12px;">
+        <label>Your Email</label>
+        <input type="email" id="upgradeEmail" placeholder="you@email.com"/>
+      </div>
+      <button class="btn btn-blue" onclick="joinWaitlist()">Join Waitlist — It's Free</button>
+      <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeUpgrade()">Maybe Later</button>
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav" id="bottomNav" style="display:none">
-    <button class="nav-item" id="nav-dashboard" onclick="goTo('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-    <button class="nav-item" id="nav-train" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-    <button class="nav-item" id="nav-tutor" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-    <button class="nav-item" id="nav-settings" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-  </nav>
-
-</div>
+</div><!-- end #app -->
 
 <script>
-const S = {
-  apiKey: localStorage.getItem('ciq_key') || '',
-  subject: localStorage.getItem('ciq_subject') || 'Advanced Food Microbiology',
-  topics: JSON.parse(localStorage.getItem('ciq_topics') || '[]'),
-  content: localStorage.getItem('ciq_content') || '',
-  mode: localStorage.getItem('ciq_mode') || 'exam',
-  daysLeft: parseInt(localStorage.getItem('ciq_days') || '60'),
-  sessionScore: 0, sessionTotal: 0, qCount: 0,
-  currentQ: null, chatHistory: [], answered: false
+// ═══════════════════════════════
+// STATE
+// ═══════════════════════════════
+const FREE_Q_LIMIT = 20;
+const FREE_MSG_LIMIT = 10;
+
+const D = {
+  subject:    localStorage.getItem('ciq_subject') || '',
+  topics:     JSON.parse(localStorage.getItem('ciq_topics') || '[]'),
+  content:    localStorage.getItem('ciq_content') || '',
+  mode:       localStorage.getItem('ciq_mode') || 'exam',
+  days:       parseInt(localStorage.getItem('ciq_days') || '60'),
+  examFmt:    JSON.parse(localStorage.getItem('ciq_fmt') || '["MCQ"]'),
+  qUsed:      parseInt(localStorage.getItem('ciq_qused') || '0'),
+  msgUsed:    parseInt(localStorage.getItem('ciq_msgused') || '0'),
+  onboarded:  localStorage.getItem('ciq_onboarded') === '1',
+  scores:     JSON.parse(localStorage.getItem('ciq_scores') || '[]'),
+  totalQs:    parseInt(localStorage.getItem('ciq_qs') || '0'),
+  // session
+  sScore: 0, sTotal: 0, qCount: 0,
+  currentQ: null, answered: false,
+  chatHistory: [],
+  obFormats: []
 };
 
-// ── NAV ──
-let stack = ['home'];
+function save(k, v) { localStorage.setItem(k, typeof v === 'object' ? JSON.stringify(v) : String(v)); }
+
+// ═══════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════
 function goTo(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
-  const withNav = ['dashboard','train','tutor','settings'].includes(name);
-  document.getElementById('bottomNav').style.display = withNav ? 'flex' : 'none';
-  document.getElementById('topBar').style.display = withNav ? 'flex' : 'none';
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const nav = document.getElementById('nav-' + name);
-  if (nav) nav.classList.add('active');
-  if (name !== stack[stack.length-1]) stack.push(name);
+  if (name === 'dash') refreshDash();
   if (name === 'train') initTrain();
-  if (name === 'dashboard') refreshDash();
   if (name === 'settings') loadSettings();
-  updateBadge();
-}
-function goBack() { stack.pop(); goTo(stack[stack.length-1] || 'home'); }
-
-function updateBadge() {
-  document.getElementById('dayBadge').textContent = `${S.daysLeft} days left`;
-  document.getElementById('homeDays').textContent = S.daysLeft;
+  if (name === 'tutor') { document.getElementById('tutorSubLabel').textContent = D.subject; }
 }
 
-// ── UPLOAD ──
-let files = [];
-function handleFiles(f) {
-  files = [...files, ...Array.from(f)];
-  renderFiles();
-  document.getElementById('processBtn').disabled = files.length === 0;
+// ═══════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════
+function obNext(step) {
+  if (step === 3) {
+    const sub = document.getElementById('ob-subject').value.trim();
+    if (!sub) { alert('Please enter your subject name.'); return; }
+    D.subject = sub;
+    D.days = parseInt(document.getElementById('ob-days').value) || 60;
+    D.examFmt = D.obFormats.length ? D.obFormats : ['MCQ'];
+    save('ciq_subject', D.subject);
+    save('ciq_days', D.days);
+    save('ciq_fmt', D.examFmt);
+  }
+  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ob' + step).classList.add('active');
 }
-function renderFiles() {
-  const list = document.getElementById('fileList');
-  const wrap = document.getElementById('fileListWrap');
-  if (!files.length) { wrap.style.display='none'; return; }
-  wrap.style.display = 'block';
-  list.innerHTML = files.map((f,i) => `<div class="file-item"><div class="file-icon">${fileIcon(f.name)}</div><div class="file-info"><div class="file-name">${f.name}</div><div class="file-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-remove" onclick="removeFile(${i})">✕</button></div>`).join('');
-}
-function fileIcon(n) { const e=n.split('.').pop().toLowerCase(); return {pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'}[e]||'📎'; }
-function removeFile(i) { files.splice(i,1); renderFiles(); document.getElementById('processBtn').disabled=files.length===0; }
 
-async function processUpload() {
-  const btn = document.getElementById('processBtn');
+function pickField(el, val) {
+  document.querySelectorAll('#fieldTags .ftag').forEach(t => t.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('ob-subject').value = val;
+}
+
+function toggleFormat(el, fmt) {
+  el.classList.toggle('sel');
+  if (D.obFormats.includes(fmt)) D.obFormats = D.obFormats.filter(f => f !== fmt);
+  else D.obFormats.push(fmt);
+}
+
+async function buildAndLaunch() {
+  const btn = document.getElementById('buildBtn');
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Building Knowledge Map...';
-  const subj = document.getElementById('subjectName').value || S.subject;
-  const syl = document.getElementById('syllabusText').value;
-  S.subject = subj;
-  localStorage.setItem('ciq_subject', subj);
+  btn.innerHTML = '<div class="spin"></div> Building Knowledge Map...';
 
-  let content = `Subject: ${subj}\n\n`;
-  if (syl) content += `Syllabus:\n${syl}\n\n`;
-  for (const file of files) {
+  const syl = document.getElementById('ob-syllabus').value;
+  let content = `Subject: ${D.subject}\nExam formats: ${D.examFmt.join(', ')}\n\n`;
+  if (syl) content += `Syllabus/Topics:\n${syl}\n\n`;
+
+  for (const file of uploadedFiles) {
     try {
-      const text = await new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file); });
-      content += `\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;
-    } catch(e) { content += `\n--- ${file.name} --- [non-text file]\n`; }
+      const text = await readText(file);
+      content += `\n--- ${file.name} ---\n${text.substring(0, 6000)}\n`;
+    } catch(e) { content += `\n--- ${file.name} --- [binary file]\n`; }
   }
-  S.content = content;
-  localStorage.setItem('ciq_content', content);
+  D.content = content;
+  save('ciq_content', content);
 
-  if (S.apiKey) {
-    try {
-      const raw = await claude(`From this course material for "${subj}", extract 8-12 main topics. Return ONLY a JSON array. Example: ["Topic 1","Topic 2"]\n\nContent:\n${content.substring(0,3000)}`);
-      S.topics = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    } catch(e) { S.topics = defaultTopics(); }
-  } else { S.topics = defaultTopics(); }
-
-  localStorage.setItem('ciq_topics', JSON.stringify(S.topics));
-  btn.innerHTML = '✅ Knowledge Map Built!';
-  btn.style.background = 'var(--success)'; btn.style.color = '#000';
-  setTimeout(() => goTo('dashboard'), 1200);
+  try {
+    const raw = await ai(`From this course material for "${D.subject}", extract 8-14 main topics/chapters. Return ONLY a valid JSON array of short topic names. No markdown, no explanation. Example: ["Topic One","Topic Two"]\n\nContent:\n${content.substring(0,3000)}`);
+    D.topics = JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) {
+    D.topics = generateDefaultTopics(D.subject);
+  }
+  save('ciq_topics', D.topics);
+  finishOnboard();
 }
 
-function defaultTopics() {
-  return ['Microbial Growth Kinetics','Foodborne Pathogens','Food Spoilage Mechanisms','Fermentation Microbiology','HACCP & Food Safety Systems','Preservation & Hurdle Technology','Detection & Enumeration Methods','Mycotoxins & Mold Control'];
+function skipAndLaunch() {
+  D.content = '';
+  D.topics = generateDefaultTopics(D.subject || 'General Study');
+  save('ciq_content', '');
+  save('ciq_topics', D.topics);
+  finishOnboard();
 }
 
-// ── DASHBOARD ──
+function skipOnboard() {
+  if (D.onboarded && D.subject) { goTo('dash'); }
+  else { obNext(2); }
+}
+
+function finishOnboard() {
+  save('ciq_onboarded', '1');
+  D.onboarded = true;
+  goTo('dash');
+}
+
+function changeSubject() {
+  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ob2').classList.add('active');
+  goTo('onboard');
+}
+
+function generateDefaultTopics(subject) {
+  // Generic fallback topics — AI will personalize questions anyway
+  return [
+    `${subject} — Foundations & Core Concepts`,
+    `${subject} — Key Mechanisms & Processes`,
+    `${subject} — Classification & Taxonomy`,
+    `${subject} — Applied Principles`,
+    `${subject} — Case Studies & Scenarios`,
+    `${subject} — Regulations & Standards`,
+    `${subject} — Analytical Methods`,
+    `${subject} — Current Issues & Debates`
+  ];
+}
+
+// ═══════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════
+let uploadedFiles = [];
+function handleFiles(f) {
+  uploadedFiles = [...uploadedFiles, ...Array.from(f).slice(0, 10)];
+  renderFileList();
+}
+function renderFileList() {
+  const wrap = document.getElementById('fileListWrap');
+  if (!uploadedFiles.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  const icons = {pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};
+  document.getElementById('fileList').innerHTML = uploadedFiles.map((f,i) => `
+    <div class="file-row">
+      <span style="font-size:18px;">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span>
+      <div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div>
+      <button class="file-row-del" onclick="removeFile(${i})">✕</button>
+    </div>`).join('');
+}
+function removeFile(i) { uploadedFiles.splice(i,1); renderFileList(); }
+function readText(file) {
+  return new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file); });
+}
+
+// ═══════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════
 function refreshDash() {
-  document.getElementById('tutorSubject').textContent = S.subject;
-  document.getElementById('examPill').classList.toggle('active', S.mode==='exam');
-  document.getElementById('masteryPill').classList.toggle('active', S.mode==='mastery');
-  document.getElementById('modeTag').textContent = S.mode==='exam' ? '⚡ Exam Mode' : '🧠 Mastery Mode';
-  if (S.topics.length) {
-    document.getElementById('topicsSection').style.display = 'block';
-    document.getElementById('topicChips').innerHTML = S.topics.map(t=>`<div class="chip">${t}</div>`).join('');
-    document.getElementById('progressLabel').textContent = `0 / ${S.topics.length} topics`;
-    document.getElementById('homeTopics').textContent = S.topics.length;
+  document.getElementById('dashSubject').textContent = D.subject || 'No subject set';
+  document.getElementById('dashMeta').textContent = `${D.days} days left · ${D.examFmt.join(', ')}`;
+  document.getElementById('dsTopics').textContent = D.topics.length;
+  document.getElementById('dsQs').textContent = D.totalQs;
+  document.getElementById('examPill').classList.toggle('active', D.mode==='exam');
+  document.getElementById('mastPill').classList.toggle('active', D.mode==='mastery');
+  if (D.scores.length) {
+    const avg = Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);
+    document.getElementById('dsScore').textContent = avg+'%';
+    const pct = Math.min(100, D.totalQs * 2);
+    document.getElementById('dashProg').style.width = pct+'%';
+    document.getElementById('dashProgPct').textContent = pct+'% mastered';
+    document.getElementById('dashProgTopics').textContent = `${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;
   }
-  const scores = JSON.parse(localStorage.getItem('ciq_scores') || '[]');
-  const qs = parseInt(localStorage.getItem('ciq_qs') || '0');
-  document.getElementById('statQs').textContent = qs;
-  if (scores.length) {
-    const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
-    const offset = 251 - (251*avg/100);
-    document.getElementById('scoreRingCircle').style.strokeDashoffset = offset;
-    document.getElementById('scoreRingNum').textContent = avg+'%';
-    document.getElementById('homeScore').textContent = avg+'%';
-    document.getElementById('statStrong').textContent = scores.filter(s=>s>=70).length;
-    document.getElementById('statWeak').textContent = scores.filter(s=>s<50).length;
-    const pct = Math.min(100, qs*2);
-    document.getElementById('overallProgress').style.width = pct+'%';
-    document.getElementById('progressPct').textContent = pct+'% complete';
+  if (D.topics.length) {
+    document.getElementById('topicMapWrap').style.display = 'block';
+    document.getElementById('topicMap').innerHTML = D.topics.map(t=>`<div class="topic-chip">${t}</div>`).join('');
   }
+  updateUsageUI();
 }
-function setMode(m) { S.mode=m; localStorage.setItem('ciq_mode',m); refreshDash(); }
 
-// ── TRAINING ──
+function setMode(m) { D.mode=m; save('ciq_mode',m); refreshDash(); }
+
+function updateUsageUI() {
+  const left = Math.max(0, FREE_Q_LIMIT - D.qUsed);
+  const pct = Math.min(100,(D.qUsed/FREE_Q_LIMIT)*100);
+  const dot = document.getElementById('usageDot');
+  document.getElementById('usageText').textContent = left > 0 ? `${left} free left` : 'Limit reached';
+  dot.className = 'usage-dot' + (left===0?' over':left<=5?' warn':'');
+  document.getElementById('trainUsagePill').textContent = left > 0 ? `${left} left` : '⚠ Limit';
+}
+
+// ═══════════════════════════════
+// TRAINING
+// ═══════════════════════════════
 async function initTrain() {
-  S.sessionScore=0; S.sessionTotal=0; S.qCount=0; S.answered=false;
-  document.getElementById('trainScore').textContent = 'Score: 0';
-  document.getElementById('trainLabel').textContent = 'Question 1';
-  document.getElementById('trainProgress').style.width = '10%';
-  document.getElementById('trainActions').style.display = 'none';
-  await genQuestion();
+  D.sScore=0; D.sTotal=0; D.qCount=0; D.answered=false;
+  document.getElementById('trainScore').textContent='0 / 0';
+  document.getElementById('trainLabel').textContent='Question 1';
+  document.getElementById('trainProg').style.width='5%';
+  document.getElementById('trainActions').style.display='none';
+  updateUsageUI();
+  await genQ();
 }
 
-async function genQuestion() {
-  S.answered = false;
-  document.getElementById('trainActions').style.display = 'none';
-  document.getElementById('nextBtn').style.display = 'none';
-  const qArea = document.getElementById('questionArea');
-  qArea.innerHTML = '<div class="loading"><div class="spinner"></div>Generating question...</div>';
-  S.qCount++;
-  document.getElementById('trainLabel').textContent = `Question ${S.qCount}`;
-  document.getElementById('trainProgress').style.width = Math.min(100, S.qCount*10)+'%';
+async function genQ() {
+  if (D.qUsed >= FREE_Q_LIMIT) { showUpgrade(); return; }
+  D.answered = false;
+  document.getElementById('trainActions').style.display='none';
+  document.getElementById('nextBtn').style.display='none';
+  const qArea = document.getElementById('qArea');
+  qArea.innerHTML = '<div class="loading"><div class="spin"></div>Generating question...</div>';
+  D.qCount++;
+  document.getElementById('trainLabel').textContent = `Question ${D.qCount}`;
+  document.getElementById('trainProg').style.width = Math.min(100,D.qCount*10)+'%';
 
-  const topic = S.topics.length ? S.topics[Math.floor(Math.random()*S.topics.length)] : S.subject;
-  const modeCtx = S.mode==='exam'
-    ? 'Generate an exam-style MCQ or True/False question. Be precise and exam-appropriate.'
-    : 'Generate a challenging mastery question requiring analysis, application, or scenario reasoning.';
-  const contentCtx = S.content ? `Base the question on this course material:\n${S.content.substring(0,3000)}` : `Subject: ${S.subject}`;
+  const topic = D.topics.length ? D.topics[Math.floor(Math.random()*D.topics.length)] : D.subject;
+  const fmt = D.examFmt[Math.floor(Math.random()*D.examFmt.length)] || 'MCQ';
+  const isMastery = D.mode === 'mastery';
 
-  const prompt = `You are an expert examiner for "${S.subject}".
-Topic: ${topic}
-${modeCtx}
-${contentCtx}
+  const modePrompt = isMastery
+    ? 'Generate a MASTERY-level question requiring deep reasoning, analysis, application to novel scenarios, or synthesis across concepts. Avoid simple recall.'
+    : `Generate an EXAM-style question matching the format: ${fmt}. Be precise, exam-appropriate, and test understanding not just memory.`;
 
-Return ONLY valid JSON, no other text:
+  const typeInstruction = fmt === 'True / False'
+    ? 'Use type "truefalse" with options ["True","False"] and correct 0 or 1.'
+    : 'Use type "mcq" with 4 options A-D.';
+
+  const contentHint = D.content
+    ? `Base questions directly on this course content:\n${D.content.substring(0,3500)}`
+    : `The subject is "${D.subject}". Use your expert knowledge of this field to generate an accurate, high-quality question.`;
+
+  const prompt = `You are an expert examiner and educator for "${D.subject}".
+Topic focus: ${topic}
+${modePrompt}
+${contentHint}
+
+${typeInstruction}
+
+Return ONLY valid JSON. No markdown fences, no explanation, just the JSON object:
 {
   "type": "mcq",
-  "question": "question text",
-  "options": ["A: option text", "B: option text", "C: option text", "D: option text"],
+  "question": "full question text here",
+  "options": ["A: option one", "B: option two", "C: option three", "D: option four"],
   "correct": 0,
-  "explanation": "clear explanation of why this is correct and others are wrong"
-}
-For true/false: options must be ["True", "False"] and correct is 0 or 1. Set type to "truefalse".`;
+  "explanation": "Clear explanation of why the correct answer is right and why each wrong answer is incorrect. Be educational."
+}`;
 
-  if (!S.apiKey) { renderDemo(qArea); return; }
   try {
-    const raw = await claude(prompt);
-    const q = JSON.parse(raw.replace(/```json|```/g,'').trim());
-    renderQ(qArea, q);
-  } catch(e) { renderDemo(qArea); }
+    const raw = await ai(prompt);
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const start = clean.indexOf('{');
+    const end = clean.lastIndexOf('}');
+    const q = JSON.parse(clean.substring(start, end+1));
+    renderQ(qArea, q, topic);
+  } catch(e) {
+    renderFallbackQ(qArea);
+  }
 }
 
-function renderQ(container, q) {
-  S.currentQ = q;
+function renderQ(container, q, topic) {
+  D.currentQ = q;
   const letters = ['A','B','C','D'];
   container.innerHTML = `
-    <div class="question-card">
-      <div class="question-header">
-        <div class="question-type">${q.type==='truefalse'?'✓✗ True / False':'◎ Multiple Choice'}</div>
-        <div class="question-num">Q${S.qCount}</div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:2px;">${topic||D.subject}</div>
+    <div class="q-card">
+      <div class="q-head">
+        <div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div>
+        <div class="q-meta">Q${D.qCount}</div>
       </div>
-      <div class="question-body">
-        <div class="question-text">${q.question}</div>
-        <div class="options" id="opts">
+      <div class="q-body">
+        <div class="q-text">${q.question}</div>
+        <div class="opts" id="opts">
           ${q.options.map((opt,i)=>`
-            <div class="option" id="opt${i}" onclick="pick(${i})">
-              <div class="option-letter">${q.type==='truefalse'?(i===0?'T':'F'):letters[i]}</div>
-              <div class="option-text">${opt}</div>
+            <div class="opt" id="opt${i}" onclick="pick(${i})">
+              <div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):letters[i]}</div>
+              <div class="opt-text">${opt}</div>
             </div>`).join('')}
         </div>
-        <div class="feedback-box" id="fb"></div>
+        <div class="feedback" id="fb"></div>
       </div>
     </div>`;
 }
 
-function renderDemo(container) {
-  renderQ(container, {
-    type: 'mcq',
-    question: 'Which water activity (aw) threshold inhibits the growth of most foodborne pathogenic bacteria?',
-    options: ['A: Below 0.99', 'B: Below 0.91', 'C: Below 0.85', 'D: Below 0.75'],
-    correct: 2,
-    explanation: 'Most foodborne pathogens cannot grow below aw 0.85. This is a key food safety control parameter used in determining shelf stability.'
-  });
-  const note = document.createElement('div');
-  note.className = 'setup-banner';
-  note.style.marginTop = '12px';
-  note.innerHTML = '<strong>Demo question</strong> — Add your API key in Settings to generate questions from your own materials.';
-  document.getElementById('questionArea').appendChild(note);
+function renderFallbackQ(container) {
+  container.innerHTML = `
+    <div class="q-card">
+      <div class="q-head"><div class="q-type">◎  Practice Question</div><div class="q-meta">Q${D.qCount}</div></div>
+      <div class="q-body">
+        <div class="q-text">In the context of ${D.subject}, which of the following best describes evidence-based best practice?</div>
+        <div class="opts" id="opts">
+          <div class="opt" id="opt0" onclick="pick(0)"><div class="opt-letter">A</div><div class="opt-text">Applying principles without considering context</div></div>
+          <div class="opt" id="opt1" onclick="pick(1)"><div class="opt-letter">B</div><div class="opt-text">Integrating current evidence with professional expertise and context</div></div>
+          <div class="opt" id="opt2" onclick="pick(2)"><div class="opt-letter">C</div><div class="opt-text">Following outdated protocols regardless of new research</div></div>
+          <div class="opt" id="opt3" onclick="pick(3)"><div class="opt-letter">D</div><div class="opt-text">Using only theoretical knowledge without practical application</div></div>
+        </div>
+        <div class="feedback" id="fb"></div>
+      </div>
+    </div>
+    <div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:var(--r-sm);padding:12px 14px;font-size:12px;color:var(--gold);">⚠ Demo question shown. For subject-specific questions, make sure your materials are uploaded.</div>`;
+  D.currentQ = { type:'mcq', options:['','','',''], correct:1, explanation:'Evidence-based practice integrates the best available research, professional judgment, and contextual factors for optimal outcomes.' };
 }
 
 function pick(i) {
-  if (S.answered) return;
-  S.answered = true;
-  S.sessionTotal++;
-  const correct = i === S.currentQ.correct;
-  if (correct) S.sessionScore++;
+  if (D.answered) return;
+  D.answered = true; D.sTotal++;
+  const correct = i === D.currentQ.correct;
+  if (correct) D.sScore++;
 
-  // Track
-  const scores = JSON.parse(localStorage.getItem('ciq_scores') || '[]');
-  scores.push(correct ? 100 : 0);
-  if (scores.length > 100) scores.shift();
-  localStorage.setItem('ciq_scores', JSON.stringify(scores));
-  const qs = (parseInt(localStorage.getItem('ciq_qs') || '0')) + 1;
-  localStorage.setItem('ciq_qs', qs);
+  // Track usage & scores
+  D.qUsed++; D.totalQs++;
+  D.scores.push(correct ? 100 : 0);
+  if (D.scores.length > 100) D.scores.shift();
+  save('ciq_qused', D.qUsed);
+  save('ciq_qs', D.totalQs);
+  save('ciq_scores', D.scores);
 
-  document.getElementById('trainScore').textContent = `Score: ${S.sessionScore}/${S.sessionTotal}`;
-  document.querySelectorAll('.option').forEach((el,idx) => {
-    if (idx===S.currentQ.correct) el.classList.add('correct');
-    else if (idx===i && !correct) el.classList.add('wrong');
+  document.getElementById('trainScore').textContent=`${D.sScore} / ${D.sTotal}`;
+  updateUsageUI();
+
+  document.querySelectorAll('.opt').forEach((el,idx)=>{
+    if(idx===D.currentQ.correct) el.classList.add('correct');
+    else if(idx===i&&!correct) el.classList.add('wrong');
   });
-  const fb = document.getElementById('fb');
-  fb.className = `feedback-box show ${correct?'correct-fb':'wrong-fb'}`;
-  fb.innerHTML = correct
-    ? `✅ <strong>Correct!</strong> ${S.currentQ.explanation}`
-    : `❌ <strong>Incorrect.</strong> Correct: <strong>${S.currentQ.options[S.currentQ.correct]}</strong>. ${S.currentQ.explanation}`;
-  document.getElementById('trainActions').style.display = 'flex';
-  document.getElementById('nextBtn').style.display = 'flex';
+  const fb=document.getElementById('fb');
+  fb.className=`feedback show ${correct?'ok':'bad'}`;
+  fb.innerHTML=correct
+    ?`✅ <strong>Correct!</strong> ${D.currentQ.explanation}`
+    :`❌ <strong>Incorrect.</strong> Correct answer: <strong>${D.currentQ.options[D.currentQ.correct]}</strong><br><br>${D.currentQ.explanation}`;
+
+  document.getElementById('trainActions').style.display='flex';
+  document.getElementById('nextBtn').style.display='flex';
 }
 
-async function nextQuestion() { await genQuestion(); }
+async function nextQ() {
+  if (D.qUsed >= FREE_Q_LIMIT) { showUpgrade(); return; }
+  await genQ();
+}
 
-// ── TUTOR ──
-function handleChatKey(e) { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();} }
-async function sendChat() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
+// ═══════════════════════════════
+// TUTOR CHAT
+// ═══════════════════════════════
+function chatKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} }
+
+async function sendMsg() {
+  if (D.msgUsed >= FREE_MSG_LIMIT) { showUpgrade(); return; }
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
   if (!text) return;
-  input.value = '';
-  addMsg('user', text);
-  S.chatHistory.push({role:'user',content:text});
+  inp.value='';
+  addBubble('user',text);
+  D.chatHistory.push({role:'user',content:text});
 
-  const thinkId = 'th'+Date.now();
-  const el = document.createElement('div');
-  el.className='msg ai'; el.id=thinkId;
-  el.innerHTML=`<div class="msg-sender">CognIQ Tutor</div><div class="msg-bubble"><div class="dot-pulse"><span></span><span></span><span></span></div></div>`;
-  document.getElementById('chatArea').appendChild(el);
+  const tid='t'+Date.now();
+  const el=document.createElement('div');
+  el.className='msg ai';el.id=tid;
+  el.innerHTML=`<div class="msg-name">CognIQ Tutor</div><div class="msg-bub"><div class="dots"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('chatBody').appendChild(el);
   scrollChat();
 
-  if (!S.apiKey) {
-    document.getElementById(thinkId)?.remove();
-    addMsg('ai', `Great question! Add your Anthropic API key in Settings to get full AI tutor responses. I'll be able to explain concepts, walk through case studies, and help you prepare for your exam.`);
-    return;
-  }
-
-  const sys = `You are an expert tutor for "${S.subject}". The student has an exam in ${S.daysLeft} days covering MCQ, written essays, and case studies. Be clear, educational, and help them truly understand — not just memorize. Use examples and mechanisms where relevant.${S.content?`\n\nCourse context:\n${S.content.substring(0,3000)}`:''}`;
+  const sys=`You are an expert tutor for "${D.subject}". The student has ${D.days} days until their exam. Exam formats: ${D.examFmt.join(', ')}.
+Be educational, clear, and help the student truly understand — not just memorize. Adapt your explanations to the level and style appropriate for ${D.subject}.
+Use examples, mechanisms, analogies, and real-world context where relevant.${D.content?`\n\nCourse context (from student's own materials):\n${D.content.substring(0,3000)}`:''}`;
 
   try {
-    const reply = await claudeChat(sys, S.chatHistory.slice(-8));
-    document.getElementById(thinkId)?.remove();
-    S.chatHistory.push({role:'assistant',content:reply});
-    addMsg('ai', reply);
+    const reply = await aiChat(sys, D.chatHistory.slice(-8));
+    document.getElementById(tid)?.remove();
+    D.chatHistory.push({role:'assistant',content:reply});
+    D.msgUsed++;
+    save('ciq_msgused', D.msgUsed);
+    addBubble('ai',reply);
   } catch(e) {
-    document.getElementById(thinkId)?.remove();
-    addMsg('ai','Sorry, something went wrong. Please check your API key in Settings.');
+    document.getElementById(tid)?.remove();
+    addBubble('ai','Something went wrong. Please try again.');
   }
 }
-function addMsg(role, text) {
-  const area = document.getElementById('chatArea');
-  const d = document.createElement('div');
+
+function addBubble(role, text) {
+  const body=document.getElementById('chatBody');
+  const d=document.createElement('div');
   d.className=`msg ${role}`;
-  d.innerHTML=`<div class="msg-sender">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
-  area.appendChild(d);
-  scrollChat();
+  const formatted = text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  d.innerHTML=`<div class="msg-name">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bub">${formatted}</div>`;
+  body.appendChild(d);scrollChat();
 }
-function scrollChat() { const a=document.getElementById('chatArea'); a.scrollTop=a.scrollHeight; }
-function clearChat() {
-  S.chatHistory=[];
-  document.getElementById('chatArea').innerHTML=`<div class="msg ai"><div class="msg-sender">CognIQ Tutor</div><div class="msg-bubble">Chat cleared! What would you like to work on?</div></div>`;
+function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
+function clearChat(){
+  D.chatHistory=[];
+  document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;
 }
 
-// ── CLAUDE API ──
-async function claude(prompt) {
-  const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+// ═══════════════════════════════
+// UPGRADE WALL
+// ═══════════════════════════════
+function showUpgrade() {
+  document.getElementById('upgradeOverlay').classList.add('show');
+}
+function closeUpgrade() {
+  document.getElementById('upgradeOverlay').classList.remove('show');
+}
+function joinWaitlist() {
+  const email = document.getElementById('upgradeEmail').value.trim();
+  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+  // Store locally for now (replace with a backend call later)
+  const list = JSON.parse(localStorage.getItem('ciq_waitlist') || '[]');
+  list.push({email, subject: D.subject, date: new Date().toISOString()});
+  save('ciq_waitlist', list);
+  document.getElementById('upgradeOverlay').innerHTML = `
+    <div class="upgrade-sheet" style="text-align:center;">
+      <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+      <div class="upgrade-title">You're on the list!</div>
+      <div class="upgrade-sub" style="margin-top:8px;">We'll email you at <strong>${email}</strong> when Pro launches. You'll get early access and a founder discount.</div>
+      <button class="btn btn-blue" style="margin-top:24px;" onclick="closeUpgrade()">Continue Learning</button>
+    </div>`;
+}
+
+// ═══════════════════════════════
+// SETTINGS
+// ═══════════════════════════════
+function loadSettings() {
+  document.getElementById('set-days').value = D.days;
+  document.getElementById('set-subject').value = D.subject;
+  const used = D.qUsed;
+  document.getElementById('set-q-used').textContent = `${used} / ${FREE_Q_LIMIT} free`;
+  document.getElementById('set-usage-bar').style.width = Math.min(100,(used/FREE_Q_LIMIT)*100)+'%';
+}
+function saveDays() { D.days=parseInt(document.getElementById('set-days').value)||60; save('ciq_days',D.days); alert('✅ Saved!'); }
+function saveSubject() { D.subject=document.getElementById('set-subject').value; save('ciq_subject',D.subject); alert('✅ Saved!'); }
+function resetAll() { if(confirm('Reset everything? This cannot be undone.')) { localStorage.clear(); location.reload(); } }
+
+// ═══════════════════════════════
+// AI API (server-side proxy)
+// ═══════════════════════════════
+async function ai(prompt) {
+  const r = await fetch('/api/chat',{
+    method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
   });
-  if (!r.ok) throw new Error('API '+r.status);
-  const d=await r.json(); return d.content[0].text;
+  if(!r.ok) throw new Error(r.status);
+  const d=await r.json();return d.content[0].text;
 }
-async function claudeChat(system, messages) {
-  const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+async function aiChat(system, messages) {
+  const r = await fetch('/api/chat',{
+    method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system,messages})
   });
-  if (!r.ok) throw new Error('API '+r.status);
-  const d=await r.json(); return d.content[0].text;
+  if(!r.ok) throw new Error(r.status);
+  const d=await r.json();return d.content[0].text;
 }
 
-// ── SETTINGS ──
-function loadSettings() {
-  document.getElementById('apiKeyInput').value = S.apiKey;
-  document.getElementById('examDaysInput').value = S.daysLeft;
-  document.getElementById('settingsSubject').value = S.subject;
-}
-function saveApiKey() {
-  S.apiKey = document.getElementById('apiKeyInput').value.trim();
-  localStorage.setItem('ciq_key', S.apiKey);
-  document.getElementById('setupBanner').style.display = S.apiKey ? 'none' : '';
-  alert('✅ API key saved! AI engine is now active.');
-}
-function saveExamDays() {
-  S.daysLeft = parseInt(document.getElementById('examDaysInput').value) || 60;
-  localStorage.setItem('ciq_days', S.daysLeft);
-  updateBadge();
-  alert('✅ Saved!');
-}
-function saveSubject() {
-  S.subject = document.getElementById('settingsSubject').value;
-  localStorage.setItem('ciq_subject', S.subject);
-  alert('✅ Subject saved!');
-}
-function resetData() {
-  if (confirm('Reset everything? This cannot be undone.')) { localStorage.clear(); location.reload(); }
-}
-
-// ── INIT ──
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
 (function init() {
-  updateBadge();
-  if (S.apiKey) document.getElementById('setupBanner').style.display = 'none';
-  const zone = document.getElementById('uploadZone');
-  zone.addEventListener('dragover', e=>{e.preventDefault();zone.classList.add('dragover');});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
+  // Drag-and-drop
+  const zone = document.getElementById('dropZone');
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');handleFiles(e.dataTransfer.files);});
+
+  // Route: if already onboarded, go straight to dashboard
+  if (D.onboarded && D.subject) {
+    goTo('dash');
+  }
+  // else: stay on onboarding screen (already active)
 })();
 </script>
 </body>
