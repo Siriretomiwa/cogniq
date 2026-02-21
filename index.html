@@ -623,40 +623,219 @@
 </div>
 
 <script>
-/* ===========================
-   COSMOS BACKGROUND (simple)
-=========================== */
-(function initCosmos(){
+/* ============================================================
+   COGNITIVE LEARNING BACKGROUND (dynamic learning environment)
+   - neural nodes + links
+   - floating symbols (math/science)
+   - floating topic words from localStorage topics
+============================================================ */
+(function initCognitiveBackground(){
   const canvas = document.getElementById('cosmos');
-  const ctx = canvas.getContext('2d');
-  let W,H,pts=[];
-  function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
-  addEventListener('resize',()=>{resize();seed();});
-  function seed(){
-    pts = Array.from({length:160},()=>({
-      x:Math.random()*W, y:Math.random()*H,
-      r:Math.random()*1.8+.4,
-      vy:Math.random()*0.55+.1,
-      a:Math.random()*0.25+0.05,
-      h:(Math.random()<0.7? (240+Math.random()*45):(185+Math.random()*20))
-    }));
+  const ctx = canvas.getContext('2d', { alpha: true });
+
+  let W, H, DPR;
+  function resize(){
+    DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    W = Math.floor(window.innerWidth);
+    H = Math.floor(window.innerHeight);
+    canvas.width  = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
-  resize(); seed();
-  let t=0;
-  (function frame(){
-    t++;
-    ctx.clearRect(0,0,W,H);
-    for(const p of pts){
-      p.y -= p.vy;
-      if(p.y < -10){p.y = H+10; p.x=Math.random()*W;}
-      const tw = 0.5 + 0.5*Math.sin(t*0.01 + p.x*0.01);
+  window.addEventListener('resize', resize);
+  resize();
+
+  const SYMBOLS = ['∑','∫','Δ','λ','μ','π','∂','Ω','∇','√','≠','∞','≈','→','↔','⊕','⊗','∴'];
+  const HUES = { purple: 262, cyan: 195 };
+
+  function getTopicWords(){
+    try{
+      const stored = JSON.parse(localStorage.getItem('cio_topics') || '[]');
+      const cleaned = stored
+        .filter(Boolean)
+        .map(s => String(s).trim())
+        .filter(s => s.length >= 3)
+        .slice(0, 8);
+      return cleaned.length ? cleaned : ['Learning', 'Mastery', 'Practice', 'Diagnosis'];
+    }catch(e){
+      return ['Learning', 'Mastery', 'Practice', 'Diagnosis'];
+    }
+  }
+
+  let topicWords = getTopicWords();
+
+  // re-pull topics occasionally (if user launched and topics got saved later)
+  setInterval(()=>{ topicWords = getTopicWords(); }, 4000);
+
+  const rand = (a,b)=> a + Math.random()*(b-a);
+
+  /* -------------------------
+     Neural nodes
+  -------------------------- */
+  class Node{
+    constructor(){
+      this.reset(true);
+    }
+    reset(init=false){
+      this.x = rand(0, W);
+      this.y = rand(0, H);
+      const sp = rand(0.08, 0.22);
+      const ang = rand(0, Math.PI*2);
+      this.vx = Math.cos(ang)*sp;
+      this.vy = Math.sin(ang)*sp;
+      this.r  = rand(1.1, 2.2);
+      this.h  = Math.random()<0.7 ? HUES.purple : HUES.cyan;
+    }
+    update(){
+      this.x += this.vx;
+      this.y += this.vy;
+      if(this.x < -20 || this.x > W+20) this.vx *= -1;
+      if(this.y < -20 || this.y > H+20) this.vy *= -1;
+    }
+    draw(){
       ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = `hsla(${p.h},80%,75%,${p.a*tw})`;
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${this.h},85%,75%,0.22)`;
       ctx.fill();
     }
+  }
+
+  const NODE_COUNT = Math.max(36, Math.min(70, Math.floor((W*H)/25000)));
+  const nodes = Array.from({length: NODE_COUNT}, ()=> new Node());
+
+  function drawLinks(){
+    const maxDist = 150;
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d  = Math.sqrt(dx*dx + dy*dy);
+        if(d < maxDist){
+          const alpha = 0.10 * (1 - d/maxDist);
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(124,106,247,${alpha})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  /* -------------------------
+     Floating symbols
+  -------------------------- */
+  class SymbolParticle{
+    constructor(depth=1){
+      this.depth = depth;
+      this.reset(true);
+    }
+    reset(init=false){
+      this.x = rand(0, W);
+      this.y = init ? rand(0, H) : H + rand(30, 140);
+      this.size = rand(14, 26);
+      this.speed = rand(0.06, 0.22) * this.depth;
+      this.opacity = rand(0.02, 0.08);
+      this.drift = rand(-0.12, 0.12);
+      this.rot = rand(-15, 15);
+      this.rotSp = rand(-0.06, 0.06);
+      this.sym = SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+      this.h = Math.random()<0.75 ? HUES.purple : HUES.cyan;
+    }
+    update(){
+      this.y -= this.speed;
+      this.x += this.drift;
+      this.rot += this.rotSp;
+      if(this.y < -60) this.reset();
+      if(this.x < -80) this.x = W+80;
+      if(this.x > W+80) this.x = -80;
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rot*Math.PI/180);
+      ctx.font = `${this.size}px serif`;
+      ctx.fillStyle = `hsla(${this.h},85%,75%,1)`;
+      ctx.fillText(this.sym, 0, 0);
+      ctx.restore();
+    }
+  }
+
+  /* -------------------------
+     Floating topic words
+  -------------------------- */
+  class TopicWord{
+    constructor(){
+      this.reset(true);
+    }
+    reset(init=false){
+      this.text = topicWords[Math.floor(Math.random()*topicWords.length)] || 'Learning';
+      this.x = rand(20, W-220);
+      this.y = init ? rand(0, H) : H + rand(40, 160);
+      this.size = rand(12, 16);
+      this.speed = rand(0.04, 0.12);
+      this.opacity = rand(0.015, 0.05);
+      this.h = HUES.purple;
+    }
+    update(){
+      this.y -= this.speed;
+      if(this.y < -60) this.reset();
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.font = `700 ${this.size}px 'Plus Jakarta Sans'`;
+      ctx.fillStyle = `hsla(${this.h},85%,78%,1)`;
+      ctx.fillText(this.text, this.x, this.y);
+      ctx.restore();
+    }
+  }
+
+  const symbolsBack  = Array.from({length: 18}, ()=> new SymbolParticle(0.65));
+  const symbolsFront = Array.from({length: 14}, ()=> new SymbolParticle(1.0));
+  const words = Array.from({length: 6}, ()=> new TopicWord());
+
+  /* -------------------------
+     Soft vignette + glow
+  -------------------------- */
+  function drawVignette(){
+    const g = ctx.createRadialGradient(W*0.4, H*0.35, 80, W*0.5, H*0.5, Math.max(W,H)*0.75);
+    g.addColorStop(0, 'rgba(124,106,247,0.06)');
+    g.addColorStop(0.55, 'rgba(4,4,13,0)');
+    g.addColorStop(1, 'rgba(4,4,13,0.55)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  }
+
+  /* -------------------------
+     Animate
+  -------------------------- */
+  let t = 0;
+  function frame(){
+    t++;
+    ctx.clearRect(0,0,W,H);
+
+    // neural net
+    nodes.forEach(n=>n.update());
+    drawLinks();
+    nodes.forEach(n=>n.draw());
+
+    // layers
+    symbolsBack.forEach(s=>{s.update(); s.draw();});
+    words.forEach(w=>{w.update(); w.draw();});
+    symbolsFront.forEach(s=>{s.update(); s.draw();});
+
+    drawVignette();
+
     requestAnimationFrame(frame);
-  })();
+  }
+  frame();
+
 })();
 
 /* ===========================
@@ -677,8 +856,15 @@ function save(key,val){
 
 let selectedFmts = new Set(D.fmts || ["MCQ"]);
 function toggleFmt(el, fmt){
-  if(selectedFmts.has(fmt)){ selectedFmts.delete(fmt); el.style.borderColor='var(--border)'; el.style.color='var(--text-2)'; }
-  else { selectedFmts.add(fmt); el.style.borderColor='var(--v1)'; el.style.color='var(--v1)'; }
+  if(selectedFmts.has(fmt)){
+    selectedFmts.delete(fmt);
+    el.style.borderColor='var(--border)';
+    el.style.color='var(--text-2)';
+  } else {
+    selectedFmts.add(fmt);
+    el.style.borderColor='var(--v1)';
+    el.style.color='var(--v1)';
+  }
 }
 
 /* ===========================
@@ -783,6 +969,14 @@ Common failure modes
 Case studies & tradeoffs
 Current debates & limitations`;
   selectedFmts = new Set(['MCQ','Written Essays','Case Studies']);
+  // visually mark the chips
+  document.querySelectorAll('#fmtChips .chip').forEach(ch=>{
+    const txt = ch.textContent.trim();
+    const fmt = txt.replace('True/False','True / False').replace('Viva/Oral','Viva / Oral');
+    if(selectedFmts.has(fmt) || selectedFmts.has(txt)) {
+      ch.style.borderColor='var(--v1)'; ch.style.color='var(--v1)';
+    }
+  });
   launch();
 }
 
@@ -812,7 +1006,6 @@ function stub(action){
   const msg = `✅ ${action}\n\n(Placeholder)\nWire this button to your Bubble/OpenAI workflow later.`;
   const map = {
     'Ingestion → Parse & Index':'ingestOut',
-    'Generate graph view':null,
     'Run knowledge diagnostic':'diagKnowOut',
     'Run personality/goal diagnostic':'diagPsyOut',
     'Generate orientation lesson':'teachOut',
@@ -842,9 +1035,10 @@ function stub(action){
   chips.forEach(ch=>{
     const t = ch.textContent.trim();
     const fmt = t.replace('True/False','True / False').replace('Viva/Oral','Viva / Oral');
-    // Light heuristic; you can align exact names if needed.
-    if(D.fmts?.some(x => x.replace(/\s/g,'').toLowerCase() === fmt.replace(/\s/g,'').toLowerCase())){
+    const match = (D.fmts || []).some(x => x.replace(/\s/g,'').toLowerCase() === fmt.replace(/\s/g,'').toLowerCase());
+    if(match){
       ch.style.borderColor='var(--v1)'; ch.style.color='var(--v1)';
+      selectedFmts.add(fmt);
     }
   });
 
