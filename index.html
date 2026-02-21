@@ -49,18 +49,26 @@
     /* Right panel — action */
     .land-right{
       width:420px;flex-shrink:0;
-      display:flex;flex-direction:column;justify-content:center;
-      padding:48px 40px;
+      display:flex;flex-direction:column;
+      padding:0;
       background:rgba(8,8,26,.6);
       backdrop-filter:blur(24px);
       overflow-y:auto;
     }
+    .land-right>div{
+      padding:40px 36px 60px;
+      min-height:100%;
+    }
 
-    /* Mobile: stack vertically */
+    /* Mobile: hide hero, full screen form only */
+    .ob-mobile-logo{display:none;align-items:center;gap:10px;margin-bottom:24px;}
     @media(max-width:768px){
       #landing{flex-direction:column;}
-      .land-left{padding:40px 24px 28px;border-right:none;border-bottom:1px solid var(--border);flex:none;}
-      .land-right{width:100%;flex:1;padding:28px 24px 40px;overflow-y:auto;}
+      .land-left{display:none;}
+      .land-right{width:100%;flex:1;padding:0;overflow-y:auto;display:flex;flex-direction:column;}
+      .land-right>div{flex:1;overflow-y:auto;}
+      .ob-step{padding:28px 20px 80px;}
+      .ob-mobile-logo{display:flex!important;}
     }
 
     /* ── COGNIO LOGO MARK ── */
@@ -147,9 +155,9 @@
     .mobile-nav{
       display:none;
       border-top:1px solid var(--border);
-      background:rgba(4,4,13,.95);
+      background:rgba(4,4,13,.97);
       backdrop-filter:blur(20px);
-      position:fixed;bottom:0;left:0;right:0;z-index:50;
+      position:fixed;bottom:0;left:0;right:0;z-index:100;
     }
     .mnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 4px 13px;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .2s;position:relative;}
     .mnav-btn.active{color:var(--v1);}
@@ -330,12 +338,23 @@
 
     /* ── RESPONSIVE ── */
     @media(max-width:768px){
-      .sidebar{display:none;}
-      .mobile-nav{display:flex;}
-      .scroll-body{padding:20px 18px 100px;}
-      .chat-body{padding:16px 18px;}
-      .chat-bar{padding:10px 18px 18px;}
-      .topbar{padding:16px 18px 12px;}
+      /* App shell */
+      #mainApp{flex-direction:column!important;position:relative;}
+      .sidebar{display:none!important;}
+      .content-area{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;}
+
+      /* Mobile nav */
+      .mobile-nav{display:flex!important;position:fixed;bottom:0;left:0;right:0;z-index:100;}
+
+      /* Screens - account for fixed bottom nav */
+      .scroll-body{padding:20px 18px 90px;}
+      .chat-body{padding:14px 18px 14px;}
+      .chat-bar{padding:10px 18px 14px;}
+      .topbar{padding:14px 18px 10px;}
+
+      /* Train screen */
+      #screen-train #qArea{padding:16px 18px 24px;}
+      #screen-train #trainActions{padding:10px 18px 80px;}
     }
     @media(min-width:769px){
       .mobile-nav{display:none!important;}
@@ -407,6 +426,10 @@
 
         <!-- Step 1 -->
         <div class="ob-step active" id="ob1">
+          <div class="ob-mobile-logo">
+            <div class="cognio-icon" style="width:36px;height:36px;font-size:18px;border-radius:10px;">🧠</div>
+            <div class="cognio-name" style="font-size:20px;">Cogni<em>o</em></div>
+          </div>
           <div><div class="ob-title">Start your<br/><em>learning journey</em></div><p class="ob-sub" style="margin-top:10px;">Tell us what you're studying. Cognio adapts completely to your subject, level, and exam format.</p></div>
           <div class="gap-16">
             <div class="field"><label>Subject or Course Name</label><input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Contract Law, CFA Level 1..."/></div>
