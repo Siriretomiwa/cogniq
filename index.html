@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Cognio — Master Any Subject</title>
+  <title>CogniO — Cognitive Mastery Engine</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#04040d;--bg2:#08081a;--surface:#0d0d22;--surface2:#131330;
       --border:#1a1a3a;--border2:#24244a;
-      --v1:#7c6af7;--v2:#9d4edd;--v3:#c77dff;--v4:#6a4cf7;
-      --cyan:#4fc3f7;--teal:#26c6da;--gold:#ffd54f;
+      --v1:#7c6af7;--v2:#9d4edd;--v3:#c77dff;--cyan:#4fc3f7;--teal:#26c6da;--gold:#ffd54f;
       --red:#ef5350;--green:#66bb6a;
       --text:#f0f0ff;--text-2:#8888b8;--text-3:#3a3a6a;
       --glow:rgba(124,106,247,.4);--glow2:rgba(124,106,247,.1);
@@ -20,474 +21,249 @@
     html,body{height:100%;overflow:hidden;}
     body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;}
 
-    /* ── CANVAS BACKGROUND ── */
+    /* background */
     #cosmos{position:fixed;inset:0;z-index:0;pointer-events:none;}
-
-    /* ── APP SHELL ── */
     #app{position:relative;z-index:1;height:100%;display:flex;overflow:hidden;}
 
-    /* ══════════════════════════
-       LANDING — DESKTOP SPLIT
-    ══════════════════════════ */
-    #landing{
-      display:flex;width:100%;height:100%;
-      flex-direction:row;
-    }
-    /* Left panel — branding */
+    /* landing */
+    #landing{display:flex;width:100%;height:100%;}
     .land-left{
-      flex:1;min-width:0;
-      display:flex;flex-direction:column;justify-content:center;
-      padding:60px 56px;
-      border-right:1px solid var(--border);
-      position:relative;overflow:hidden;
+      flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;
+      padding:60px 56px;border-right:1px solid var(--border);position:relative;overflow:hidden;
     }
     .land-left::before{
       content:'';position:absolute;inset:0;
       background:radial-gradient(ellipse at 30% 40%, rgba(124,106,247,.12) 0%, transparent 65%);
       pointer-events:none;
     }
-    /* Right panel — action */
     .land-right{
-      width:420px;flex-shrink:0;
-      display:flex;flex-direction:column;
-      padding:0;
-      background:rgba(8,8,26,.6);
-      backdrop-filter:blur(24px);
-      overflow-y:auto;
+      width:460px;flex-shrink:0;display:flex;flex-direction:column;
+      background:rgba(8,8,26,.6);backdrop-filter:blur(24px);overflow-y:auto;
     }
-    .land-right>div{
-      padding:40px 36px 60px;
-      min-height:100%;
-    }
-
-    /* Mobile: hide hero, full screen form only */
+    .land-right>div{padding:36px 32px 56px;min-height:100%;}
     .ob-mobile-logo{display:none;align-items:center;gap:10px;margin-bottom:24px;}
+
     @media(max-width:768px){
       #landing{flex-direction:column;}
       .land-left{display:none;}
-      .land-right{width:100%;flex:1;padding:0;overflow-y:auto;display:flex;flex-direction:column;}
-      .land-right>div{flex:1;overflow-y:auto;}
-      .ob-step{padding:28px 20px 80px;}
+      .land-right{width:100%;flex:1;}
       .ob-mobile-logo{display:flex!important;}
     }
 
-    /* ── COGNIO LOGO MARK ── */
-    .cognio-mark{
-      display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;
-    }
+    /* brand */
+    .cognio-mark{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;}
     .cognio-icon{
-      width:46px;height:46px;border-radius:13px;
-      background:linear-gradient(135deg,var(--v1),var(--v2));
-      display:flex;align-items:center;justify-content:center;
-      font-size:22px;
+      width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--v1),var(--v2));
+      display:flex;align-items:center;justify-content:center;font-size:22px;
       box-shadow:0 0 24px rgba(124,106,247,.5);
-      animation:iconPulse 3s ease-in-out infinite;
     }
-    @keyframes iconPulse{0%,100%{box-shadow:0 0 24px rgba(124,106,247,.5);}50%{box-shadow:0 0 40px rgba(124,106,247,.8),0 0 60px rgba(124,106,247,.3);}}
     .cognio-name{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.5px;}
     .cognio-name em{font-style:normal;color:var(--v1);}
 
-    /* ── HERO TEXT ── */
     .hero-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
     .hero-tag::before{content:'';width:28px;height:2px;background:var(--teal);border-radius:1px;}
-    .hero-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px;}
+    .hero-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px;}
     .hero-h1 em{font-style:normal;background:linear-gradient(135deg,var(--v1),var(--v3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .hero-sub{font-size:clamp(15px,1.6vw,18px);color:var(--text-2);line-height:1.7;max-width:480px;margin-bottom:36px;}
+    .hero-sub{font-size:clamp(15px,1.6vw,18px);color:var(--text-2);line-height:1.7;max-width:520px;margin-bottom:22px;}
 
-    /* ── STATS ROW ── */
-    .hero-stats{display:flex;gap:28px;margin-bottom:40px;}
-    .hero-stat{}
-    .hero-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--v1);}
-    .hero-stat-lbl{font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
-
-    /* ── FEATURE PILLS ── */
-    .feat-pills{display:flex;flex-wrap:wrap;gap:8px;}
+    .feat-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
     .feat-pill{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:20px;background:rgba(124,106,247,.08);border:1px solid rgba(124,106,247,.2);font-size:13px;font-weight:500;color:var(--text-2);}
     .feat-pill span{font-size:15px;}
 
-    /* ── FLOATING BOOK ELEMENTS ── */
-    .book-float{
-      position:absolute;font-size:28px;opacity:0;
-      animation:bookDrift 14s ease-in-out infinite;
-      pointer-events:none;filter:blur(.5px);
-    }
-    @keyframes bookDrift{
-      0%{opacity:0;transform:translateY(30px) rotate(-5deg);}
-      10%{opacity:.18;}
-      90%{opacity:.12;}
-      100%{opacity:0;transform:translateY(-60px) rotate(8deg);}
-    }
-
-    /* ══════════════════════════
-       MAIN APP (post-onboard)
-    ══════════════════════════ */
-    #mainApp{
-      display:none;width:100%;height:100%;
-      flex-direction:row;
-    }
+    /* app shell */
+    #mainApp{display:none;width:100%;height:100%;}
     #mainApp.show{display:flex;}
-
-    /* Desktop sidebar */
     .sidebar{
-      width:240px;flex-shrink:0;
-      display:flex;flex-direction:column;
-      border-right:1px solid var(--border);
-      background:rgba(4,4,13,.8);
-      backdrop-filter:blur(20px);
-      padding:28px 0;
+      width:260px;flex-shrink:0;display:flex;flex-direction:column;
+      border-right:1px solid var(--border);background:rgba(4,4,13,.8);backdrop-filter:blur(20px);
+      padding:22px 0;
     }
-    .sidebar-logo{padding:0 22px 28px;border-bottom:1px solid var(--border);margin-bottom:20px;}
-    .sidebar-logo .cognio-name{font-size:20px;}
-    .sidebar-nav{flex:1;padding:0 10px;display:flex;flex-direction:column;gap:4px;}
+    .sidebar-logo{padding:0 18px 18px;border-bottom:1px solid var(--border);margin-bottom:14px;}
+    .sidebar-logo .cognio-name{font-size:18px;}
+    .sidebar-nav{flex:1;padding:0 10px;display:flex;flex-direction:column;gap:4px;overflow:auto;}
     .snav-btn{
-      display:flex;align-items:center;gap:12px;
-      padding:12px 14px;border-radius:12px;
-      border:none;background:none;
-      font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;
-      color:var(--text-2);cursor:pointer;transition:all .2s;width:100%;text-align:left;
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;
+      border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;
+      color:var(--text-2);cursor:pointer;transition:all .18s;width:100%;text-align:left;
     }
     .snav-btn:hover{background:var(--glow2);color:var(--text);}
     .snav-btn.active{background:linear-gradient(135deg,rgba(124,106,247,.2),rgba(157,78,221,.1));color:var(--v1);border:1px solid rgba(124,106,247,.2);}
-    .snav-icon{font-size:18px;width:22px;text-align:center;}
-    .sidebar-footer{padding:16px 22px 0;border-top:1px solid var(--border);margin-top:auto;}
+    .snav-icon{font-size:16px;width:20px;text-align:center;}
+    .sidebar-footer{padding:12px 18px 0;border-top:1px solid var(--border);margin-top:auto;}
 
-    /* Mobile bottom nav */
-    .mobile-nav{
-      display:none;
-      border-top:1px solid var(--border);
-      background:rgba(4,4,13,.97);
-      backdrop-filter:blur(20px);
-      position:fixed;bottom:0;left:0;right:0;z-index:100;
-    }
-    .mnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 4px 13px;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .2s;position:relative;}
-    .mnav-btn.active{color:var(--v1);}
-    .mnav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:2px;background:var(--v1);border-radius:0 0 2px 2px;box-shadow:0 0 10px var(--glow);}
-    .mnav-icon{font-size:20px;}
-    .mnav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
-
-    /* Content area */
     .content-area{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
-
-    /* Screens */
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(4,4,13,.85);backdrop-filter:blur(20px);flex-shrink:0;}
+    .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+    .scroll-body{flex:1;overflow-y:auto;padding:18px 18px 120px;}
     .screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
     .screen.active{display:flex;}
-    .screen.slide-in{animation:slideIn .35s cubic-bezier(.22,1,.36,1);}
-    .screen.slide-back{animation:slideBack .32s cubic-bezier(.22,1,.36,1);}
-    @keyframes slideIn{from{opacity:0;transform:translateX(32px);}to{opacity:1;transform:translateX(0);}}
-    @keyframes slideBack{from{opacity:0;transform:translateX(-32px);}to{opacity:1;transform:translateX(0);}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
 
-    .scroll-body{flex:1;overflow-y:auto;padding:24px 24px 120px;}
-    .scroll-body::-webkit-scrollbar{width:3px;}
-    .scroll-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-
-    /* Topbar */
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--border);background:rgba(4,4,13,.85);backdrop-filter:blur(20px);flex-shrink:0;}
-    .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;}
-
-    /* Usage pill */
-    .usage-pill{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;font-weight:600;color:var(--text-2);}
-    .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s;}
+    .usage-pill{display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;font-weight:700;color:var(--text-2);}
+    .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
     .usage-dot.warn{background:var(--gold);}
-    .usage-dot.over{background:var(--red);animation:blink 1s infinite;}
-    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .usage-dot.over{background:var(--red);}
 
-    /* ── BUTTONS ── */
-    .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 20px;border-radius:var(--r-sm);border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
-    .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.07),transparent 60%);pointer-events:none;}
-    .btn-primary{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 4px 20px rgba(124,106,247,.45);}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,106,247,.55);}
-    .btn-primary:active{transform:translateY(0);}
-    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
-    .btn-outline:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
-    .btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
-    .btn-ghost:hover{color:var(--text);border-color:var(--border2);}
-    .btn-sm{padding:9px 16px;font-size:13px;width:auto;border-radius:9px;}
-    .btn-icon{width:44px;height:44px;padding:0;border-radius:12px;flex-shrink:0;}
-    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(239,83,80,.3);}
-
-    /* ── INPUTS ── */
-    .field{display:flex;flex-direction:column;gap:6px;}
-    .field label{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;}
-    input[type=text],input[type=email],textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:13px 15px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:all .2s;}
-    input:focus,textarea:focus{border-color:var(--v1);box-shadow:0 0 0 3px rgba(124,106,247,.12);}
-    textarea{resize:vertical;min-height:100px;}
-    ::placeholder{color:var(--text-3);}
-
-    /* ── CARDS ── */
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:border-color .2s;}
-    .card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px;}
-    .glow-card{background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(157,78,221,.06));border:1px solid rgba(124,106,247,.22);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;}
-    .glow-card::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(124,106,247,.12),transparent 70%);pointer-events:none;}
-
-    /* ── STATS ── */
-    .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-    .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 10px;text-align:center;transition:all .2s;cursor:default;}
-    .stat-box:hover{border-color:var(--v1);transform:translateY(-2px);}
-    .stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--v1);}
-    .stat-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:3px;}
-
-    /* ── PROGRESS ── */
-    .prog-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
-    .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--v1),var(--cyan));transition:width .7s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(124,106,247,.5);}
-
-    /* ── MODE PILLS ── */
-    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:4px;}
-    .mode-pill{flex:1;text-align:center;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .22s;}
-    .mode-pill.active{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 2px 12px rgba(124,106,247,.4);}
-
-    /* ── ONBOARDING ── */
-    .ob-step{display:none;flex-direction:column;gap:20px;padding:28px 24px 60px;animation:fadeUp .4s ease;}
-    .ob-step.active{display:flex;}
-    .step-dots{display:flex;gap:6px;justify-content:center;}
-    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;}
-    .step-dot.active{background:var(--v1);width:22px;border-radius:3px;box-shadow:0 0 8px var(--glow);}
-    .ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,6vw,34px);line-height:1.1;letter-spacing:-.5px;}
-    .ob-title em{font-style:normal;color:var(--v1);}
-    .ob-sub{font-size:14px;color:var(--text-2);line-height:1.65;}
-
-    /* ── FIELD TAGS ── */
-    .field-tags{display:flex;flex-wrap:wrap;gap:8px;}
-    .ftag{padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:all .18s;color:var(--text-2);}
-    .ftag:hover,.ftag.sel{background:var(--glow2);border-color:var(--v1);color:var(--v1);}
-
-    /* ── UPLOAD ── */
-    .drop-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:30px 18px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface);}
-    .drop-zone:hover,.drop-zone.over{border-color:var(--v1);background:var(--glow2);}
-    .drop-icon{font-size:36px;margin-bottom:10px;animation:float 3s ease-in-out infinite;}
-    @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-    .drop-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
-    .drop-sub{font-size:13px;color:var(--text-2);margin-top:5px;}
-    #fileInput{display:none;}
-    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;animation:fadeIn .3s ease;}
-    .file-row-info{flex:1;min-width:0;}
-    .file-row-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .file-row-size{font-size:11px;color:var(--text-2);margin-top:2px;}
-    .file-row-del{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;padding:3px;}
-
-    /* ── QUESTION CARD ── */
-    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 40px rgba(0,0,0,.5);}
-    .q-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(124,106,247,.07),transparent);}
-    .q-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--v1);}
-    .q-meta{font-size:11px;color:var(--text-3);}
-    .q-body{padding:20px;}
-    .q-text{font-size:15px;line-height:1.7;font-weight:500;margin-bottom:20px;}
-    .opts{display:flex;flex-direction:column;gap:10px;}
-    .opt{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--surface2);animation:fadeUp .3s ease both;}
-    .opt:nth-child(1){animation-delay:.04s}.opt:nth-child(2){animation-delay:.09s}.opt:nth-child(3){animation-delay:.14s}.opt:nth-child(4){animation-delay:.19s}
-    .opt:hover{border-color:var(--v1);background:var(--glow2);transform:translateX(3px);}
-    .opt.correct{border-color:var(--green);background:rgba(102,187,106,.08);transform:none;}
-    .opt.wrong{border-color:var(--red);background:rgba(239,83,80,.08);}
-    .opt.correct .opt-letter{background:var(--green);color:#000;}
-    .opt.wrong .opt-letter{background:var(--red);color:#fff;}
-    .opt-letter{width:28px;height:28px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;transition:all .2s;}
-    .opt-text{font-size:14px;line-height:1.55;flex:1;padding-top:4px;}
-    .feedback{margin-top:16px;padding:14px 16px;border-radius:var(--r-sm);font-size:13px;line-height:1.65;display:none;}
-    .feedback.show{display:block;animation:fadeUp .3s ease;}
-    .feedback.ok{background:rgba(102,187,106,.08);border:1px solid rgba(102,187,106,.3);color:#a5d6a7;}
-    .feedback.bad{background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.3);color:#ffcdd2;}
-
-    /* ── CHAT ── */
-    .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:18px 24px;}
-    .chat-body::-webkit-scrollbar{width:3px;}
-    .chat-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-    .msg{display:flex;flex-direction:column;gap:4px;max-width:80%;animation:fadeUp .3s ease;}
-    .msg.ai{align-self:flex-start;}
-    .msg.user{align-self:flex-end;}
-    .msg-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 4px;}
-    .msg.user .msg-name{text-align:right;}
-    .msg-bub{padding:13px 16px;border-radius:14px;font-size:14px;line-height:1.65;}
-    .msg.ai .msg-bub{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px;}
-    .msg.user .msg-bub{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;border-bottom-right-radius:3px;box-shadow:0 4px 14px rgba(124,106,247,.35);}
-    .chat-bar{display:flex;gap:10px;align-items:flex-end;padding:12px 24px 20px;border-top:1px solid var(--border);background:rgba(4,4,13,.9);backdrop-filter:blur(20px);flex-shrink:0;}
-    .chat-bar textarea{min-height:46px;max-height:120px;padding:13px 15px;resize:none;flex:1;}
-
-    /* ── TOPIC CHIPS ── */
-    .topic-wrap{display:flex;flex-wrap:wrap;gap:8px;}
-    .topic-chip{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .18s;}
-    .topic-chip:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
-
-    /* ── UPGRADE ── */
-    .upgrade-overlay{position:fixed;inset:0;z-index:200;background:rgba(4,4,13,.88);display:none;align-items:center;justify-content:center;backdrop-filter:blur(16px);padding:20px;}
-    .upgrade-overlay.show{display:flex;}
-    .upgrade-sheet{width:100%;max-width:480px;background:var(--bg2);border:1px solid var(--border2);border-radius:24px;padding:36px 32px;animation:scaleIn .3s cubic-bezier(.22,1,.36,1);}
-    @keyframes scaleIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
-    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:18px;}
-    .upgrade-title{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.3px;line-height:1.1;margin-bottom:10px;}
-    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:20px;}
-    .perk{display:flex;align-items:center;gap:10px;font-size:14px;padding:4px 0;}
-    .perk-icon{color:var(--green);font-size:16px;flex-shrink:0;}
-
-    /* ── LOADING ── */
-    .loading{display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:14px;padding:20px 0;}
-    .spin{width:18px;height:18px;flex-shrink:0;border:2px solid var(--border2);border-top-color:var(--v1);border-radius:50%;animation:spin .7s linear infinite;}
-    @keyframes spin{to{transform:rotate(360deg);}}
-    .dots{display:flex;gap:5px;align-items:center;}
-    .dots span{width:7px;height:7px;border-radius:50%;background:var(--v1);animation:dp 1.2s ease-in-out infinite;}
-    .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
-    @keyframes dp{0%,80%,100%{transform:scale(.5);opacity:.3;}40%{transform:scale(1);opacity:1;}}
-
-    /* ── UTILS ── */
+    /* cards + inputs */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
+    .card-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:10px;}
+    .dim{color:var(--text-2);font-size:13px;line-height:1.6;}
+    .sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.2px;}
     .gap-8{display:flex;flex-direction:column;gap:8px;}
     .gap-12{display:flex;flex-direction:column;gap:12px;}
     .gap-16{display:flex;flex-direction:column;gap:16px;}
-    .gap-20{display:flex;flex-direction:column;gap:20px;}
-    .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.2px;}
-    .dim{color:var(--text-2);font-size:13px;}
 
-    /* ── RESPONSIVE ── */
+    .field{display:flex;flex-direction:column;gap:6px;}
+    .field label{font-size:11px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;}
+    input[type=text],input[type=email],input[type=date],textarea,select{
+      width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);
+      padding:12px 14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;outline:none;
+    }
+    textarea{resize:vertical;min-height:100px;}
+    ::placeholder{color:var(--text-3);}
+
+    .btn{
+      display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+      padding:13px 16px;border-radius:var(--r-sm);border:none;
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .18s;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 4px 20px rgba(124,106,247,.35);}
+    .btn-primary:hover{transform:translateY(-1px);}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
+    .btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
+
+    .pill-row{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:4px;}
+    .pill{
+      flex:1;text-align:center;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:900;cursor:pointer;
+      color:var(--text-2);border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s;
+    }
+    .pill.active{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 2px 12px rgba(124,106,247,.35);}
+
+    /* simple chips */
+    .chipwrap{display:flex;flex-wrap:wrap;gap:8px;}
+    .chip{
+      padding:7px 12px;border-radius:999px;border:1px solid var(--border);
+      background:var(--surface2);color:var(--text-2);font-size:12px;font-weight:800;cursor:pointer;
+    }
+    .chip:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
+
+    /* mobile */
+    .mobile-nav{
+      display:none;border-top:1px solid var(--border);background:rgba(4,4,13,.97);backdrop-filter:blur(20px);
+      position:fixed;bottom:0;left:0;right:0;z-index:100;
+    }
+    .mnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 12px;border:none;background:none;color:var(--text-3);cursor:pointer;}
+    .mnav-btn.active{color:var(--v1);}
+    .mnav-icon{font-size:18px;}
+    .mnav-label{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;}
+
     @media(max-width:768px){
-      /* App shell */
-      #mainApp{flex-direction:column!important;position:relative;}
+      #mainApp{flex-direction:column!important;}
       .sidebar{display:none!important;}
-      .content-area{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column;}
-
-      /* Mobile nav */
-      .mobile-nav{display:flex!important;position:fixed;bottom:0;left:0;right:0;z-index:100;}
-
-      /* Screens - account for fixed bottom nav */
-      .scroll-body{padding:20px 18px 90px;}
-      .chat-body{padding:14px 18px 14px;}
-      .chat-bar{padding:10px 18px 14px;}
-      .topbar{padding:14px 18px 10px;}
-
-      /* Train screen */
-      #screen-train #qArea{padding:16px 18px 24px;}
-      #screen-train #trainActions{padding:10px 18px 80px;}
+      .mobile-nav{display:flex!important;}
+      .scroll-body{padding:16px 16px 96px;}
     }
-    @media(min-width:769px){
-      .mobile-nav{display:none!important;}
-      #mainApp{flex-direction:row;}
-    }
+
+    /* loading */
+    .loading{display:flex;align-items:center;gap:10px;color:var(--text-2);font-size:14px;padding:12px 0;}
+    .spin{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--v1);border-radius:50%;animation:spin .7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
   </style>
 </head>
-<body>
 
-<!-- Living Canvas Background -->
+<body>
 <canvas id="cosmos"></canvas>
 
 <div id="app">
 
-  <!-- ════════════════════════════
-       LANDING PAGE
-  ════════════════════════════ -->
+  <!-- =========================
+       LANDING
+  ========================== -->
   <div id="landing">
 
-    <!-- LEFT: Branding + Hero -->
-    <div class="land-left" id="landLeft">
-
-      <!-- Floating books decoration -->
-      <div class="book-float" style="left:8%;top:15%;animation-delay:0s;animation-duration:16s;">📖</div>
-      <div class="book-float" style="left:75%;top:20%;animation-delay:-3s;animation-duration:13s;">📚</div>
-      <div class="book-float" style="left:20%;top:70%;animation-delay:-6s;animation-duration:18s;">🧬</div>
-      <div class="book-float" style="left:85%;top:60%;animation-delay:-9s;animation-duration:14s;">⚗️</div>
-      <div class="book-float" style="left:50%;top:80%;animation-delay:-2s;animation-duration:20s;">📐</div>
-      <div class="book-float" style="left:60%;top:35%;animation-delay:-11s;animation-duration:15s;">🔬</div>
-      <div class="book-float" style="left:35%;top:10%;animation-delay:-5s;animation-duration:17s;">⚖️</div>
-      <div class="book-float" style="left:90%;top:85%;animation-delay:-8s;animation-duration:12s;">💡</div>
-
-      <!-- Logo -->
-      <div class="cognio-mark" style="animation:fadeUp .6s ease;">
+    <div class="land-left">
+      <div class="cognio-mark">
         <div class="cognio-icon">🧠</div>
-        <div class="cognio-name">Cogni<em>o</em></div>
+        <div class="cognio-name">Cogni<em>O</em></div>
       </div>
 
-      <!-- Hero -->
-      <div class="hero-tag" style="animation:fadeUp .6s .1s ease both;">AI-Powered Mastery Engine</div>
-      <h1 class="hero-h1" style="animation:fadeUp .6s .18s ease both;">
-        Study smarter.<br/>
-        Master <em>anything.</em>
+      <div class="hero-tag">Cognitive mastery platform</div>
+
+      <h1 class="hero-h1">
+        Upload. Diagnose.<br/>
+        Learn. Apply. <em>Master.</em>
       </h1>
-      <p class="hero-sub" style="animation:fadeUp .6s .26s ease both;">
-        Upload your materials. Cognio builds a personalised AI training system — adaptive questions, expert tutoring, and deep analytics tailored to your exact subject and exam format.
+
+      <p class="hero-sub">
+        CogniO turns your notes, slides, textbooks and lectures into a full training system:
+        knowledge mapping, adaptive diagnostics, structured teaching, visual flashcards,
+        case simulations, viva defence practice, and evidence-backed learning — with Exam Mode and Mastery Mode.
       </p>
 
-      <!-- Stats -->
-      <div class="hero-stats" style="animation:fadeUp .6s .34s ease both;">
-        <div class="hero-stat"><div class="hero-stat-val">Any</div><div class="hero-stat-lbl">Subject</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">AI</div><div class="hero-stat-lbl">Powered</div></div>
-        <div class="hero-stat"><div class="hero-stat-val">Free</div><div class="hero-stat-lbl">To Start</div></div>
-      </div>
-
-      <!-- Feature pills -->
-      <div class="feat-pills" style="animation:fadeUp .6s .42s ease both;">
-        <div class="feat-pill"><span>⚡</span> Exam Mode</div>
-        <div class="feat-pill"><span>🧠</span> Mastery Mode</div>
-        <div class="feat-pill"><span>💬</span> AI Tutor</div>
-        <div class="feat-pill"><span>📊</span> Progress Tracking</div>
-        <div class="feat-pill"><span>🔬</span> Any Field</div>
+      <div class="feat-pills">
+        <div class="feat-pill"><span>📥</span> Multi-modal ingestion</div>
+        <div class="feat-pill"><span>🧭</span> Knowledge graph</div>
+        <div class="feat-pill"><span>🧪</span> Diagnostics + profiling</div>
+        <div class="feat-pill"><span>🧠</span> Structured teaching</div>
+        <div class="feat-pill"><span>🗂️</span> Flashcards + spaced repetition</div>
+        <div class="feat-pill"><span>⚖️</span> Tradeoffs + synthesis</div>
+        <div class="feat-pill"><span>🎤</span> Viva / oral simulation</div>
+        <div class="feat-pill"><span>📚</span> Credible research layer</div>
+        <div class="feat-pill"><span>📈</span> Predictive readiness</div>
       </div>
     </div>
 
-    <!-- RIGHT: Onboarding flow -->
     <div class="land-right">
-      <div style="flex:1;overflow-y:auto;">
+      <div>
 
-        <!-- Step 1 -->
-        <div class="ob-step active" id="ob1">
-          <div class="ob-mobile-logo">
-            <div class="cognio-icon" style="width:36px;height:36px;font-size:18px;border-radius:10px;">🧠</div>
-            <div class="cognio-name" style="font-size:20px;">Cogni<em>o</em></div>
-          </div>
-          <div><div class="ob-title">Start your<br/><em>learning journey</em></div><p class="ob-sub" style="margin-top:10px;">Tell us what you're studying. Cognio adapts completely to your subject, level, and exam format.</p></div>
-          <div class="gap-16">
-            <div class="field"><label>Subject or Course Name</label><input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Contract Law, CFA Level 1..."/></div>
-            <div>
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Or pick your field</div>
-              <div class="field-tags" id="fieldTags">
-                <div class="ftag" onclick="pickField(this,'Medicine & Health Sciences')">🏥 Medicine</div>
-                <div class="ftag" onclick="pickField(this,'Law & Legal Studies')">⚖️ Law</div>
-                <div class="ftag" onclick="pickField(this,'Engineering')">⚙️ Engineering</div>
-                <div class="ftag" onclick="pickField(this,'Food Science & Microbiology')">🔬 Microbiology</div>
-                <div class="ftag" onclick="pickField(this,'Finance & Accounting')">📈 Finance</div>
-                <div class="ftag" onclick="pickField(this,'Computer Science')">💻 CS / Tech</div>
-                <div class="ftag" onclick="pickField(this,'Business & Management')">💼 Business</div>
-                <div class="ftag" onclick="pickField(this,'Pharmacy & Pharmacology')">💊 Pharmacy</div>
-                <div class="ftag" onclick="pickField(this,'Psychology & Neuroscience')">🧠 Psychology</div>
-                <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
-                <div class="ftag" onclick="pickField(this,'Other')">✦ Other</div>
-              </div>
-            </div>
-            <div class="field"><label>Days Until Your Exam</label><input type="text" id="ob-days" placeholder="60" value="60"/></div>
-            <div>
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Exam Format</div>
-              <div class="field-tags" id="fmtTags">
-                <div class="ftag" onclick="toggleFmt(this,'MCQ')">MCQ</div>
-                <div class="ftag" onclick="toggleFmt(this,'Written Essays')">Written Essays</div>
-                <div class="ftag" onclick="toggleFmt(this,'Case Studies')">Case Studies</div>
-                <div class="ftag" onclick="toggleFmt(this,'True / False')">True / False</div>
-                <div class="ftag" onclick="toggleFmt(this,'Viva / Oral')">Viva / Oral</div>
-                <div class="ftag" onclick="toggleFmt(this,'Practical')">Practical</div>
-              </div>
-            </div>
-          </div>
-          <div class="gap-8">
-            <button class="btn btn-primary" onclick="obGo(2)">Continue — Upload Materials →</button>
-            <button class="btn btn-ghost" onclick="skipToApp()">I already have an account</button>
-          </div>
-          <div class="step-dots"><div class="step-dot active"></div><div class="step-dot"></div></div>
+        <div class="ob-mobile-logo">
+          <div class="cognio-icon" style="width:36px;height:36px;font-size:18px;border-radius:10px;">🧠</div>
+          <div class="cognio-name" style="font-size:20px;">Cogni<em>O</em></div>
         </div>
 
-        <!-- Step 2 -->
-        <div class="ob-step" id="ob2">
-          <div class="step-dots"><div class="step-dot"></div><div class="step-dot active"></div></div>
-          <div><div class="ob-title">Upload your<br/><em>materials</em></div><p class="ob-sub" style="margin-top:8px;">The more context you give, the more personalised your training. Or skip and use AI general knowledge.</p></div>
-          <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-            <div class="drop-icon">📚</div>
-            <div class="drop-title">Tap to upload files</div>
-            <div class="drop-sub">PDF, DOCX, PPTX, TXT — up to 10 files</div>
+        <div class="gap-16">
+          <div>
+            <div class="sec-title">Start your workspace</div>
+            <div class="dim">Set your subject, exam date and formats. Then upload materials.</div>
           </div>
-          <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)"/>
-          <div id="fileListWrap" style="display:none" class="gap-8">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);">Files</div>
-            <div class="gap-8" id="fileList"></div>
+
+          <div class="field">
+            <label>Course / Subject</label>
+            <input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology"/>
           </div>
-          <div class="field"><label>Paste Syllabus or Key Topics (optional)</label><textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or key content — this greatly improves question quality..."></textarea></div>
+
+          <div class="field">
+            <label>Exam date</label>
+            <input type="date" id="ob-examdate"/>
+          </div>
+
+          <div class="field">
+            <label>Exam formats (multi)</label>
+            <div class="chipwrap" id="fmtChips">
+              <div class="chip" onclick="toggleFmt(this,'MCQ')">MCQ</div>
+              <div class="chip" onclick="toggleFmt(this,'Written Essays')">Written Essays</div>
+              <div class="chip" onclick="toggleFmt(this,'Case Studies')">Case Studies</div>
+              <div class="chip" onclick="toggleFmt(this,'True / False')">True/False</div>
+              <div class="chip" onclick="toggleFmt(this,'Viva / Oral')">Viva/Oral</div>
+              <div class="chip" onclick="toggleFmt(this,'Practical')">Practical</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Upload materials</div>
+            <div class="dim">MVP note: this UI supports files, but real PDF/DOCX parsing is handled by your backend or no-code workflows.</div>
+            <div class="gap-12" style="margin-top:10px;">
+              <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt"/>
+              <textarea id="ob-syllabus" placeholder="Optional: paste syllabus / key topics (helps better questions)"></textarea>
+            </div>
+          </div>
+
           <div class="gap-8">
-            <button class="btn btn-primary" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
-            <button class="btn btn-ghost btn-sm" onclick="skipAndLaunch()" style="width:100%">Skip — Use AI general knowledge</button>
-            <button class="btn btn-ghost btn-sm" onclick="obGo(1)" style="width:100%">← Back</button>
+            <button class="btn btn-primary" onclick="launch()">Build my workspace →</button>
+            <button class="btn btn-ghost" onclick="demoLaunch()">Use demo data (no upload)</button>
+          </div>
+
+          <div class="dim" style="font-size:12px;">
+            After launch, you’ll complete: Knowledge Diagnostic + Personality/Goal Diagnostic. Then the system teaches and trains you.
           </div>
         </div>
 
@@ -495,581 +271,586 @@
     </div>
   </div>
 
-  <!-- ════════════════════════════
+  <!-- =========================
        MAIN APP
-  ════════════════════════════ -->
+  ========================== -->
   <div id="mainApp">
 
-    <!-- Desktop Sidebar -->
-    <nav class="sidebar" id="sidebar">
+    <!-- Sidebar -->
+    <nav class="sidebar">
       <div class="sidebar-logo">
         <div class="cognio-mark" style="margin:0;">
           <div class="cognio-icon" style="width:34px;height:34px;font-size:17px;border-radius:9px;">🧠</div>
-          <div class="cognio-name" style="font-size:18px;">Cogni<em>o</em></div>
+          <div class="cognio-name" style="font-size:18px;">Cogni<em>O</em></div>
         </div>
       </div>
+
       <div class="sidebar-nav">
-        <button class="snav-btn active" id="snav-dash" onclick="goTo('dash','slide')"><span class="snav-icon">📊</span>Dashboard</button>
-        <button class="snav-btn" id="snav-train" onclick="goTo('train','slide')"><span class="snav-icon">⚡</span>Practice</button>
-        <button class="snav-btn" id="snav-tutor" onclick="goTo('tutor','slide')"><span class="snav-icon">💬</span>AI Tutor</button>
-        <button class="snav-btn" id="snav-settings" onclick="goTo('settings','slide')"><span class="snav-icon">⚙️</span>Settings</button>
+        <button class="snav-btn active" id="snav-dash" onclick="goTo('dash')"><span class="snav-icon">📊</span>Dashboard</button>
+
+        <button class="snav-btn" id="snav-ingest" onclick="goTo('ingest')"><span class="snav-icon">📥</span>Ingestion</button>
+        <button class="snav-btn" id="snav-graph" onclick="goTo('graph')"><span class="snav-icon">🧭</span>Knowledge Map</button>
+
+        <button class="snav-btn" id="snav-diagnose" onclick="goTo('diagnose')"><span class="snav-icon">🧪</span>Diagnostics</button>
+        <button class="snav-btn" id="snav-teach" onclick="goTo('teach')"><span class="snav-icon">🧠</span>Teach</button>
+
+        <button class="snav-btn" id="snav-train" onclick="goTo('train')"><span class="snav-icon">⚡</span>Practice</button>
+        <button class="snav-btn" id="snav-flash" onclick="goTo('flash')"><span class="snav-icon">🗂️</span>Flashcards</button>
+        <button class="snav-btn" id="snav-cases" onclick="goTo('cases')"><span class="snav-icon">🧩</span>Cases</button>
+        <button class="snav-btn" id="snav-viva" onclick="goTo('viva')"><span class="snav-icon">🎤</span>Viva</button>
+
+        <button class="snav-btn" id="snav-evidence" onclick="goTo('evidence')"><span class="snav-icon">📚</span>Evidence</button>
+        <button class="snav-btn" id="snav-analytics" onclick="goTo('analytics')"><span class="snav-icon">📈</span>Analytics</button>
+
+        <button class="snav-btn" id="snav-tutor" onclick="goTo('tutor')"><span class="snav-icon">💬</span>AI Tutor</button>
+        <button class="snav-btn" id="snav-settings" onclick="goTo('settings')"><span class="snav-icon">⚙️</span>Settings</button>
       </div>
+
       <div class="sidebar-footer">
-        <div class="usage-pill" style="width:100%;justify-content:center;"><div class="usage-dot" id="usageDot2"></div><span id="usageText2">20 free questions</span></div>
+        <div class="usage-pill" style="width:100%;justify-content:center;">
+          <div class="usage-dot" id="usageDot"></div>
+          <span id="usageText">Ready</span>
+        </div>
       </div>
     </nav>
 
     <!-- Content -->
     <div class="content-area">
 
-      <!-- DASHBOARD -->
+      <div class="topbar">
+        <div class="topbar-title" id="topTitle">Dashboard</div>
+        <div class="usage-pill">
+          <div class="usage-dot" id="modeDot"></div>
+          <span id="modeText">Exam Mode</span>
+        </div>
+      </div>
+
+      <!-- DASH -->
       <div class="screen active" id="screen-dash">
-        <div class="topbar"><div class="topbar-title" id="topbarTitle">Dashboard</div><div class="usage-pill"><div class="usage-dot" id="usageDot"></div><span id="usageText">20 free</span></div></div>
-        <div class="scroll-body gap-20">
-          <div class="glow-card" style="animation:fadeUp .4s ease;">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--v3);margin-bottom:6px;">Active Subject</div>
-            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.3px;line-height:1.2;" id="dashSubject">Your Subject</div>
-            <div class="dim" style="margin-top:6px;" id="dashMeta">60 days left</div>
+        <div class="scroll-body gap-16">
+          <div class="card">
+            <div class="card-label">Active workspace</div>
+            <div class="sec-title" id="dashSubject">—</div>
+            <div class="dim" id="dashMeta">—</div>
           </div>
-          <div class="mode-pills" style="animation:fadeUp .4s .06s ease both;"><button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button><button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button></div>
-          <div class="stat-grid" style="animation:fadeUp .4s .1s ease both;">
-            <div class="stat-box"><div class="stat-val" id="dsTopics">0</div><div class="stat-lbl">Topics</div></div>
-            <div class="stat-box"><div class="stat-val" id="dsScore" style="color:var(--cyan)">—</div><div class="stat-lbl">Avg Score</div></div>
-            <div class="stat-box"><div class="stat-val" id="dsQs">0</div><div class="stat-lbl">Questions</div></div>
+
+          <div class="card">
+            <div class="card-label">Modes</div>
+            <div class="pill-row">
+              <button class="pill active" id="pillExam" onclick="setMode('exam')">⚡ Exam</button>
+              <button class="pill" id="pillMastery" onclick="setMode('mastery')">🧠 Mastery</button>
+            </div>
+            <div class="dim" style="margin-top:10px;">
+              Exam Mode = rubric + time pressure + pass probability. Mastery Mode = ambiguity + tradeoffs + synthesis + defence.
+            </div>
           </div>
-          <div class="card" style="animation:fadeUp .4s .14s ease both;">
-            <div class="card-label">Overall Progress</div>
-            <div class="prog-wrap"><div class="prog-fill" id="dashProg" style="width:0%"></div></div>
-            <div style="display:flex;justify-content:space-between;margin-top:10px;"><span class="dim" id="dashProgPct">0% mastered</span><span class="dim" id="dashProgTopics">0 / 0 topics</span></div>
+
+          <div class="card">
+            <div class="card-label">Next recommended step</div>
+            <div class="dim" id="nextStep">
+              Run Diagnostics → then Teach overview → then Practice session.
+            </div>
+            <div class="gap-8" style="margin-top:12px;">
+              <button class="btn btn-primary" onclick="goTo('diagnose')">Run diagnostics</button>
+              <button class="btn btn-outline" onclick="goTo('teach')">Teach overview</button>
+            </div>
           </div>
-          <div class="gap-8" style="animation:fadeUp .4s .18s ease both;">
-            <button class="btn btn-primary" onclick="goTo('train','slide')">⚡ Start Practice Session</button>
-            <button class="btn btn-outline" onclick="goTo('tutor','slide')">💬 Ask AI Tutor</button>
+
+          <div class="card">
+            <div class="card-label">Roadmap modules (placeholders)</div>
+            <div class="chipwrap">
+              <div class="chip" onclick="goTo('ingest')">Ingestion</div>
+              <div class="chip" onclick="goTo('graph')">Knowledge map</div>
+              <div class="chip" onclick="goTo('diagnose')">Diagnostics</div>
+              <div class="chip" onclick="goTo('teach')">Teaching</div>
+              <div class="chip" onclick="goTo('flash')">Flashcards</div>
+              <div class="chip" onclick="goTo('cases')">Case studies</div>
+              <div class="chip" onclick="goTo('evidence')">Evidence search</div>
+              <div class="chip" onclick="goTo('analytics')">Analytics</div>
+            </div>
           </div>
-          <div id="topicMapWrap" style="display:none;animation:fadeUp .4s .22s ease both;"><div class="sec-title" style="margin-bottom:12px;">Topic Map</div><div class="topic-wrap" id="topicMap"></div></div>
-          <button class="btn btn-ghost btn-sm" onclick="changeSub()" style="width:100%;animation:fadeUp .4s .26s ease both;">↩ Change Subject / Upload New Materials</button>
+        </div>
+      </div>
+
+      <!-- INGEST -->
+      <div class="screen" id="screen-ingest">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Ingestion</div>
+          <div class="dim">
+            Multi-modal intake: PDFs, docs, slides, video transcripts, web links. This screen is the control center for ingestion + parsing.
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Upload & parse</div>
+            <div class="dim">MVP: store files + extract text via your backend/no-code. Full spaceship: multi-modal + structural extraction.</div>
+            <input type="file" id="ingestFiles" multiple/>
+            <textarea id="ingestNotes" placeholder="Optional: paste text / transcript / notes"></textarea>
+            <button class="btn btn-primary" onclick="stub('Ingestion → Parse & Index')">Parse & index</button>
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Outputs</div>
+            <div class="dim">Expected: topics, definitions, frameworks, formulas, cases, references, and preliminary graph nodes.</div>
+            <div id="ingestOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAPH -->
+      <div class="screen" id="screen-graph">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Knowledge Map</div>
+          <div class="dim">
+            Full spaceship: auto-built knowledge graph with prerequisites + node mastery. MVP: topic list + manual linking.
+          </div>
+
+          <div class="card">
+            <div class="card-label">Topics</div>
+            <div class="chipwrap" id="topicChips"></div>
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Graph (placeholder)</div>
+            <div class="dim">
+              Later: interactive node graph, dependency edges, weak-node highlights, prerequisite repair suggestions.
+            </div>
+            <button class="btn btn-outline" onclick="stub('Generate graph view')">Generate graph view</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGNOSE -->
+      <div class="screen" id="screen-diagnose">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Diagnostics</div>
+          <div class="dim">
+            Two diagnostics: (1) knowledge baseline, (2) personality/goal + pressure response to choose default mode + coaching style.
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Knowledge diagnostic</div>
+            <div class="dim">Adaptive test (MVP: fixed set; spaceship: IRT/Bayesian). Outputs heatmap + weak-node list.</div>
+            <button class="btn btn-primary" onclick="stub('Run knowledge diagnostic')">Run knowledge diagnostic</button>
+            <div id="diagKnowOut" class="dim">—</div>
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Personality/goal diagnostic</div>
+            <div class="dim">Outputs your default mode (Exam/Mastery) and the tone blend (Mentor/Coach/Lab).</div>
+            <button class="btn btn-outline" onclick="stub('Run personality/goal diagnostic')">Run personality/goal diagnostic</button>
+            <div id="diagPsyOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEACH -->
+      <div class="screen" id="screen-teach">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Teach</div>
+          <div class="dim">
+            Structured teaching first: overview → mechanisms → applications → failure modes → exam framing.
+            This prepares you for flashcards and cases.
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Orientation</div>
+            <div class="dim">Big picture: what matters, how topics connect, what to learn first.</div>
+            <button class="btn btn-primary" onclick="stub('Generate orientation lesson')">Generate orientation lesson</button>
+            <div id="teachOut" class="dim">—</div>
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Visuals (placeholder)</div>
+            <div class="dim">Later: diagrams/flowcharts/label maps for each topic.</div>
+            <button class="btn btn-outline" onclick="stub('Generate a diagram prompt')">Generate visual prompt</button>
+          </div>
         </div>
       </div>
 
       <!-- TRAIN -->
       <div class="screen" id="screen-train">
-        <div class="topbar">
-          <div style="display:flex;align-items:center;gap:12px;flex:1;">
-            <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')" style="display:flex;align-items:center;justify-content:center;">←</button>
-            <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span class="dim" id="trainLabel">Question 1</span><span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span></div>
-              <div class="prog-wrap"><div class="prog-fill" id="trainProg" style="width:5%"></div></div>
-            </div>
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Practice</div>
+          <div class="dim">Adaptive questions (Exam) or deep reasoning (Mastery). Later: IRT + semantic grading + error clustering.</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Generate question</div>
+            <button class="btn btn-primary" onclick="stub('Generate next question')">Next question</button>
+            <div id="trainOut" class="dim">—</div>
           </div>
-          <div class="usage-pill" style="font-size:10px;margin-left:12px;" id="trainUsagePill">20 left</div>
         </div>
-        <div id="qArea" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 24px 24px;display:flex;flex-direction:column;gap:14px;min-height:0;"><div class="loading"><div class="spin"></div>Generating your first question...</div></div>
-        <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:14px 24px 20px;border-top:1px solid var(--border);background:rgba(4,4,13,.92);backdrop-filter:blur(20px);flex-shrink:0;">
-          <button class="btn btn-primary" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
-          <button class="btn btn-ghost" onclick="goTo('dash','back')">End Session</button>
+      </div>
+
+      <!-- FLASH -->
+      <div class="screen" id="screen-flash">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Flashcards</div>
+          <div class="dim">Visual + application-first flashcards. Later: spaced repetition with decay curves + weak-node resurfacing.</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Generate deck</div>
+            <button class="btn btn-primary" onclick="stub('Generate flashcard deck')">Generate flashcards</button>
+            <div id="flashOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CASES -->
+      <div class="screen" id="screen-cases">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Case Studies</div>
+          <div class="dim">Scenario ladders: basic → constrained → ambiguous → synthesis. Later: expert rubric + structured answer coaching.</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Generate case</div>
+            <button class="btn btn-primary" onclick="stub('Generate case study')">Generate case study</button>
+            <textarea placeholder="Write your answer (structured)"></textarea>
+            <button class="btn btn-outline" onclick="stub('Grade answer with rubric')">Grade my answer</button>
+            <div id="caseOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIVA -->
+      <div class="screen" id="screen-viva">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Viva / Oral Defence</div>
+          <div class="dim">Later: timed defence, cross-examination, assumptions challenged, limitation probing.</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Start viva</div>
+            <button class="btn btn-primary" onclick="stub('Start viva session')">Start viva</button>
+            <div id="vivaOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVIDENCE -->
+      <div class="screen" id="screen-evidence">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Evidence</div>
+          <div class="dim">
+            Credible public search to strengthen weak areas when your uploads aren’t enough.
+            Full spaceship: source grading + claim→source mapping + counterarguments.
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Search (placeholder)</div>
+            <input type="text" placeholder="Topic to strengthen (e.g., 'HACCP validation methods')"/>
+            <button class="btn btn-primary" onclick="stub('Run credible search and curate pack')">Search credible sources</button>
+            <div id="evidenceOut" class="dim">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="screen" id="screen-analytics">
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Analytics</div>
+          <div class="dim">
+            Full spaceship dashboard: mastery by node, retention decay, exam readiness forecast, cognitive profile, transfer ability.
+          </div>
+
+          <div class="card gap-12">
+            <div class="card-label">Mastery snapshot</div>
+            <div class="dim" id="analyticsOut">—</div>
+            <button class="btn btn-outline" onclick="stub('Refresh analytics')">Refresh</button>
+          </div>
         </div>
       </div>
 
       <!-- TUTOR -->
       <div class="screen" id="screen-tutor">
-        <div class="topbar">
-          <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')" style="display:flex;align-items:center;justify-content:center;">←</button>
-          <div style="flex:1;margin-left:12px;"><div style="font-weight:700;font-size:15px;">AI Tutor</div><div class="dim" style="font-size:11px;" id="tutorSubLabel">Your subject</div></div>
-          <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
+        <div class="scroll-body gap-16">
+          <div class="sec-title">AI Tutor</div>
+          <div class="dim">Calm mentor + performance coach + cognitive lab (adaptive). MVP can be a simple chat; spaceship grades reasoning.</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Ask</div>
+            <textarea id="tutorQ" placeholder="Ask anything about your topic..."></textarea>
+            <button class="btn btn-primary" onclick="stub('Send tutor message')">Send</button>
+            <div id="tutorOut" class="dim">—</div>
+          </div>
         </div>
-        <div class="chat-body" id="chatBody">
-          <div class="msg ai"><div class="msg-name">Cognio Tutor</div><div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject and exam format. Ask me anything — concept explanations, case walkthroughs, exam strategy, mechanisms. What would you like to explore?</div></div>
-        </div>
-        <div class="chat-bar"><textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea><button class="btn btn-icon btn-primary" onclick="sendMsg()">↑</button></div>
       </div>
 
       <!-- SETTINGS -->
       <div class="screen" id="screen-settings">
-        <div class="topbar"><div class="topbar-title">Settings</div></div>
-        <div class="scroll-body gap-20">
-          <div class="card gap-16"><div class="card-label">📅 Exam Countdown</div><div class="field"><label>Days Until Exam</label><input type="text" id="set-days" placeholder="60"/></div><button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button></div>
-          <div class="card gap-16"><div class="card-label">🎯 Subject</div><div class="field"><label>Subject Name</label><input type="text" id="set-subject"/></div><button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button></div>
-          <div class="card gap-16">
-            <div class="card-label">📊 Usage</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;"><span class="dim">Questions used</span><span style="font-weight:600;" id="set-q-used">0 / 20 free</span></div>
-            <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%"></div></div>
-            <button class="btn btn-primary btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
+        <div class="scroll-body gap-16">
+          <div class="sec-title">Settings</div>
+
+          <div class="card gap-12">
+            <div class="card-label">Workspace</div>
+            <div class="field">
+              <label>Subject</label>
+              <input type="text" id="setSubject"/>
+            </div>
+            <div class="field">
+              <label>Exam date</label>
+              <input type="date" id="setExamDate"/>
+            </div>
+            <button class="btn btn-outline" onclick="saveSettings()">Save</button>
           </div>
-          <div class="card"><div class="card-label">🗄️ Data</div><p class="dim" style="margin-bottom:14px;">Reset all progress, topics, and uploaded materials.</p><button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button></div>
+
+          <div class="card gap-12">
+            <div class="card-label">Reset</div>
+            <div class="dim">Clears local workspace (demo storage).</div>
+            <button class="btn btn-ghost" onclick="resetAll()">Reset all</button>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Integration note</div>
+            <div class="dim">
+              This file is a front-end shell that “allows for everything” in the roadmap via screens + navigation.
+              Actual capabilities (upload parsing, AI generation, scoring, search) should be wired to your Bubble workflows or API backend.
+            </div>
+          </div>
         </div>
       </div>
 
-    </div><!-- end content-area -->
+    </div>
 
-    <!-- Mobile Bottom Nav -->
-    <nav class="mobile-nav" id="mobileNav">
-      <button class="mnav-btn active" id="mnav-dash" onclick="goTo('dash','back')"><span class="mnav-icon">📊</span><span class="mnav-label">Dashboard</span></button>
-      <button class="mnav-btn" id="mnav-train" onclick="goTo('train','slide')"><span class="mnav-icon">⚡</span><span class="mnav-label">Train</span></button>
-      <button class="mnav-btn" id="mnav-tutor" onclick="goTo('tutor','slide')"><span class="mnav-icon">💬</span><span class="mnav-label">Tutor</span></button>
-      <button class="mnav-btn" id="mnav-settings" onclick="goTo('settings','slide')"><span class="mnav-icon">⚙️</span><span class="mnav-label">Settings</span></button>
+    <!-- Mobile nav (core shortcuts) -->
+    <nav class="mobile-nav">
+      <button class="mnav-btn active" id="mnav-dash" onclick="goTo('dash')"><span class="mnav-icon">📊</span><span class="mnav-label">Dash</span></button>
+      <button class="mnav-btn" id="mnav-train" onclick="goTo('train')"><span class="mnav-icon">⚡</span><span class="mnav-label">Train</span></button>
+      <button class="mnav-btn" id="mnav-flash" onclick="goTo('flash')"><span class="mnav-icon">🗂️</span><span class="mnav-label">Cards</span></button>
+      <button class="mnav-btn" id="mnav-tutor" onclick="goTo('tutor')"><span class="mnav-icon">💬</span><span class="mnav-label">Tutor</span></button>
+      <button class="mnav-btn" id="mnav-settings" onclick="goTo('settings')"><span class="mnav-icon">⚙️</span><span class="mnav-label">Settings</span></button>
     </nav>
 
-  </div><!-- end mainApp -->
-
-  <!-- UPGRADE OVERLAY -->
-  <div class="upgrade-overlay" id="upgradeOverlay">
-    <div class="upgrade-sheet">
-      <div class="upgrade-badge">⭐ Upgrade to Pro</div>
-      <div class="upgrade-title">You've hit your free limit.</div>
-      <div class="upgrade-sub">Join the waitlist for Cognio Pro — unlimited training, all subjects, all modes.</div>
-      <div class="gap-8" style="margin-bottom:20px;">
-        <div class="perk"><span class="perk-icon">✓</span><span>Unlimited practice questions</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Unlimited AI tutor messages</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive analytics</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Written answer AI grading</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Viva / oral simulation mode</span></div>
-      </div>
-      <div class="field" style="margin-bottom:12px;"><label>Your Email</label><input type="email" id="upgradeEmail" placeholder="you@email.com"/></div>
-      <button class="btn btn-primary" onclick="joinWaitlist()">Join Waitlist — It's Free</button>
-      <button class="btn btn-ghost" style="margin-top:8px;" onclick="closeUpgrade()">Maybe Later</button>
-    </div>
   </div>
-
-</div><!-- end #app -->
+</div>
 
 <script>
-// ═══════════════════════════════════════
-// COSMOS CANVAS — Living background
-// ═══════════════════════════════════════
+/* ===========================
+   COSMOS BACKGROUND (simple)
+=========================== */
 (function initCosmos(){
   const canvas = document.getElementById('cosmos');
   const ctx = canvas.getContext('2d');
-  let W, H, particles=[], books=[];
-  const PARTICLE_COUNT = 180;
-  const BOOK_EMOJIS = ['📖','📚','🔬','⚗️','📐','⚖️','💡','🧬','📊','🧮','🔭','📝'];
-
-  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-  window.addEventListener('resize',()=>{resize();init();});
-  resize();
-
-  function rand(a,b){return a+Math.random()*(b-a);}
-
-  class Particle{
-    constructor(){this.reset(true);}
-    reset(init=false){
-      this.x=rand(0,W);
-      this.y=init?rand(0,H):H+20;
-      this.size=rand(.6,2.2);
-      this.speed=rand(.15,.55);
-      this.opacity=rand(.06,.35);
-      this.drift=rand(-.3,.3);
-      // color: mostly purple/violet, some cyan
-      const hue=Math.random()<0.7?rand(240,280):rand(185,200);
-      this.color=`hsla(${hue},80%,75%,${this.opacity})`;
-      this.twinkleSpeed=rand(.008,.025);
-      this.twinkleOffset=rand(0,Math.PI*2);
-    }
-    update(t){
-      this.y-=this.speed;
-      this.x+=this.drift;
-      const tw=Math.sin(t*this.twinkleSpeed+this.twinkleOffset);
-      this.currentOpacity=this.opacity*(0.5+0.5*tw);
-      if(this.y<-10)this.reset();
-    }
-    draw(){
+  let W,H,pts=[];
+  function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight;}
+  addEventListener('resize',()=>{resize();seed();});
+  function seed(){
+    pts = Array.from({length:160},()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*1.8+.4,
+      vy:Math.random()*0.55+.1,
+      a:Math.random()*0.25+0.05,
+      h:(Math.random()<0.7? (240+Math.random()*45):(185+Math.random()*20))
+    }));
+  }
+  resize(); seed();
+  let t=0;
+  (function frame(){
+    t++;
+    ctx.clearRect(0,0,W,H);
+    for(const p of pts){
+      p.y -= p.vy;
+      if(p.y < -10){p.y = H+10; p.x=Math.random()*W;}
+      const tw = 0.5 + 0.5*Math.sin(t*0.01 + p.x*0.01);
       ctx.beginPath();
-      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-      ctx.fillStyle=this.color.replace(/[\d.]+\)$/,this.currentOpacity+')');
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = `hsla(${p.h},80%,75%,${p.a*tw})`;
       ctx.fill();
     }
-  }
-
-  class FloatingBook{
-    constructor(){this.reset(true);}
-    reset(init=false){
-      this.x=rand(20,W-60);
-      this.y=init?rand(-50,H+50):H+60;
-      this.emoji=BOOK_EMOJIS[Math.floor(Math.random()*BOOK_EMOJIS.length)];
-      this.size=rand(14,28);
-      this.speed=rand(.06,.2);
-      this.drift=rand(-.15,.15);
-      this.rotation=rand(-20,20);
-      this.rotSpeed=rand(-.3,.3);
-      this.opacity=rand(.04,.14);
-      this.scale=1;
-      this.scaleDir=rand(-.001,.001);
-    }
-    update(){
-      this.y-=this.speed;
-      this.x+=this.drift;
-      this.rotation+=this.rotSpeed;
-      this.scale+=this.scaleDir;
-      if(this.scale>1.06||this.scale<0.95)this.scaleDir*=-1;
-      if(this.y<-60)this.reset();
-    }
-    draw(){
-      ctx.save();
-      ctx.globalAlpha=this.opacity;
-      ctx.translate(this.x,this.y);
-      ctx.rotate(this.rotation*Math.PI/180);
-      ctx.scale(this.scale,this.scale);
-      ctx.font=`${this.size}px serif`;
-      ctx.fillText(this.emoji,0,0);
-      ctx.restore();
-    }
-  }
-
-  // Flowing energy lines
-  class EnergyLine{
-    constructor(){this.reset();}
-    reset(){
-      this.x1=rand(0,W);this.y1=rand(0,H);
-      this.x2=this.x1+rand(-200,200);this.y2=this.y1+rand(-200,200);
-      this.opacity=0;this.maxOpacity=rand(.02,.07);
-      this.phase='in';this.speed=rand(.004,.012);
-      this.hue=rand(240,280);
-    }
-    update(){
-      if(this.phase==='in'){this.opacity+=this.speed;if(this.opacity>=this.maxOpacity)this.phase='out';}
-      else{this.opacity-=this.speed*0.5;if(this.opacity<=0)this.reset();}
-    }
-    draw(){
-      const grad=ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
-      grad.addColorStop(0,`hsla(${this.hue},70%,70%,0)`);
-      grad.addColorStop(.5,`hsla(${this.hue},70%,70%,${this.opacity})`);
-      grad.addColorStop(1,`hsla(${this.hue},70%,70%,0)`);
-      ctx.beginPath();ctx.moveTo(this.x1,this.y1);ctx.lineTo(this.x2,this.y2);
-      ctx.strokeStyle=grad;ctx.lineWidth=rand(.5,1.5);ctx.stroke();
-    }
-  }
-
-  function init(){
-    particles=Array.from({length:PARTICLE_COUNT},()=>new Particle());
-    books=Array.from({length:22},()=>new FloatingBook());
-    lines=Array.from({length:18},()=>new EnergyLine());
-  }
-  let lines=[];
-  init();
-
-  let t=0;
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    t++;
-    lines.forEach(l=>{l.update();l.draw();});
-    books.forEach(b=>{b.update();b.draw();});
-    particles.forEach(p=>{p.update(t);p.draw();});
     requestAnimationFrame(frame);
-  }
-  frame();
+  })();
 })();
 
-// ═══════════════════════════════════════
-// APP STATE
-// ═══════════════════════════════════════
-const FREE_Q=20, FREE_MSG=10;
-const D={
-  subject:localStorage.getItem('cio_subject')||'',
-  topics:JSON.parse(localStorage.getItem('cio_topics')||'[]'),
-  content:localStorage.getItem('cio_content')||'',
-  mode:localStorage.getItem('cio_mode')||'exam',
-  days:parseInt(localStorage.getItem('cio_days')||'60'),
-  fmt:JSON.parse(localStorage.getItem('cio_fmt')||'["MCQ"]'),
-  qUsed:parseInt(localStorage.getItem('cio_qused')||'0'),
-  msgUsed:parseInt(localStorage.getItem('cio_msgused')||'0'),
-  onboarded:localStorage.getItem('cio_onboarded')==='1',
-  scores:JSON.parse(localStorage.getItem('cio_scores')||'[]'),
-  totalQs:parseInt(localStorage.getItem('cio_qs')||'0'),
-  sScore:0,sTotal:0,qCount:0,currentQ:null,answered:false,
-  chatHistory:[],obFmts:[]
+/* ===========================
+   APP STATE (demo)
+=========================== */
+const D = {
+  subject: localStorage.getItem('cio_subject') || '',
+  examDate: localStorage.getItem('cio_examDate') || '',
+  fmts: JSON.parse(localStorage.getItem('cio_fmts') || '["MCQ"]'),
+  topics: JSON.parse(localStorage.getItem('cio_topics') || '[]'),
+  mode: localStorage.getItem('cio_mode') || 'exam',
+  onboarded: localStorage.getItem('cio_onboarded') === '1',
 };
-const save=(k,v)=>localStorage.setItem(k,typeof v==='object'?JSON.stringify(v):String(v));
 
-// ═══════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════
+function save(key,val){
+  localStorage.setItem(key, typeof val === 'object' ? JSON.stringify(val) : String(val));
+}
+
+let selectedFmts = new Set(D.fmts || ["MCQ"]);
+function toggleFmt(el, fmt){
+  if(selectedFmts.has(fmt)){ selectedFmts.delete(fmt); el.style.borderColor='var(--border)'; el.style.color='var(--text-2)'; }
+  else { selectedFmts.add(fmt); el.style.borderColor='var(--v1)'; el.style.color='var(--v1)'; }
+}
+
+/* ===========================
+   NAV
+=========================== */
+const screens = ['dash','ingest','graph','diagnose','teach','train','flash','cases','viva','evidence','analytics','tutor','settings'];
+
+function goTo(name){
+  for(const s of screens){
+    document.getElementById('screen-'+s).classList.toggle('active', s === name);
+    const sb = document.getElementById('snav-'+s);
+    if(sb) sb.classList.toggle('active', s === name);
+    const mb = document.getElementById('mnav-'+s);
+    if(mb) mb.classList.toggle('active', s === name);
+  }
+  const titles = {
+    dash:'Dashboard', ingest:'Ingestion', graph:'Knowledge Map', diagnose:'Diagnostics', teach:'Teach',
+    train:'Practice', flash:'Flashcards', cases:'Case Studies', viva:'Viva', evidence:'Evidence',
+    analytics:'Analytics', tutor:'AI Tutor', settings:'Settings'
+  };
+  document.getElementById('topTitle').textContent = titles[name] || 'CogniO';
+}
+
 function showApp(){
   document.getElementById('landing').style.display='none';
   document.getElementById('mainApp').classList.add('show');
-}
-function showLanding(){
-  document.getElementById('mainApp').classList.remove('show');
-  document.getElementById('landing').style.display='flex';
+  refreshAll();
 }
 
-function goTo(name,dir){
-  const cur=document.querySelector('#mainApp .screen.active');
-  const nxt=document.getElementById('screen-'+name);
-  if(!nxt||cur===nxt)return;
-  cur.classList.remove('active');
-  nxt.classList.add('active');
-  nxt.classList.remove('slide-in','slide-back');
-  void nxt.offsetWidth;
-  if(dir==='slide')nxt.classList.add('slide-in');
-  else if(dir==='back')nxt.classList.add('slide-back');
-
-  // Update nav
-  ['dash','train','tutor','settings'].forEach(n=>{
-    const sb=document.getElementById('snav-'+n);
-    const mb=document.getElementById('mnav-'+n);
-    if(sb)sb.classList.toggle('active',n===name);
-    if(mb)mb.classList.toggle('active',n===name);
-  });
-  const titles={dash:'Dashboard',train:'Practice',tutor:'AI Tutor',settings:'Settings'};
-  document.getElementById('topbarTitle').textContent=titles[name]||'';
-
-  if(name==='dash')refreshDash();
-  if(name==='train')initTrain();
-  if(name==='settings')loadSettings();
-  if(name==='tutor')document.getElementById('tutorSubLabel').textContent=D.subject;
+/* ===========================
+   MODE
+=========================== */
+function setMode(m){
+  D.mode = m;
+  save('cio_mode', m);
+  document.getElementById('pillExam').classList.toggle('active', m==='exam');
+  document.getElementById('pillMastery').classList.toggle('active', m==='mastery');
+  document.getElementById('modeText').textContent = m==='exam' ? 'Exam Mode' : 'Mastery Mode';
+  document.getElementById('modeDot').className = 'usage-dot ' + (m==='exam' ? '' : 'warn');
 }
 
-// ═══════════════════════════════════════
-// ONBOARDING
-// ═══════════════════════════════════════
-function obGo(step){
-  if(step===2){
-    const sub=document.getElementById('ob-subject').value.trim();
-    if(!sub){alert('Please enter your subject name first.');return;}
-    D.subject=sub;D.days=parseInt(document.getElementById('ob-days').value)||60;
-    D.fmt=D.obFmts.length?D.obFmts:['MCQ'];
-    save('cio_subject',D.subject);save('cio_days',D.days);save('cio_fmt',D.fmt);
-  }
-  document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('ob'+step).classList.add('active');
-}
-function pickField(el,val){document.querySelectorAll('#fieldTags .ftag').forEach(t=>t.classList.remove('sel'));el.classList.add('sel');document.getElementById('ob-subject').value=val;}
-function toggleFmt(el,fmt){el.classList.toggle('sel');D.obFmts=D.obFmts.includes(fmt)?D.obFmts.filter(f=>f!==fmt):[...D.obFmts,fmt];}
+function refreshAll(){
+  // meta
+  document.getElementById('dashSubject').textContent = D.subject || '—';
+  const metaParts = [];
+  if(D.examDate) metaParts.push(`Exam: ${D.examDate}`);
+  if(D.fmts?.length) metaParts.push(D.fmts.join(', '));
+  document.getElementById('dashMeta').textContent = metaParts.length ? metaParts.join(' · ') : '—';
 
-async function buildAndLaunch(){
-  const btn=document.getElementById('buildBtn');
-  btn.disabled=true;btn.innerHTML='<div class="spin"></div> Building Knowledge Map...';
-  const syl=document.getElementById('ob-syllabus').value;
-  let content=`Subject: ${D.subject}\nExam formats: ${D.fmt.join(', ')}\n\n`;
-  if(syl)content+=`Syllabus/Topics:\n${syl}\n\n`;
-  for(const file of uploadedFiles){
-    try{const text=await readText(file);content+=`\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;}
-    catch(e){content+=`\n--- ${file.name} --- [binary file]\n`;}
-  }
-  D.content=content;save('cio_content',content);
-  try{
-    const raw=await callAI(`From this course material for "${D.subject}", extract 8-14 main topics as a JSON array of short strings. Return ONLY the JSON array.\n\nContent:\n${content.substring(0,3000)}`);
-    const s=raw.indexOf('['),e=raw.lastIndexOf(']');
-    D.topics=JSON.parse(raw.substring(s,e+1));
-  }catch(e){D.topics=defaultTopics(D.subject);}
-  save('cio_topics',D.topics);save('cio_onboarded','1');D.onboarded=true;
-  btn.innerHTML='✅ Knowledge Map Built!';
-  btn.style.background='linear-gradient(135deg,#66bb6a,#43a047)';
-  setTimeout(()=>{showApp();refreshDash();},1000);
+  // topics
+  const chips = document.getElementById('topicChips');
+  chips.innerHTML = (D.topics?.length ? D.topics : ['No topics yet']).map(t=>`<div class="chip">${t}</div>`).join('');
+
+  // settings form
+  document.getElementById('setSubject').value = D.subject || '';
+  document.getElementById('setExamDate').value = D.examDate || '';
+
+  // mode
+  setMode(D.mode);
 }
 
-function skipAndLaunch(){
-  D.content='';D.topics=defaultTopics(D.subject||'General Study');
-  save('cio_content','');save('cio_topics',D.topics);save('cio_onboarded','1');D.onboarded=true;
-  showApp();refreshDash();
-}
-function skipToApp(){if(D.onboarded&&D.subject){showApp();refreshDash();}else obGo(1);}
-function changeSub(){showLanding();document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));document.getElementById('ob1').classList.add('active');}
-function defaultTopics(s){return[`${s} — Foundations & Core Concepts`,`${s} — Key Mechanisms & Processes`,`${s} — Classification & Taxonomy`,`${s} — Applied Principles`,`${s} — Case Studies & Scenarios`,`${s} — Regulations & Standards`,`${s} — Analytical Methods`,`${s} — Current Issues & Debates`];}
+/* ===========================
+   LAUNCH
+=========================== */
+function launch(){
+  const subject = document.getElementById('ob-subject').value.trim();
+  const examDate = document.getElementById('ob-examdate').value;
+  if(!subject){ alert('Please enter your course/subject name.'); return; }
 
-// ═══════════════════════════════════════
-// FILE UPLOAD
-// ═══════════════════════════════════════
-let uploadedFiles=[];
-function handleFiles(f){uploadedFiles=[...uploadedFiles,...Array.from(f).slice(0,10)];renderFiles();}
-function renderFiles(){
-  const wrap=document.getElementById('fileListWrap');
-  if(!uploadedFiles.length){wrap.style.display='none';return;}
-  wrap.style.display='flex';
-  const icons={pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};
-  document.getElementById('fileList').innerHTML=uploadedFiles.map((f,i)=>`<div class="file-row"><span style="font-size:20px">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span><div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-row-del" onclick="removeFile(${i})">✕</button></div>`).join('');
-}
-function removeFile(i){uploadedFiles.splice(i,1);renderFiles();}
-function readText(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file);});}
+  D.subject = subject;
+  D.examDate = examDate || '';
+  D.fmts = Array.from(selectedFmts.size ? selectedFmts : new Set(['MCQ']));
 
-// ═══════════════════════════════════════
-// DASHBOARD
-// ═══════════════════════════════════════
-function refreshDash(){
-  document.getElementById('dashSubject').textContent=D.subject||'No subject set';
-  document.getElementById('dashMeta').textContent=`${D.days} days left · ${D.fmt.join(', ')}`;
-  document.getElementById('dsTopics').textContent=D.topics.length;
-  document.getElementById('dsQs').textContent=D.totalQs;
-  document.getElementById('examPill').classList.toggle('active',D.mode==='exam');
-  document.getElementById('mastPill').classList.toggle('active',D.mode==='mastery');
-  if(D.scores.length){
-    const avg=Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);
-    document.getElementById('dsScore').textContent=avg+'%';
-    const pct=Math.min(100,D.totalQs*2);
-    document.getElementById('dashProg').style.width=pct+'%';
-    document.getElementById('dashProgPct').textContent=pct+'% mastered';
-    document.getElementById('dashProgTopics').textContent=`${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;
-  }
-  if(D.topics.length){document.getElementById('topicMapWrap').style.display='block';document.getElementById('topicMap').innerHTML=D.topics.map(t=>`<div class="topic-chip">${t}</div>`).join('');}
-  updateUsage();
-}
-function setMode(m){D.mode=m;save('cio_mode',m);refreshDash();}
-function updateUsage(){
-  const left=Math.max(0,FREE_Q-D.qUsed);
-  const txt=left>0?`${left} free`:'Limit reached';
-  const txt2=left>0?`${left} free questions`:'Upgrade for more';
-  const cls='usage-dot'+(left===0?' over':left<=5?' warn':'');
-  document.getElementById('usageText').textContent=txt;
-  document.getElementById('usageText2').textContent=txt2;
-  document.getElementById('usageDot').className=cls;
-  document.getElementById('usageDot2').className=cls;
-  document.getElementById('trainUsagePill').textContent=left>0?`${left} left`:'⚠ Limit';
+  // placeholder: topics created from syllabus text or uploads (you’ll wire this to AI)
+  const syl = document.getElementById('ob-syllabus').value.trim();
+  D.topics = syl
+    ? syl.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,14)
+    : [
+        `${subject} — Foundations`,
+        `${subject} — Mechanisms`,
+        `${subject} — Applications`,
+        `${subject} — Case Studies`,
+        `${subject} — Debates & Limitations`,
+      ];
+
+  save('cio_subject', D.subject);
+  save('cio_examDate', D.examDate);
+  save('cio_fmts', D.fmts);
+  save('cio_topics', D.topics);
+  save('cio_onboarded', '1');
+
+  showApp();
 }
 
-// ═══════════════════════════════════════
-// TRAINING
-// ═══════════════════════════════════════
-async function initTrain(){
-  D.sScore=0;D.sTotal=0;D.qCount=0;D.answered=false;
-  document.getElementById('trainScore').textContent='0 / 0';
-  document.getElementById('trainLabel').textContent='Question 1';
-  document.getElementById('trainProg').style.width='5%';
-  document.getElementById('trainActions').style.display='none';
-  updateUsage();await genQ();
+function demoLaunch(){
+  document.getElementById('ob-subject').value = 'Advanced Topic (Demo)';
+  document.getElementById('ob-syllabus').value =
+`Foundations & core concepts
+Key mechanisms & processes
+Applied methods & workflows
+Common failure modes
+Case studies & tradeoffs
+Current debates & limitations`;
+  selectedFmts = new Set(['MCQ','Written Essays','Case Studies']);
+  launch();
 }
 
-async function genQ(){
-  if(D.qUsed>=FREE_Q){showUpgrade();return;}
-  D.answered=false;
-  document.getElementById('trainActions').style.display='none';
-  document.getElementById('nextBtn').style.display='none';
-  const qArea=document.getElementById('qArea');
-  qArea.innerHTML='<div class="loading"><div class="spin"></div>Generating question from your materials...</div>';
-  D.qCount++;
-  document.getElementById('trainLabel').textContent=`Question ${D.qCount}`;
-  document.getElementById('trainProg').style.width=Math.min(100,D.qCount*10)+'%';
+/* ===========================
+   SETTINGS
+=========================== */
+function saveSettings(){
+  D.subject = document.getElementById('setSubject').value.trim();
+  D.examDate = document.getElementById('setExamDate').value;
+  save('cio_subject', D.subject);
+  save('cio_examDate', D.examDate);
+  refreshAll();
+  alert('✅ Saved');
+}
 
-  const topic=D.topics.length?D.topics[Math.floor(Math.random()*D.topics.length)]:D.subject;
-  const isMastery=D.mode==='mastery';
-  const isTF=D.fmt.includes('True / False')&&Math.random()<0.3;
-  const modeInstr=isMastery?'Generate a MASTERY-level question requiring deep reasoning, analysis, application to novel scenarios, or synthesis. Avoid simple recall.':'Generate a precise EXAM-style question that tests real understanding.';
-  const typeInstr=isTF?'Return type "truefalse". Options must be exactly ["True","False"]. Correct is 0 (True) or 1 (False).':'Return type "mcq". Provide exactly 4 options. Only one is correct.';
-  const contentInstr=D.content?`You MUST base this question specifically on the student's own course materials. Use specific facts, mechanisms, organisms, cases, or principles from this content:\n\n${D.content.substring(0,4000)}`:`Subject: "${D.subject}". Use your expert knowledge to generate a specific, high-quality question on: ${topic}`;
+function resetAll(){
+  if(!confirm('Reset everything?')) return;
+  localStorage.clear();
+  location.reload();
+}
 
-  const prompt=`You are an expert examiner for "${D.subject}".
-Topic: ${topic}
-${modeInstr}
-${contentInstr}
-${typeInstr}
-CRITICAL: Your entire response must be a single valid JSON object. Start with { and end with }. No text before or after.
-{"type":"mcq","question":"write the complete question here","options":["A: first option","B: second option","C: third option","D: fourth option"],"correct":0,"explanation":"Explain clearly why the correct answer is right and why each wrong option is incorrect."}`;
-
-  for(let attempt=1;attempt<=3;attempt++){
-    try{
-      const raw=await callAI(prompt);
-      const start=raw.indexOf('{'),end=raw.lastIndexOf('}');
-      if(start===-1||end===-1)throw new Error('No JSON found in response');
-      const q=JSON.parse(raw.substring(start,end+1));
-      if(!q.question||!Array.isArray(q.options)||q.options.length<2||q.correct===undefined)throw new Error('Invalid question structure');
-      renderQ(qArea,q,topic);return;
-    }catch(e){
-      if(attempt<3){await new Promise(r=>setTimeout(r,600));qArea.innerHTML=`<div class="loading"><div class="spin"></div>Retrying (${attempt+1}/3)...</div>`;}
-      else{qArea.innerHTML=`<div style="background:rgba(239,83,80,.07);border:1px solid rgba(239,83,80,.25);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;animation:fadeUp .3s ease;"><div style="font-weight:700;color:var(--red);font-size:16px;">⚠ Could not generate question</div><div class="dim" style="line-height:1.65;">Error: <code style="font-size:12px;color:var(--text-2);background:var(--surface2);padding:2px 6px;border-radius:4px;">${e.message}</code></div><button class="btn btn-outline btn-sm" onclick="genQ()" style="width:100%;margin-top:4px;">↻ Try Again</button></div>`;D.qCount--;}
-    }
+/* ===========================
+   STUB ACTIONS
+   (Replace these with Bubble workflows or your API calls)
+=========================== */
+function stub(action){
+  const msg = `✅ ${action}\n\n(Placeholder)\nWire this button to your Bubble/OpenAI workflow later.`;
+  const map = {
+    'Ingestion → Parse & Index':'ingestOut',
+    'Generate graph view':null,
+    'Run knowledge diagnostic':'diagKnowOut',
+    'Run personality/goal diagnostic':'diagPsyOut',
+    'Generate orientation lesson':'teachOut',
+    'Generate next question':'trainOut',
+    'Generate flashcard deck':'flashOut',
+    'Generate case study':'caseOut',
+    'Grade answer with rubric':'caseOut',
+    'Start viva session':'vivaOut',
+    'Run credible search and curate pack':'evidenceOut',
+    'Refresh analytics':'analyticsOut',
+    'Send tutor message':'tutorOut'
+  };
+  const id = map[action];
+  if(id){
+    document.getElementById(id).textContent = msg;
+  } else {
+    alert(msg);
   }
 }
 
-function renderQ(container,q,topic){
-  D.currentQ=q;const L=['A','B','C','D'];
-  container.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:4px;">${topic||D.subject}</div><div class="q-card"><div class="q-head"><div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div><div class="q-meta">Q${D.qCount}</div></div><div class="q-body"><div class="q-text">${q.question}</div><div class="opts" id="opts">${q.options.map((opt,i)=>`<div class="opt" id="opt${i}" onclick="pick(${i})"><div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):L[i]}</div><div class="opt-text">${opt}</div></div>`).join('')}</div><div class="feedback" id="fb"></div></div></div>`;
-  container.scrollTop=0;
-}
-
-function pick(i){
-  if(D.answered)return;
-  D.answered=true;D.sTotal++;
-  const ok=i===D.currentQ.correct;
-  if(ok)D.sScore++;
-  D.qUsed++;D.totalQs++;D.scores.push(ok?100:0);
-  if(D.scores.length>100)D.scores.shift();
-  save('cio_qused',D.qUsed);save('cio_qs',D.totalQs);save('cio_scores',D.scores);
-  document.getElementById('trainScore').textContent=`${D.sScore} / ${D.sTotal}`;
-  updateUsage();
-  document.querySelectorAll('.opt').forEach((el,idx)=>{if(idx===D.currentQ.correct)el.classList.add('correct');else if(idx===i&&!ok)el.classList.add('wrong');});
-  const fb=document.getElementById('fb');
-  fb.className=`feedback show ${ok?'ok':'bad'}`;
-  fb.innerHTML=ok?`✅ <strong>Correct!</strong> ${D.currentQ.explanation}`:`❌ <strong>Incorrect.</strong> Correct: <strong>${D.currentQ.options[D.currentQ.correct]}</strong><br><br>${D.currentQ.explanation}`;
-  document.getElementById('trainActions').style.display='flex';
-  document.getElementById('nextBtn').style.display='flex';
-}
-async function nextQ(){if(D.qUsed>=FREE_Q){showUpgrade();return;}await genQ();}
-
-// ═══════════════════════════════════════
-// TUTOR
-// ═══════════════════════════════════════
-function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-async function sendMsg(){
-  if(D.msgUsed>=FREE_MSG){showUpgrade();return;}
-  const inp=document.getElementById('chatInput');
-  const text=inp.value.trim();if(!text)return;inp.value='';
-  addBub('user',text);D.chatHistory.push({role:'user',content:text});
-  const tid='t'+Date.now();
-  const el=document.createElement('div');el.className='msg ai';el.id=tid;
-  el.innerHTML=`<div class="msg-name">Cognio Tutor</div><div class="msg-bub"><div class="dots"><span></span><span></span><span></span></div></div>`;
-  document.getElementById('chatBody').appendChild(el);scrollChat();
-  const sys=`You are an expert tutor for "${D.subject}". The student has ${D.days} days until their exam covering: ${D.fmt.join(', ')}. Be educational, clear, and help the student truly understand — not just memorize. Use specific examples, mechanisms, and real-world context.${D.content?`\n\nStudent's course materials:\n${D.content.substring(0,3500)}`:''}`;
-  try{
-    const reply=await callAIChat(sys,D.chatHistory.slice(-10));
-    document.getElementById(tid)?.remove();D.chatHistory.push({role:'assistant',content:reply});
-    D.msgUsed++;save('cio_msgused',D.msgUsed);addBub('ai',reply);
-  }catch(e){document.getElementById(tid)?.remove();addBub('ai',`Sorry, something went wrong: ${e.message}`);}
-}
-function addBub(role,text){
-  const body=document.getElementById('chatBody');const d=document.createElement('div');d.className=`msg ${role}`;
-  d.innerHTML=`<div class="msg-name">${role==='ai'?'Cognio Tutor':'You'}</div><div class="msg-bub">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
-  body.appendChild(d);scrollChat();
-}
-function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
-function clearChat(){D.chatHistory=[];document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">Cognio Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;}
-
-// ═══════════════════════════════════════
-// UPGRADE
-// ═══════════════════════════════════════
-function showUpgrade(){document.getElementById('upgradeOverlay').classList.add('show');}
-function closeUpgrade(){document.getElementById('upgradeOverlay').classList.remove('show');}
-function joinWaitlist(){
-  const email=document.getElementById('upgradeEmail').value.trim();
-  if(!email||!email.includes('@')){alert('Please enter a valid email.');return;}
-  const list=JSON.parse(localStorage.getItem('cio_waitlist')||'[]');
-  list.push({email,subject:D.subject,date:new Date().toISOString()});
-  save('cio_waitlist',list);
-  document.getElementById('upgradeOverlay').innerHTML=`<div class="upgrade-sheet" style="text-align:center;"><div style="font-size:52px;margin-bottom:18px;">🎉</div><div class="upgrade-title">You're on the list!</div><div class="upgrade-sub" style="margin-top:10px;">We'll email <strong>${email}</strong> when Cognio Pro launches.</div><button class="btn btn-primary" style="margin-top:28px;" onclick="closeUpgrade()">Continue Learning</button></div>`;
-}
-
-// ═══════════════════════════════════════
-// SETTINGS
-// ═══════════════════════════════════════
-function loadSettings(){document.getElementById('set-days').value=D.days;document.getElementById('set-subject').value=D.subject;document.getElementById('set-q-used').textContent=`${D.qUsed} / ${FREE_Q} free`;document.getElementById('set-usage-bar').style.width=Math.min(100,(D.qUsed/FREE_Q)*100)+'%';}
-function saveDays(){D.days=parseInt(document.getElementById('set-days').value)||60;save('cio_days',D.days);alert('✅ Saved!');}
-function saveSubject(){D.subject=document.getElementById('set-subject').value;save('cio_subject',D.subject);alert('✅ Saved!');}
-function resetAll(){if(confirm('Reset everything? Cannot be undone.')){localStorage.clear();location.reload();}}
-
-// ═══════════════════════════════════════
-// API
-// ═══════════════════════════════════════
-async function callAI(prompt){
-  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:1024})});
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);
-  if(!d.content?.[0]?.text)throw new Error('Empty response from AI');
-  return d.content[0].text;
-}
-async function callAIChat(system,messages){
-  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system,messages,max_tokens:1500})});
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);
-  if(!d.content?.[0]?.text)throw new Error('Empty response from AI');
-  return d.content[0].text;
-}
-
-// ═══════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════
+/* ===========================
+   INIT
+=========================== */
 (function init(){
-  const zone=document.getElementById('dropZone');
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
-  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');handleFiles(e.dataTransfer.files);});
-  if(D.onboarded&&D.subject){showApp();refreshDash();}
+  // Pre-select chips based on saved fmts (landing only)
+  const chips = document.querySelectorAll('#fmtChips .chip');
+  chips.forEach(ch=>{
+    const t = ch.textContent.trim();
+    const fmt = t.replace('True/False','True / False').replace('Viva/Oral','Viva / Oral');
+    // Light heuristic; you can align exact names if needed.
+    if(D.fmts?.some(x => x.replace(/\s/g,'').toLowerCase() === fmt.replace(/\s/g,'').toLowerCase())){
+      ch.style.borderColor='var(--v1)'; ch.style.color='var(--v1)';
+    }
+  });
+
+  if(D.onboarded && D.subject){
+    showApp();
+  }
 })();
 </script>
 </body>
