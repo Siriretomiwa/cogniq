@@ -3,151 +3,315 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>CognIQ — Master Any Subject</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <title>Cognio — Master Any Subject</title>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@600;700&family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#06060e;--bg2:#0c0c1a;--surface:#0f0f20;--surface2:#161628;--border:#1e1e35;--border2:#28284a;--v1:#7c6af7;--v2:#9d4edd;--v3:#c77dff;--cyan:#6af7c2;--gold:#f7c26a;--red:#f76a6a;--green:#6af7a0;--text:#eeeef8;--text-2:#8888b0;--text-3:#44446a;--glow:rgba(124,106,247,.35);--glow2:rgba(124,106,247,.12);--r:18px;--r-sm:11px;}
+    :root{
+      --bg:#04040d;--bg2:#08081a;--surface:#0d0d22;--surface2:#131330;
+      --border:#1a1a3a;--border2:#24244a;
+      --v1:#7c6af7;--v2:#9d4edd;--v3:#c77dff;--v4:#6a4cf7;
+      --cyan:#4fc3f7;--teal:#26c6da;--gold:#ffd54f;
+      --red:#ef5350;--green:#66bb6a;
+      --text:#f0f0ff;--text-2:#8888b8;--text-3:#3a3a6a;
+      --glow:rgba(124,106,247,.4);--glow2:rgba(124,106,247,.1);
+      --r:18px;--r-sm:11px;
+    }
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html,body{height:100%;overflow:hidden;}
-    body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;display:flex;flex-direction:column;align-items:center;}
-    .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.18;pointer-events:none;z-index:0;animation:orbFloat 12s ease-in-out infinite;}
-    .orb1{width:400px;height:400px;background:var(--v1);top:-150px;right:-100px;animation-delay:0s;}
-    .orb2{width:300px;height:300px;background:var(--v2);bottom:-100px;left:-80px;animation-delay:-4s;}
-    .orb3{width:200px;height:200px;background:var(--cyan);top:40%;left:20%;opacity:.08;animation-delay:-8s;}
-    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(20px,-30px) scale(1.05);}66%{transform:translate(-15px,20px) scale(.95);}}
-    #app{position:relative;z-index:1;width:100%;max-width:500px;height:100%;display:flex;flex-direction:column;overflow:hidden;}
+    body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;}
+
+    /* ── CANVAS BACKGROUND ── */
+    #cosmos{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+    /* ── APP SHELL ── */
+    #app{position:relative;z-index:1;height:100%;display:flex;overflow:hidden;}
+
+    /* ══════════════════════════
+       LANDING — DESKTOP SPLIT
+    ══════════════════════════ */
+    #landing{
+      display:flex;width:100%;height:100%;
+      flex-direction:row;
+    }
+    /* Left panel — branding */
+    .land-left{
+      flex:1;min-width:0;
+      display:flex;flex-direction:column;justify-content:center;
+      padding:60px 56px;
+      border-right:1px solid var(--border);
+      position:relative;overflow:hidden;
+    }
+    .land-left::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 30% 40%, rgba(124,106,247,.12) 0%, transparent 65%);
+      pointer-events:none;
+    }
+    /* Right panel — action */
+    .land-right{
+      width:420px;flex-shrink:0;
+      display:flex;flex-direction:column;justify-content:center;
+      padding:48px 40px;
+      background:rgba(8,8,26,.6);
+      backdrop-filter:blur(24px);
+      overflow-y:auto;
+    }
+
+    /* Mobile: stack vertically */
+    @media(max-width:768px){
+      #landing{flex-direction:column;}
+      .land-left{padding:40px 24px 28px;border-right:none;border-bottom:1px solid var(--border);flex:none;}
+      .land-right{width:100%;flex:1;padding:28px 24px 40px;overflow-y:auto;}
+    }
+
+    /* ── COGNIO LOGO MARK ── */
+    .cognio-mark{
+      display:inline-flex;align-items:center;gap:10px;margin-bottom:32px;
+    }
+    .cognio-icon{
+      width:46px;height:46px;border-radius:13px;
+      background:linear-gradient(135deg,var(--v1),var(--v2));
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;
+      box-shadow:0 0 24px rgba(124,106,247,.5);
+      animation:iconPulse 3s ease-in-out infinite;
+    }
+    @keyframes iconPulse{0%,100%{box-shadow:0 0 24px rgba(124,106,247,.5);}50%{box-shadow:0 0 40px rgba(124,106,247,.8),0 0 60px rgba(124,106,247,.3);}}
+    .cognio-name{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.5px;}
+    .cognio-name em{font-style:normal;color:var(--v1);}
+
+    /* ── HERO TEXT ── */
+    .hero-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+    .hero-tag::before{content:'';width:28px;height:2px;background:var(--teal);border-radius:1px;}
+    .hero-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(36px,4.5vw,60px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px;}
+    .hero-h1 em{font-style:normal;background:linear-gradient(135deg,var(--v1),var(--v3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-sub{font-size:clamp(15px,1.6vw,18px);color:var(--text-2);line-height:1.7;max-width:480px;margin-bottom:36px;}
+
+    /* ── STATS ROW ── */
+    .hero-stats{display:flex;gap:28px;margin-bottom:40px;}
+    .hero-stat{}
+    .hero-stat-val{font-family:'Syne',sans-serif;font-weight:800;font-size:26px;color:var(--v1);}
+    .hero-stat-lbl{font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+
+    /* ── FEATURE PILLS ── */
+    .feat-pills{display:flex;flex-wrap:wrap;gap:8px;}
+    .feat-pill{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:20px;background:rgba(124,106,247,.08);border:1px solid rgba(124,106,247,.2);font-size:13px;font-weight:500;color:var(--text-2);}
+    .feat-pill span{font-size:15px;}
+
+    /* ── FLOATING BOOK ELEMENTS ── */
+    .book-float{
+      position:absolute;font-size:28px;opacity:0;
+      animation:bookDrift 14s ease-in-out infinite;
+      pointer-events:none;filter:blur(.5px);
+    }
+    @keyframes bookDrift{
+      0%{opacity:0;transform:translateY(30px) rotate(-5deg);}
+      10%{opacity:.18;}
+      90%{opacity:.12;}
+      100%{opacity:0;transform:translateY(-60px) rotate(8deg);}
+    }
+
+    /* ══════════════════════════
+       MAIN APP (post-onboard)
+    ══════════════════════════ */
+    #mainApp{
+      display:none;width:100%;height:100%;
+      flex-direction:row;
+    }
+    #mainApp.show{display:flex;}
+
+    /* Desktop sidebar */
+    .sidebar{
+      width:240px;flex-shrink:0;
+      display:flex;flex-direction:column;
+      border-right:1px solid var(--border);
+      background:rgba(4,4,13,.8);
+      backdrop-filter:blur(20px);
+      padding:28px 0;
+    }
+    .sidebar-logo{padding:0 22px 28px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+    .sidebar-logo .cognio-name{font-size:20px;}
+    .sidebar-nav{flex:1;padding:0 10px;display:flex;flex-direction:column;gap:4px;}
+    .snav-btn{
+      display:flex;align-items:center;gap:12px;
+      padding:12px 14px;border-radius:12px;
+      border:none;background:none;
+      font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:500;
+      color:var(--text-2);cursor:pointer;transition:all .2s;width:100%;text-align:left;
+    }
+    .snav-btn:hover{background:var(--glow2);color:var(--text);}
+    .snav-btn.active{background:linear-gradient(135deg,rgba(124,106,247,.2),rgba(157,78,221,.1));color:var(--v1);border:1px solid rgba(124,106,247,.2);}
+    .snav-icon{font-size:18px;width:22px;text-align:center;}
+    .sidebar-footer{padding:16px 22px 0;border-top:1px solid var(--border);margin-top:auto;}
+
+    /* Mobile bottom nav */
+    .mobile-nav{
+      display:none;
+      border-top:1px solid var(--border);
+      background:rgba(4,4,13,.95);
+      backdrop-filter:blur(20px);
+      position:fixed;bottom:0;left:0;right:0;z-index:50;
+    }
+    .mnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 4px 13px;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .2s;position:relative;}
+    .mnav-btn.active{color:var(--v1);}
+    .mnav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:2px;background:var(--v1);border-radius:0 0 2px 2px;box-shadow:0 0 10px var(--glow);}
+    .mnav-icon{font-size:20px;}
+    .mnav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
+
+    /* Content area */
+    .content-area{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
+
+    /* Screens */
     .screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
-    #screen-train{overflow:hidden;}
     .screen.active{display:flex;}
-    .screen.slide-in{animation:slideIn .38s cubic-bezier(.22,1,.36,1);}
-    .screen.slide-back{animation:slideBack .35s cubic-bezier(.22,1,.36,1);}
-    @keyframes slideIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
-    @keyframes slideBack{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+    .screen.slide-in{animation:slideIn .35s cubic-bezier(.22,1,.36,1);}
+    .screen.slide-back{animation:slideBack .32s cubic-bezier(.22,1,.36,1);}
+    @keyframes slideIn{from{opacity:0;transform:translateX(32px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes slideBack{from{opacity:0;transform:translateX(-32px);}to{opacity:1;transform:translateX(0);}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
     @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-    .scroll-body{flex:1;overflow-y:auto;padding:20px 18px 110px;}
+
+    .scroll-body{flex:1;overflow-y:auto;padding:24px 24px 120px;}
     .scroll-body::-webkit-scrollbar{width:3px;}
     .scroll-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 12px;border-bottom:1px solid var(--border);background:rgba(6,6,14,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:20;flex-shrink:0;}
-    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.5px;}
-    .logo em{font-style:normal;color:var(--v1);}
-    .usage-pill{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;font-weight:600;color:var(--text-2);transition:all .3s;}
+
+    /* Topbar */
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--border);background:rgba(4,4,13,.85);backdrop-filter:blur(20px);flex-shrink:0;}
+    .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;}
+
+    /* Usage pill */
+    .usage-pill{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;font-weight:600;color:var(--text-2);}
     .usage-dot{width:6px;height:6px;border-radius:50%;background:var(--green);transition:background .3s;}
     .usage-dot.warn{background:var(--gold);}
     .usage-dot.over{background:var(--red);animation:blink 1s infinite;}
     @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
-    .bottom-nav{display:none;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);position:sticky;bottom:0;z-index:20;flex-shrink:0;}
-    .bottom-nav.show{display:flex;}
-    .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 4px 14px;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-3);cursor:pointer;transition:all .2s;position:relative;}
-    .nav-btn.active{color:var(--v1);}
-    .nav-btn.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:32px;height:2px;background:var(--v1);border-radius:0 0 2px 2px;box-shadow:0 0 10px var(--glow);}
-    .nav-icon{font-size:20px;}
-    .nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
-    .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 20px;border-radius:var(--r-sm);border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
-    .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;}
-    .btn-primary{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 4px 24px rgba(124,106,247,.4);}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,106,247,.5);}
+
+    /* ── BUTTONS ── */
+    .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 20px;border-radius:var(--r-sm);border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
+    .btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.07),transparent 60%);pointer-events:none;}
+    .btn-primary{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 4px 20px rgba(124,106,247,.45);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,106,247,.55);}
     .btn-primary:active{transform:translateY(0);}
     .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);}
     .btn-outline:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
     .btn-ghost{background:var(--surface2);color:var(--text-2);border:1px solid var(--border);}
     .btn-ghost:hover{color:var(--text);border-color:var(--border2);}
-    .btn-sm{padding:10px 16px;font-size:13px;width:auto;border-radius:9px;}
+    .btn-sm{padding:9px 16px;font-size:13px;width:auto;border-radius:9px;}
     .btn-icon{width:44px;height:44px;padding:0;border-radius:12px;flex-shrink:0;}
-    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(247,106,106,.3);}
+    .btn-danger{background:transparent;color:var(--red);border:1px solid rgba(239,83,80,.3);}
+
+    /* ── INPUTS ── */
     .field{display:flex;flex-direction:column;gap:6px;}
     .field label{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;}
-    input[type=text],input[type=email],textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:14px 16px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:all .2s;}
+    input[type=text],input[type=email],textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:13px 15px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;outline:none;transition:all .2s;}
     input:focus,textarea:focus{border-color:var(--v1);box-shadow:0 0 0 3px rgba(124,106,247,.12);}
-    textarea{resize:vertical;min-height:110px;}
+    textarea{resize:vertical;min-height:100px;}
     ::placeholder{color:var(--text-3);}
+
+    /* ── CARDS ── */
     .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:border-color .2s;}
     .card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:14px;}
-    .glow-card{background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(157,78,221,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;}
-    .glow-card::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(124,106,247,.15),transparent 70%);pointer-events:none;}
+    .glow-card{background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(157,78,221,.06));border:1px solid rgba(124,106,247,.22);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;}
+    .glow-card::before{content:'';position:absolute;top:-40%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(124,106,247,.12),transparent 70%);pointer-events:none;}
+
+    /* ── STATS ── */
     .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
     .stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 10px;text-align:center;transition:all .2s;cursor:default;}
     .stat-box:hover{border-color:var(--v1);transform:translateY(-2px);}
     .stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:var(--v1);}
     .stat-lbl{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-top:3px;}
-    .drop-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:32px 18px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface);}
-    .drop-zone:hover,.drop-zone.over{border-color:var(--v1);background:var(--glow2);box-shadow:0 0 30px rgba(124,106,247,.1);}
-    .drop-icon{font-size:38px;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+
+    /* ── PROGRESS ── */
+    .prog-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+    .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--v1),var(--cyan));transition:width .7s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(124,106,247,.5);}
+
+    /* ── MODE PILLS ── */
+    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:4px;}
+    .mode-pill{flex:1;text-align:center;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .22s;}
+    .mode-pill.active{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 2px 12px rgba(124,106,247,.4);}
+
+    /* ── ONBOARDING ── */
+    .ob-step{display:none;flex-direction:column;gap:20px;padding:28px 24px 60px;animation:fadeUp .4s ease;}
+    .ob-step.active{display:flex;}
+    .step-dots{display:flex;gap:6px;justify-content:center;}
+    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;}
+    .step-dot.active{background:var(--v1);width:22px;border-radius:3px;box-shadow:0 0 8px var(--glow);}
+    .ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,6vw,34px);line-height:1.1;letter-spacing:-.5px;}
+    .ob-title em{font-style:normal;color:var(--v1);}
+    .ob-sub{font-size:14px;color:var(--text-2);line-height:1.65;}
+
+    /* ── FIELD TAGS ── */
+    .field-tags{display:flex;flex-wrap:wrap;gap:8px;}
+    .ftag{padding:7px 13px;border-radius:20px;font-size:13px;font-weight:500;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:all .18s;color:var(--text-2);}
+    .ftag:hover,.ftag.sel{background:var(--glow2);border-color:var(--v1);color:var(--v1);}
+
+    /* ── UPLOAD ── */
+    .drop-zone{border:2px dashed var(--border2);border-radius:var(--r);padding:30px 18px;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface);}
+    .drop-zone:hover,.drop-zone.over{border-color:var(--v1);background:var(--glow2);}
+    .drop-icon{font-size:36px;margin-bottom:10px;animation:float 3s ease-in-out infinite;}
     @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-    .drop-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;}
-    .drop-sub{font-size:13px;color:var(--text-2);margin-top:6px;}
+    .drop-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+    .drop-sub{font-size:13px;color:var(--text-2);margin-top:5px;}
     #fileInput{display:none;}
-    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;animation:fadeIn .3s ease;}
+    .file-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;animation:fadeIn .3s ease;}
     .file-row-info{flex:1;min-width:0;}
     .file-row-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .file-row-size{font-size:11px;color:var(--text-2);margin-top:2px;}
     .file-row-del{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;padding:3px;}
-    .field-tags{display:flex;flex-wrap:wrap;gap:8px;}
-    .ftag{padding:8px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:all .18s;color:var(--text-2);}
-    .ftag:hover,.ftag.sel{background:var(--glow2);border-color:var(--v1);color:var(--v1);box-shadow:0 0 12px rgba(124,106,247,.15);}
-    .prog-wrap{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
-    .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--v1),var(--cyan));transition:width .7s cubic-bezier(.22,1,.36,1);box-shadow:0 0 8px rgba(124,106,247,.6);}
-    .mode-pills{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:4px;}
-    .mode-pill{flex:1;text-align:center;padding:10px 6px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;transition:all .22s;}
-    .mode-pill.active{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;box-shadow:0 2px 12px rgba(124,106,247,.4);}
-    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 40px rgba(0,0,0,.4);}
-    .q-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(124,106,247,.06),transparent);}
+
+    /* ── QUESTION CARD ── */
+    .q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+    .q-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(124,106,247,.07),transparent);}
     .q-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--v1);}
     .q-meta{font-size:11px;color:var(--text-3);}
     .q-body{padding:20px;}
     .q-text{font-size:15px;line-height:1.7;font-weight:500;margin-bottom:20px;}
     .opts{display:flex;flex-direction:column;gap:10px;}
-    .opt{display:flex;align-items:flex-start;gap:12px;padding:14px 15px;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--surface2);animation:fadeUp .3s ease both;}
-    .opt:nth-child(1){animation-delay:.05s}.opt:nth-child(2){animation-delay:.1s}.opt:nth-child(3){animation-delay:.15s}.opt:nth-child(4){animation-delay:.2s}
+    .opt{display:flex;align-items:flex-start;gap:12px;padding:13px 15px;border-radius:var(--r-sm);border:1px solid var(--border);cursor:pointer;transition:all .2s;background:var(--surface2);animation:fadeUp .3s ease both;}
+    .opt:nth-child(1){animation-delay:.04s}.opt:nth-child(2){animation-delay:.09s}.opt:nth-child(3){animation-delay:.14s}.opt:nth-child(4){animation-delay:.19s}
     .opt:hover{border-color:var(--v1);background:var(--glow2);transform:translateX(3px);}
-    .opt.correct{border-color:var(--green);background:rgba(106,247,160,.08);transform:none;}
-    .opt.wrong{border-color:var(--red);background:rgba(247,106,106,.08);}
+    .opt.correct{border-color:var(--green);background:rgba(102,187,106,.08);transform:none;}
+    .opt.wrong{border-color:var(--red);background:rgba(239,83,80,.08);}
     .opt.correct .opt-letter{background:var(--green);color:#000;}
     .opt.wrong .opt-letter{background:var(--red);color:#fff;}
-    .opt-letter{width:28px;height:28px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;letter-spacing:.5px;transition:all .2s;}
+    .opt-letter{width:28px;height:28px;border-radius:8px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:'Syne',sans-serif;transition:all .2s;}
     .opt-text{font-size:14px;line-height:1.55;flex:1;padding-top:4px;}
     .feedback{margin-top:16px;padding:14px 16px;border-radius:var(--r-sm);font-size:13px;line-height:1.65;display:none;}
     .feedback.show{display:block;animation:fadeUp .3s ease;}
-    .feedback.ok{background:rgba(106,247,160,.08);border:1px solid rgba(106,247,160,.3);color:#8ff5b8;}
-    .feedback.bad{background:rgba(247,106,106,.08);border:1px solid rgba(247,106,106,.3);color:#ffb8b8;}
-    .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:16px 18px;}
+    .feedback.ok{background:rgba(102,187,106,.08);border:1px solid rgba(102,187,106,.3);color:#a5d6a7;}
+    .feedback.bad{background:rgba(239,83,80,.08);border:1px solid rgba(239,83,80,.3);color:#ffcdd2;}
+
+    /* ── CHAT ── */
+    .chat-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:18px 24px;}
     .chat-body::-webkit-scrollbar{width:3px;}
     .chat-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-    .msg{display:flex;flex-direction:column;gap:4px;max-width:87%;animation:fadeUp .3s ease;}
+    .msg{display:flex;flex-direction:column;gap:4px;max-width:80%;animation:fadeUp .3s ease;}
     .msg.ai{align-self:flex-start;}
     .msg.user{align-self:flex-end;}
     .msg-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);padding:0 4px;}
     .msg.user .msg-name{text-align:right;}
     .msg-bub{padding:13px 16px;border-radius:14px;font-size:14px;line-height:1.65;}
     .msg.ai .msg-bub{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:3px;}
-    .msg.user .msg-bub{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;border-bottom-right-radius:3px;box-shadow:0 4px 16px rgba(124,106,247,.35);}
-    .chat-bar{display:flex;gap:10px;align-items:flex-end;padding:12px 18px 22px;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);flex-shrink:0;}
+    .msg.user .msg-bub{background:linear-gradient(135deg,var(--v1),var(--v2));color:#fff;border-bottom-right-radius:3px;box-shadow:0 4px 14px rgba(124,106,247,.35);}
+    .chat-bar{display:flex;gap:10px;align-items:flex-end;padding:12px 24px 20px;border-top:1px solid var(--border);background:rgba(4,4,13,.9);backdrop-filter:blur(20px);flex-shrink:0;}
     .chat-bar textarea{min-height:46px;max-height:120px;padding:13px 15px;resize:none;flex:1;}
+
+    /* ── TOPIC CHIPS ── */
     .topic-wrap{display:flex;flex-wrap:wrap;gap:8px;}
     .topic-chip{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--text-2);cursor:pointer;transition:all .18s;}
     .topic-chip:hover{border-color:var(--v1);color:var(--v1);background:var(--glow2);}
-    .ob-step{display:none;flex-direction:column;gap:22px;padding:24px 18px 50px;animation:fadeUp .4s ease;}
-    .ob-step.active{display:flex;}
-    .step-dots{display:flex;gap:6px;justify-content:center;}
-    .step-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;}
-    .step-dot.active{background:var(--v1);width:22px;border-radius:3px;box-shadow:0 0 8px var(--glow);}
-    .ob-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);}
-    .ob-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,8vw,40px);line-height:1.08;letter-spacing:-.5px;}
-    .ob-title em{font-style:normal;color:var(--v1);}
-    .ob-sub{font-size:15px;color:var(--text-2);line-height:1.65;}
-    .feat-row{display:flex;gap:13px;align-items:flex-start;animation:fadeUp .4s ease both;}
-    .feat-icon{width:40px;height:40px;border-radius:11px;background:var(--glow2);border:1px solid rgba(124,106,247,.25);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-    .feat-title{font-weight:600;font-size:14px;}
-    .feat-sub{color:var(--text-2);font-size:13px;line-height:1.5;margin-top:2px;}
-    .upgrade-overlay{position:fixed;inset:0;z-index:100;background:rgba(6,6,14,.85);display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(12px);}
+
+    /* ── UPGRADE ── */
+    .upgrade-overlay{position:fixed;inset:0;z-index:200;background:rgba(4,4,13,.88);display:none;align-items:center;justify-content:center;backdrop-filter:blur(16px);padding:20px;}
     .upgrade-overlay.show{display:flex;}
-    .upgrade-sheet{width:100%;max-width:500px;background:var(--bg2);border:1px solid var(--border2);border-bottom:none;border-radius:24px 24px 0 0;padding:32px 24px 44px;animation:slideUp .35s cubic-bezier(.22,1,.36,1);}
-    @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;background:rgba(247,194,106,.1);border:1px solid rgba(247,194,106,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:18px;}
-    .upgrade-title{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;letter-spacing:-.3px;line-height:1.1;margin-bottom:10px;}
-    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:22px;}
+    .upgrade-sheet{width:100%;max-width:480px;background:var(--bg2);border:1px solid var(--border2);border-radius:24px;padding:36px 32px;animation:scaleIn .3s cubic-bezier(.22,1,.36,1);}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+    .upgrade-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:20px;background:rgba(255,213,79,.1);border:1px solid rgba(255,213,79,.3);color:var(--gold);font-size:12px;font-weight:700;margin-bottom:18px;}
+    .upgrade-title{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.3px;line-height:1.1;margin-bottom:10px;}
+    .upgrade-sub{font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:20px;}
     .perk{display:flex;align-items:center;gap:10px;font-size:14px;padding:4px 0;}
     .perk-icon{color:var(--green);font-size:16px;flex-shrink:0;}
+
+    /* ── LOADING ── */
     .loading{display:flex;align-items:center;gap:12px;color:var(--text-2);font-size:14px;padding:20px 0;}
     .spin{width:18px;height:18px;flex-shrink:0;border:2px solid var(--border2);border-top-color:var(--v1);border-radius:50%;animation:spin .7s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg);}}
@@ -155,211 +319,285 @@
     .dots span{width:7px;height:7px;border-radius:50%;background:var(--v1);animation:dp 1.2s ease-in-out infinite;}
     .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
     @keyframes dp{0%,80%,100%{transform:scale(.5);opacity:.3;}40%{transform:scale(1);opacity:1;}}
+
+    /* ── UTILS ── */
     .gap-8{display:flex;flex-direction:column;gap:8px;}
     .gap-12{display:flex;flex-direction:column;gap:12px;}
     .gap-16{display:flex;flex-direction:column;gap:16px;}
     .gap-20{display:flex;flex-direction:column;gap:20px;}
-    .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.2px;}
+    .sec-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.2px;}
     .dim{color:var(--text-2);font-size:13px;}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px){
+      .sidebar{display:none;}
+      .mobile-nav{display:flex;}
+      .scroll-body{padding:20px 18px 100px;}
+      .chat-body{padding:16px 18px;}
+      .chat-bar{padding:10px 18px 18px;}
+      .topbar{padding:16px 18px 12px;}
+    }
+    @media(min-width:769px){
+      .mobile-nav{display:none!important;}
+      #mainApp{flex-direction:row;}
+    }
   </style>
 </head>
 <body>
-<div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+
+<!-- Living Canvas Background -->
+<canvas id="cosmos"></canvas>
+
 <div id="app">
 
-  <!-- ONBOARDING -->
-  <div class="screen active" id="screen-onboard">
-    <div style="flex:1;overflow-y:auto;">
-      <div class="ob-step active" id="ob1">
-        <div style="padding-top:10px;">
-          <div class="logo" style="font-size:26px;margin-bottom:28px;">Cogn<em>IQ</em></div>
-          <div class="ob-tag" style="margin-bottom:14px;">Cognitive Mastery Engine</div>
-          <div class="ob-title">Master any<br/>subject.<br/><em>Any field.</em></div>
-          <p class="ob-sub" style="margin-top:16px;">Upload your materials. Get diagnosed. Train with AI that adapts to exactly what you need to know.</p>
-        </div>
-        <div class="gap-12" style="margin-top:4px;">
-          <div class="feat-row" style="animation-delay:.1s"><div class="feat-icon">🔬</div><div><div class="feat-title">Any subject, any level</div><div class="feat-sub">Law, Medicine, Engineering, Finance, Sciences — fully adapts to your field.</div></div></div>
-          <div class="feat-row" style="animation-delay:.18s"><div class="feat-icon">⚡</div><div><div class="feat-title">Exam + Mastery modes</div><div class="feat-sub">Train for your exact exam format or build deep understanding that lasts.</div></div></div>
-          <div class="feat-row" style="animation-delay:.26s"><div class="feat-icon">🧠</div><div><div class="feat-title">AI that knows your gaps</div><div class="feat-sub">Tracks weak areas, adapts every session, never repeats what you already know.</div></div></div>
-        </div>
-        <div class="gap-8" style="animation:fadeUp .4s .34s ease both;">
-          <button class="btn btn-primary" onclick="obGo(2)">Get Started →</button>
-          <button class="btn btn-ghost" onclick="skipOnboard()">I already have an account</button>
-        </div>
-        <div class="step-dots"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+  <!-- ════════════════════════════
+       LANDING PAGE
+  ════════════════════════════ -->
+  <div id="landing">
+
+    <!-- LEFT: Branding + Hero -->
+    <div class="land-left" id="landLeft">
+
+      <!-- Floating books decoration -->
+      <div class="book-float" style="left:8%;top:15%;animation-delay:0s;animation-duration:16s;">📖</div>
+      <div class="book-float" style="left:75%;top:20%;animation-delay:-3s;animation-duration:13s;">📚</div>
+      <div class="book-float" style="left:20%;top:70%;animation-delay:-6s;animation-duration:18s;">🧬</div>
+      <div class="book-float" style="left:85%;top:60%;animation-delay:-9s;animation-duration:14s;">⚗️</div>
+      <div class="book-float" style="left:50%;top:80%;animation-delay:-2s;animation-duration:20s;">📐</div>
+      <div class="book-float" style="left:60%;top:35%;animation-delay:-11s;animation-duration:15s;">🔬</div>
+      <div class="book-float" style="left:35%;top:10%;animation-delay:-5s;animation-duration:17s;">⚖️</div>
+      <div class="book-float" style="left:90%;top:85%;animation-delay:-8s;animation-duration:12s;">💡</div>
+
+      <!-- Logo -->
+      <div class="cognio-mark" style="animation:fadeUp .6s ease;">
+        <div class="cognio-icon">🧠</div>
+        <div class="cognio-name">Cogni<em>o</em></div>
       </div>
 
-      <div class="ob-step" id="ob2">
-        <div class="step-dots"><div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div></div>
-        <div><div class="ob-title">What are you<br/>studying?</div><p class="ob-sub" style="margin-top:10px;">Tell us your subject, exam format, and timeline.</p></div>
-        <div class="gap-16">
-          <div class="field"><label>Subject or Course Name</label><input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Contract Law, CFA Level 1..."/></div>
-          <div>
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Or pick your field</div>
-            <div class="field-tags" id="fieldTags">
-              <div class="ftag" onclick="pickField(this,'Medicine & Health Sciences')">🏥 Medicine</div>
-              <div class="ftag" onclick="pickField(this,'Law & Legal Studies')">⚖️ Law</div>
-              <div class="ftag" onclick="pickField(this,'Engineering')">⚙️ Engineering</div>
-              <div class="ftag" onclick="pickField(this,'Food Science & Microbiology')">🔬 Microbiology</div>
-              <div class="ftag" onclick="pickField(this,'Finance & Accounting')">📈 Finance</div>
-              <div class="ftag" onclick="pickField(this,'Computer Science')">💻 CS / Tech</div>
-              <div class="ftag" onclick="pickField(this,'Business & Management')">💼 Business</div>
-              <div class="ftag" onclick="pickField(this,'Pharmacy & Pharmacology')">💊 Pharmacy</div>
-              <div class="ftag" onclick="pickField(this,'Psychology & Neuroscience')">🧠 Psychology</div>
-              <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
-              <div class="ftag" onclick="pickField(this,'Other')">✦ Other</div>
+      <!-- Hero -->
+      <div class="hero-tag" style="animation:fadeUp .6s .1s ease both;">AI-Powered Mastery Engine</div>
+      <h1 class="hero-h1" style="animation:fadeUp .6s .18s ease both;">
+        Study smarter.<br/>
+        Master <em>anything.</em>
+      </h1>
+      <p class="hero-sub" style="animation:fadeUp .6s .26s ease both;">
+        Upload your materials. Cognio builds a personalised AI training system — adaptive questions, expert tutoring, and deep analytics tailored to your exact subject and exam format.
+      </p>
+
+      <!-- Stats -->
+      <div class="hero-stats" style="animation:fadeUp .6s .34s ease both;">
+        <div class="hero-stat"><div class="hero-stat-val">Any</div><div class="hero-stat-lbl">Subject</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">AI</div><div class="hero-stat-lbl">Powered</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">Free</div><div class="hero-stat-lbl">To Start</div></div>
+      </div>
+
+      <!-- Feature pills -->
+      <div class="feat-pills" style="animation:fadeUp .6s .42s ease both;">
+        <div class="feat-pill"><span>⚡</span> Exam Mode</div>
+        <div class="feat-pill"><span>🧠</span> Mastery Mode</div>
+        <div class="feat-pill"><span>💬</span> AI Tutor</div>
+        <div class="feat-pill"><span>📊</span> Progress Tracking</div>
+        <div class="feat-pill"><span>🔬</span> Any Field</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Onboarding flow -->
+    <div class="land-right">
+      <div style="flex:1;overflow-y:auto;">
+
+        <!-- Step 1 -->
+        <div class="ob-step active" id="ob1">
+          <div><div class="ob-title">Start your<br/><em>learning journey</em></div><p class="ob-sub" style="margin-top:10px;">Tell us what you're studying. Cognio adapts completely to your subject, level, and exam format.</p></div>
+          <div class="gap-16">
+            <div class="field"><label>Subject or Course Name</label><input type="text" id="ob-subject" placeholder="e.g. Advanced Food Microbiology, Contract Law, CFA Level 1..."/></div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Or pick your field</div>
+              <div class="field-tags" id="fieldTags">
+                <div class="ftag" onclick="pickField(this,'Medicine & Health Sciences')">🏥 Medicine</div>
+                <div class="ftag" onclick="pickField(this,'Law & Legal Studies')">⚖️ Law</div>
+                <div class="ftag" onclick="pickField(this,'Engineering')">⚙️ Engineering</div>
+                <div class="ftag" onclick="pickField(this,'Food Science & Microbiology')">🔬 Microbiology</div>
+                <div class="ftag" onclick="pickField(this,'Finance & Accounting')">📈 Finance</div>
+                <div class="ftag" onclick="pickField(this,'Computer Science')">💻 CS / Tech</div>
+                <div class="ftag" onclick="pickField(this,'Business & Management')">💼 Business</div>
+                <div class="ftag" onclick="pickField(this,'Pharmacy & Pharmacology')">💊 Pharmacy</div>
+                <div class="ftag" onclick="pickField(this,'Psychology & Neuroscience')">🧠 Psychology</div>
+                <div class="ftag" onclick="pickField(this,'Architecture & Design')">🏛️ Architecture</div>
+                <div class="ftag" onclick="pickField(this,'Other')">✦ Other</div>
+              </div>
+            </div>
+            <div class="field"><label>Days Until Your Exam</label><input type="text" id="ob-days" placeholder="60" value="60"/></div>
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Exam Format</div>
+              <div class="field-tags" id="fmtTags">
+                <div class="ftag" onclick="toggleFmt(this,'MCQ')">MCQ</div>
+                <div class="ftag" onclick="toggleFmt(this,'Written Essays')">Written Essays</div>
+                <div class="ftag" onclick="toggleFmt(this,'Case Studies')">Case Studies</div>
+                <div class="ftag" onclick="toggleFmt(this,'True / False')">True / False</div>
+                <div class="ftag" onclick="toggleFmt(this,'Viva / Oral')">Viva / Oral</div>
+                <div class="ftag" onclick="toggleFmt(this,'Practical')">Practical</div>
+              </div>
             </div>
           </div>
-          <div class="field"><label>Days Until Your Exam</label><input type="text" id="ob-days" placeholder="60" value="60"/></div>
-          <div>
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:10px;">Exam Format (select all that apply)</div>
-            <div class="field-tags" id="fmtTags">
-              <div class="ftag" onclick="toggleFmt(this,'MCQ')">MCQ</div>
-              <div class="ftag" onclick="toggleFmt(this,'Written Essays')">Written Essays</div>
-              <div class="ftag" onclick="toggleFmt(this,'Case Studies')">Case Studies</div>
-              <div class="ftag" onclick="toggleFmt(this,'True / False')">True / False</div>
-              <div class="ftag" onclick="toggleFmt(this,'Viva / Oral')">Viva / Oral</div>
-              <div class="ftag" onclick="toggleFmt(this,'Practical')">Practical</div>
-            </div>
+          <div class="gap-8">
+            <button class="btn btn-primary" onclick="obGo(2)">Continue — Upload Materials →</button>
+            <button class="btn btn-ghost" onclick="skipToApp()">I already have an account</button>
+          </div>
+          <div class="step-dots"><div class="step-dot active"></div><div class="step-dot"></div></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="ob-step" id="ob2">
+          <div class="step-dots"><div class="step-dot"></div><div class="step-dot active"></div></div>
+          <div><div class="ob-title">Upload your<br/><em>materials</em></div><p class="ob-sub" style="margin-top:8px;">The more context you give, the more personalised your training. Or skip and use AI general knowledge.</p></div>
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="drop-icon">📚</div>
+            <div class="drop-title">Tap to upload files</div>
+            <div class="drop-sub">PDF, DOCX, PPTX, TXT — up to 10 files</div>
+          </div>
+          <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)"/>
+          <div id="fileListWrap" style="display:none" class="gap-8">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);">Files</div>
+            <div class="gap-8" id="fileList"></div>
+          </div>
+          <div class="field"><label>Paste Syllabus or Key Topics (optional)</label><textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or key content — this greatly improves question quality..."></textarea></div>
+          <div class="gap-8">
+            <button class="btn btn-primary" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
+            <button class="btn btn-ghost btn-sm" onclick="skipAndLaunch()" style="width:100%">Skip — Use AI general knowledge</button>
+            <button class="btn btn-ghost btn-sm" onclick="obGo(1)" style="width:100%">← Back</button>
           </div>
         </div>
-        <div class="gap-8">
-          <button class="btn btn-primary" onclick="obGo(3)">Continue →</button>
-          <button class="btn btn-ghost btn-sm" onclick="obGo(1)" style="width:100%">← Back</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════
+       MAIN APP
+  ════════════════════════════ -->
+  <div id="mainApp">
+
+    <!-- Desktop Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="cognio-mark" style="margin:0;">
+          <div class="cognio-icon" style="width:34px;height:34px;font-size:17px;border-radius:9px;">🧠</div>
+          <div class="cognio-name" style="font-size:18px;">Cogni<em>o</em></div>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <button class="snav-btn active" id="snav-dash" onclick="goTo('dash','slide')"><span class="snav-icon">📊</span>Dashboard</button>
+        <button class="snav-btn" id="snav-train" onclick="goTo('train','slide')"><span class="snav-icon">⚡</span>Practice</button>
+        <button class="snav-btn" id="snav-tutor" onclick="goTo('tutor','slide')"><span class="snav-icon">💬</span>AI Tutor</button>
+        <button class="snav-btn" id="snav-settings" onclick="goTo('settings','slide')"><span class="snav-icon">⚙️</span>Settings</button>
+      </div>
+      <div class="sidebar-footer">
+        <div class="usage-pill" style="width:100%;justify-content:center;"><div class="usage-dot" id="usageDot2"></div><span id="usageText2">20 free questions</span></div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content-area">
+
+      <!-- DASHBOARD -->
+      <div class="screen active" id="screen-dash">
+        <div class="topbar"><div class="topbar-title" id="topbarTitle">Dashboard</div><div class="usage-pill"><div class="usage-dot" id="usageDot"></div><span id="usageText">20 free</span></div></div>
+        <div class="scroll-body gap-20">
+          <div class="glow-card" style="animation:fadeUp .4s ease;">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--v3);margin-bottom:6px;">Active Subject</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.3px;line-height:1.2;" id="dashSubject">Your Subject</div>
+            <div class="dim" style="margin-top:6px;" id="dashMeta">60 days left</div>
+          </div>
+          <div class="mode-pills" style="animation:fadeUp .4s .06s ease both;"><button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button><button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button></div>
+          <div class="stat-grid" style="animation:fadeUp .4s .1s ease both;">
+            <div class="stat-box"><div class="stat-val" id="dsTopics">0</div><div class="stat-lbl">Topics</div></div>
+            <div class="stat-box"><div class="stat-val" id="dsScore" style="color:var(--cyan)">—</div><div class="stat-lbl">Avg Score</div></div>
+            <div class="stat-box"><div class="stat-val" id="dsQs">0</div><div class="stat-lbl">Questions</div></div>
+          </div>
+          <div class="card" style="animation:fadeUp .4s .14s ease both;">
+            <div class="card-label">Overall Progress</div>
+            <div class="prog-wrap"><div class="prog-fill" id="dashProg" style="width:0%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:10px;"><span class="dim" id="dashProgPct">0% mastered</span><span class="dim" id="dashProgTopics">0 / 0 topics</span></div>
+          </div>
+          <div class="gap-8" style="animation:fadeUp .4s .18s ease both;">
+            <button class="btn btn-primary" onclick="goTo('train','slide')">⚡ Start Practice Session</button>
+            <button class="btn btn-outline" onclick="goTo('tutor','slide')">💬 Ask AI Tutor</button>
+          </div>
+          <div id="topicMapWrap" style="display:none;animation:fadeUp .4s .22s ease both;"><div class="sec-title" style="margin-bottom:12px;">Topic Map</div><div class="topic-wrap" id="topicMap"></div></div>
+          <button class="btn btn-ghost btn-sm" onclick="changeSub()" style="width:100%;animation:fadeUp .4s .26s ease both;">↩ Change Subject / Upload New Materials</button>
         </div>
       </div>
 
-      <div class="ob-step" id="ob3">
-        <div class="step-dots"><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div></div>
-        <div><div class="ob-title">Upload your<br/>materials</div><p class="ob-sub" style="margin-top:10px;">The more you upload, the more personalised your training. Or skip and let the AI use its own knowledge.</p></div>
-        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-          <div class="drop-icon">📚</div>
-          <div class="drop-title">Tap to upload files</div>
-          <div class="drop-sub">PDF, DOCX, PPTX, TXT — up to 10 files</div>
+      <!-- TRAIN -->
+      <div class="screen" id="screen-train">
+        <div class="topbar">
+          <div style="display:flex;align-items:center;gap:12px;flex:1;">
+            <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')" style="display:flex;align-items:center;justify-content:center;">←</button>
+            <div style="flex:1;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span class="dim" id="trainLabel">Question 1</span><span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span></div>
+              <div class="prog-wrap"><div class="prog-fill" id="trainProg" style="width:5%"></div></div>
+            </div>
+          </div>
+          <div class="usage-pill" style="font-size:10px;margin-left:12px;" id="trainUsagePill">20 left</div>
         </div>
-        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)"/>
-        <div id="fileListWrap" style="display:none" class="gap-8">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);">Uploaded Files</div>
-          <div class="gap-8" id="fileList"></div>
-        </div>
-        <div class="field"><label>Paste Syllabus or Key Topics (optional)</label><textarea id="ob-syllabus" placeholder="Paste your syllabus, topic list, or key content here — this greatly improves question quality..."></textarea></div>
-        <div class="gap-8">
-          <button class="btn btn-primary" id="buildBtn" onclick="buildAndLaunch()">🧠 Build My Knowledge Map</button>
-          <button class="btn btn-ghost btn-sm" onclick="skipAndLaunch()" style="width:100%">Skip — Use AI general knowledge</button>
+        <div id="qArea" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 24px 24px;display:flex;flex-direction:column;gap:14px;min-height:0;"><div class="loading"><div class="spin"></div>Generating your first question...</div></div>
+        <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:14px 24px 20px;border-top:1px solid var(--border);background:rgba(4,4,13,.92);backdrop-filter:blur(20px);flex-shrink:0;">
+          <button class="btn btn-primary" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
+          <button class="btn btn-ghost" onclick="goTo('dash','back')">End Session</button>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- DASHBOARD -->
-  <div class="screen" id="screen-dash">
-    <div class="topbar"><div class="logo">Cogn<em>IQ</em></div><div class="usage-pill"><div class="usage-dot" id="usageDot"></div><span id="usageText">20 free</span></div></div>
-    <div class="scroll-body gap-20">
-      <div class="glow-card" style="animation:fadeUp .4s ease;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--v3);margin-bottom:6px;">Active Subject</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.3px;line-height:1.2;" id="dashSubject">Your Subject</div>
-        <div class="dim" style="margin-top:6px;" id="dashMeta">60 days left</div>
+      <!-- TUTOR -->
+      <div class="screen" id="screen-tutor">
+        <div class="topbar">
+          <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')" style="display:flex;align-items:center;justify-content:center;">←</button>
+          <div style="flex:1;margin-left:12px;"><div style="font-weight:700;font-size:15px;">AI Tutor</div><div class="dim" style="font-size:11px;" id="tutorSubLabel">Your subject</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <div class="msg ai"><div class="msg-name">Cognio Tutor</div><div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject and exam format. Ask me anything — concept explanations, case walkthroughs, exam strategy, mechanisms. What would you like to explore?</div></div>
+        </div>
+        <div class="chat-bar"><textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea><button class="btn btn-icon btn-primary" onclick="sendMsg()">↑</button></div>
       </div>
-      <div class="mode-pills" style="animation:fadeUp .4s .06s ease both;"><button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button><button class="mode-pill" id="mastPill" onclick="setMode('mastery')">🧠 Mastery Mode</button></div>
-      <div class="stat-grid" style="animation:fadeUp .4s .1s ease both;">
-        <div class="stat-box"><div class="stat-val" id="dsTopics">0</div><div class="stat-lbl">Topics</div></div>
-        <div class="stat-box"><div class="stat-val" id="dsScore" style="color:var(--cyan)">—</div><div class="stat-lbl">Avg Score</div></div>
-        <div class="stat-box"><div class="stat-val" id="dsQs">0</div><div class="stat-lbl">Questions</div></div>
+
+      <!-- SETTINGS -->
+      <div class="screen" id="screen-settings">
+        <div class="topbar"><div class="topbar-title">Settings</div></div>
+        <div class="scroll-body gap-20">
+          <div class="card gap-16"><div class="card-label">📅 Exam Countdown</div><div class="field"><label>Days Until Exam</label><input type="text" id="set-days" placeholder="60"/></div><button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button></div>
+          <div class="card gap-16"><div class="card-label">🎯 Subject</div><div class="field"><label>Subject Name</label><input type="text" id="set-subject"/></div><button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button></div>
+          <div class="card gap-16">
+            <div class="card-label">📊 Usage</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;"><span class="dim">Questions used</span><span style="font-weight:600;" id="set-q-used">0 / 20 free</span></div>
+            <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%"></div></div>
+            <button class="btn btn-primary btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
+          </div>
+          <div class="card"><div class="card-label">🗄️ Data</div><p class="dim" style="margin-bottom:14px;">Reset all progress, topics, and uploaded materials.</p><button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button></div>
+        </div>
       </div>
-      <div class="card" style="animation:fadeUp .4s .14s ease both;">
-        <div class="card-label">Overall Progress</div>
-        <div class="prog-wrap"><div class="prog-fill" id="dashProg" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:10px;"><span class="dim" id="dashProgPct">0% mastered</span><span class="dim" id="dashProgTopics">0 / 0 topics</span></div>
-      </div>
-      <div class="gap-8" style="animation:fadeUp .4s .18s ease both;">
-        <button class="btn btn-primary" onclick="goTo('train','slide')">⚡ Start Practice Session</button>
-        <button class="btn btn-outline" onclick="goTo('tutor','slide')">💬 Ask AI Tutor</button>
-      </div>
-      <div id="topicMapWrap" style="display:none;animation:fadeUp .4s .22s ease both;"><div class="sec-title" style="margin-bottom:12px;">Topic Map</div><div class="topic-wrap" id="topicMap"></div></div>
-      <button class="btn btn-ghost btn-sm" onclick="changeSubject()" style="width:100%;animation:fadeUp .4s .26s ease both;">↩ Change Subject / Upload New Materials</button>
-    </div>
-    <nav class="bottom-nav show">
-      <button class="nav-btn active" id="nav-dash" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" id="nav-train" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" id="nav-tutor" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" id="nav-settings" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+
+    </div><!-- end content-area -->
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-nav" id="mobileNav">
+      <button class="mnav-btn active" id="mnav-dash" onclick="goTo('dash','back')"><span class="mnav-icon">📊</span><span class="mnav-label">Dashboard</span></button>
+      <button class="mnav-btn" id="mnav-train" onclick="goTo('train','slide')"><span class="mnav-icon">⚡</span><span class="mnav-label">Train</span></button>
+      <button class="mnav-btn" id="mnav-tutor" onclick="goTo('tutor','slide')"><span class="mnav-icon">💬</span><span class="mnav-label">Tutor</span></button>
+      <button class="mnav-btn" id="mnav-settings" onclick="goTo('settings','slide')"><span class="mnav-icon">⚙️</span><span class="mnav-label">Settings</span></button>
     </nav>
-  </div>
 
-  <!-- TRAIN -->
-  <div class="screen" id="screen-train">
-    <div class="topbar">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')">←</button>
-      <div style="flex:1;margin:0 12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span class="dim" id="trainLabel">Question 1</span><span style="font-size:13px;font-weight:600;" id="trainScore">0 / 0</span></div>
-        <div class="prog-wrap"><div class="prog-fill" id="trainProg" style="width:5%"></div></div>
-      </div>
-      <div class="usage-pill" style="font-size:10px;" id="trainUsagePill">20 left</div>
-    </div>
-    <div id="qArea" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px 24px;display:flex;flex-direction:column;gap:14px;min-height:0;"><div class="loading"><div class="spin"></div>Generating your first question...</div></div>
-    <div id="trainActions" style="display:none;flex-direction:column;gap:8px;padding:12px 18px 20px;border-top:1px solid var(--border);background:rgba(6,6,14,.95);backdrop-filter:blur(20px);flex-shrink:0;">
-      <button class="btn btn-primary" id="nextBtn" onclick="nextQ()" style="display:none">Next Question →</button>
-      <button class="btn btn-ghost" onclick="goTo('dash','back')">End Session</button>
-    </div>
-    <nav class="bottom-nav show">
-      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn active"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-    </nav>
-  </div>
+  </div><!-- end mainApp -->
 
-  <!-- TUTOR -->
-  <div class="screen" id="screen-tutor">
-    <div class="topbar">
-      <button class="btn btn-icon btn-ghost" onclick="goTo('dash','back')">←</button>
-      <div style="flex:1;margin-left:10px;"><div style="font-weight:700;font-size:15px;">AI Tutor</div><div class="dim" style="font-size:11px;" id="tutorSubLabel">Your subject</div></div>
-      <button class="btn btn-ghost btn-sm" onclick="clearChat()">Clear</button>
-    </div>
-    <div class="chat-body" id="chatBody">
-      <div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Hello! I'm your AI tutor, fully adapted to your subject and exam. Ask me anything — concept explanations, case walkthroughs, exam strategy, or tricky mechanisms. What would you like to explore?</div></div>
-    </div>
-    <div class="chat-bar"><textarea id="chatInput" placeholder="Ask anything..." rows="1" onkeydown="chatKey(event)"></textarea><button class="btn btn-icon btn-primary" onclick="sendMsg()">↑</button></div>
-    <nav class="bottom-nav show">
-      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn active"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn" onclick="goTo('settings','slide')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-    </nav>
-  </div>
-
-  <!-- SETTINGS -->
-  <div class="screen" id="screen-settings">
-    <div class="topbar"><div class="logo">Cogn<em>IQ</em></div><div style="font-size:12px;font-weight:600;color:var(--text-2);">Settings</div></div>
-    <div class="scroll-body gap-20">
-      <div class="card gap-16"><div class="card-label">📅 Exam Countdown</div><div class="field"><label>Days Until Exam</label><input type="text" id="set-days" placeholder="60"/></div><button class="btn btn-outline btn-sm" onclick="saveDays()">Save</button></div>
-      <div class="card gap-16"><div class="card-label">🎯 Subject</div><div class="field"><label>Subject Name</label><input type="text" id="set-subject"/></div><button class="btn btn-outline btn-sm" onclick="saveSubject()">Save</button></div>
-      <div class="card gap-16">
-        <div class="card-label">📊 Usage</div>
-        <div style="display:flex;justify-content:space-between;align-items:center;"><span class="dim">Questions used</span><span style="font-weight:600;" id="set-q-used">0 / 20 free</span></div>
-        <div class="prog-wrap"><div class="prog-fill" id="set-usage-bar" style="width:0%"></div></div>
-        <button class="btn btn-primary btn-sm" onclick="showUpgrade()">⭐ Upgrade for Unlimited</button>
-      </div>
-      <div class="card"><div class="card-label">🗄️ Data</div><p class="dim" style="margin-bottom:14px;">Reset all progress, topics, and uploaded materials.</p><button class="btn btn-danger btn-sm" onclick="resetAll()">Reset All Data</button></div>
-    </div>
-    <nav class="bottom-nav show">
-      <button class="nav-btn" onclick="goTo('dash','back')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-      <button class="nav-btn" onclick="goTo('train','slide')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
-      <button class="nav-btn" onclick="goTo('tutor','slide')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-      <button class="nav-btn active"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-    </nav>
-  </div>
-
-  <!-- UPGRADE -->
+  <!-- UPGRADE OVERLAY -->
   <div class="upgrade-overlay" id="upgradeOverlay">
     <div class="upgrade-sheet">
       <div class="upgrade-badge">⭐ Upgrade to Pro</div>
-      <div class="upgrade-title">You've hit your<br/>free limit.</div>
-      <div class="upgrade-sub">Join the waitlist to get early access to CognIQ Pro — unlimited training, all subjects, all modes.</div>
-      <div class="gap-8" style="margin-bottom:22px;">
+      <div class="upgrade-title">You've hit your free limit.</div>
+      <div class="upgrade-sub">Join the waitlist for Cognio Pro — unlimited training, all subjects, all modes.</div>
+      <div class="gap-8" style="margin-bottom:20px;">
         <div class="perk"><span class="perk-icon">✓</span><span>Unlimited practice questions</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Unlimited AI tutor messages</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive profiling & analytics</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Full cognitive analytics</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Written answer AI grading</span></div>
         <div class="perk"><span class="perk-icon">✓</span><span>Viva / oral simulation mode</span></div>
       </div>
@@ -369,14 +607,169 @@
     </div>
   </div>
 
-</div>
+</div><!-- end #app -->
+
 <script>
-const FREE_Q=20,FREE_MSG=10;
-const D={subject:localStorage.getItem('ciq_subject')||'',topics:JSON.parse(localStorage.getItem('ciq_topics')||'[]'),content:localStorage.getItem('ciq_content')||'',mode:localStorage.getItem('ciq_mode')||'exam',days:parseInt(localStorage.getItem('ciq_days')||'60'),fmt:JSON.parse(localStorage.getItem('ciq_fmt')||'["MCQ"]'),qUsed:parseInt(localStorage.getItem('ciq_qused')||'0'),msgUsed:parseInt(localStorage.getItem('ciq_msgused')||'0'),onboarded:localStorage.getItem('ciq_onboarded')==='1',scores:JSON.parse(localStorage.getItem('ciq_scores')||'[]'),totalQs:parseInt(localStorage.getItem('ciq_qs')||'0'),sScore:0,sTotal:0,qCount:0,currentQ:null,answered:false,chatHistory:[],obFmts:[]};
+// ═══════════════════════════════════════
+// COSMOS CANVAS — Living background
+// ═══════════════════════════════════════
+(function initCosmos(){
+  const canvas = document.getElementById('cosmos');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles=[], books=[];
+  const PARTICLE_COUNT = 180;
+  const BOOK_EMOJIS = ['📖','📚','🔬','⚗️','📐','⚖️','💡','🧬','📊','🧮','🔭','📝'];
+
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  window.addEventListener('resize',()=>{resize();init();});
+  resize();
+
+  function rand(a,b){return a+Math.random()*(b-a);}
+
+  class Particle{
+    constructor(){this.reset(true);}
+    reset(init=false){
+      this.x=rand(0,W);
+      this.y=init?rand(0,H):H+20;
+      this.size=rand(.6,2.2);
+      this.speed=rand(.15,.55);
+      this.opacity=rand(.06,.35);
+      this.drift=rand(-.3,.3);
+      // color: mostly purple/violet, some cyan
+      const hue=Math.random()<0.7?rand(240,280):rand(185,200);
+      this.color=`hsla(${hue},80%,75%,${this.opacity})`;
+      this.twinkleSpeed=rand(.008,.025);
+      this.twinkleOffset=rand(0,Math.PI*2);
+    }
+    update(t){
+      this.y-=this.speed;
+      this.x+=this.drift;
+      const tw=Math.sin(t*this.twinkleSpeed+this.twinkleOffset);
+      this.currentOpacity=this.opacity*(0.5+0.5*tw);
+      if(this.y<-10)this.reset();
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+      ctx.fillStyle=this.color.replace(/[\d.]+\)$/,this.currentOpacity+')');
+      ctx.fill();
+    }
+  }
+
+  class FloatingBook{
+    constructor(){this.reset(true);}
+    reset(init=false){
+      this.x=rand(20,W-60);
+      this.y=init?rand(-50,H+50):H+60;
+      this.emoji=BOOK_EMOJIS[Math.floor(Math.random()*BOOK_EMOJIS.length)];
+      this.size=rand(14,28);
+      this.speed=rand(.06,.2);
+      this.drift=rand(-.15,.15);
+      this.rotation=rand(-20,20);
+      this.rotSpeed=rand(-.3,.3);
+      this.opacity=rand(.04,.14);
+      this.scale=1;
+      this.scaleDir=rand(-.001,.001);
+    }
+    update(){
+      this.y-=this.speed;
+      this.x+=this.drift;
+      this.rotation+=this.rotSpeed;
+      this.scale+=this.scaleDir;
+      if(this.scale>1.06||this.scale<0.95)this.scaleDir*=-1;
+      if(this.y<-60)this.reset();
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha=this.opacity;
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.rotation*Math.PI/180);
+      ctx.scale(this.scale,this.scale);
+      ctx.font=`${this.size}px serif`;
+      ctx.fillText(this.emoji,0,0);
+      ctx.restore();
+    }
+  }
+
+  // Flowing energy lines
+  class EnergyLine{
+    constructor(){this.reset();}
+    reset(){
+      this.x1=rand(0,W);this.y1=rand(0,H);
+      this.x2=this.x1+rand(-200,200);this.y2=this.y1+rand(-200,200);
+      this.opacity=0;this.maxOpacity=rand(.02,.07);
+      this.phase='in';this.speed=rand(.004,.012);
+      this.hue=rand(240,280);
+    }
+    update(){
+      if(this.phase==='in'){this.opacity+=this.speed;if(this.opacity>=this.maxOpacity)this.phase='out';}
+      else{this.opacity-=this.speed*0.5;if(this.opacity<=0)this.reset();}
+    }
+    draw(){
+      const grad=ctx.createLinearGradient(this.x1,this.y1,this.x2,this.y2);
+      grad.addColorStop(0,`hsla(${this.hue},70%,70%,0)`);
+      grad.addColorStop(.5,`hsla(${this.hue},70%,70%,${this.opacity})`);
+      grad.addColorStop(1,`hsla(${this.hue},70%,70%,0)`);
+      ctx.beginPath();ctx.moveTo(this.x1,this.y1);ctx.lineTo(this.x2,this.y2);
+      ctx.strokeStyle=grad;ctx.lineWidth=rand(.5,1.5);ctx.stroke();
+    }
+  }
+
+  function init(){
+    particles=Array.from({length:PARTICLE_COUNT},()=>new Particle());
+    books=Array.from({length:22},()=>new FloatingBook());
+    lines=Array.from({length:18},()=>new EnergyLine());
+  }
+  let lines=[];
+  init();
+
+  let t=0;
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    t++;
+    lines.forEach(l=>{l.update();l.draw();});
+    books.forEach(b=>{b.update();b.draw();});
+    particles.forEach(p=>{p.update(t);p.draw();});
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ═══════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════
+const FREE_Q=20, FREE_MSG=10;
+const D={
+  subject:localStorage.getItem('cio_subject')||'',
+  topics:JSON.parse(localStorage.getItem('cio_topics')||'[]'),
+  content:localStorage.getItem('cio_content')||'',
+  mode:localStorage.getItem('cio_mode')||'exam',
+  days:parseInt(localStorage.getItem('cio_days')||'60'),
+  fmt:JSON.parse(localStorage.getItem('cio_fmt')||'["MCQ"]'),
+  qUsed:parseInt(localStorage.getItem('cio_qused')||'0'),
+  msgUsed:parseInt(localStorage.getItem('cio_msgused')||'0'),
+  onboarded:localStorage.getItem('cio_onboarded')==='1',
+  scores:JSON.parse(localStorage.getItem('cio_scores')||'[]'),
+  totalQs:parseInt(localStorage.getItem('cio_qs')||'0'),
+  sScore:0,sTotal:0,qCount:0,currentQ:null,answered:false,
+  chatHistory:[],obFmts:[]
+};
 const save=(k,v)=>localStorage.setItem(k,typeof v==='object'?JSON.stringify(v):String(v));
 
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showApp(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('mainApp').classList.add('show');
+}
+function showLanding(){
+  document.getElementById('mainApp').classList.remove('show');
+  document.getElementById('landing').style.display='flex';
+}
+
 function goTo(name,dir){
-  const cur=document.querySelector('.screen.active');
+  const cur=document.querySelector('#mainApp .screen.active');
   const nxt=document.getElementById('screen-'+name);
   if(!nxt||cur===nxt)return;
   cur.classList.remove('active');
@@ -385,16 +778,34 @@ function goTo(name,dir){
   void nxt.offsetWidth;
   if(dir==='slide')nxt.classList.add('slide-in');
   else if(dir==='back')nxt.classList.add('slide-back');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  ['dash','train','tutor','settings'].forEach(n=>{const b=document.getElementById('nav-'+n);if(b&&n===name)b.classList.add('active');});
+
+  // Update nav
+  ['dash','train','tutor','settings'].forEach(n=>{
+    const sb=document.getElementById('snav-'+n);
+    const mb=document.getElementById('mnav-'+n);
+    if(sb)sb.classList.toggle('active',n===name);
+    if(mb)mb.classList.toggle('active',n===name);
+  });
+  const titles={dash:'Dashboard',train:'Practice',tutor:'AI Tutor',settings:'Settings'};
+  document.getElementById('topbarTitle').textContent=titles[name]||'';
+
   if(name==='dash')refreshDash();
   if(name==='train')initTrain();
   if(name==='settings')loadSettings();
   if(name==='tutor')document.getElementById('tutorSubLabel').textContent=D.subject;
 }
 
+// ═══════════════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════════════
 function obGo(step){
-  if(step===3){const sub=document.getElementById('ob-subject').value.trim();if(!sub){alert('Please enter your subject name first.');return;}D.subject=sub;D.days=parseInt(document.getElementById('ob-days').value)||60;D.fmt=D.obFmts.length?D.obFmts:['MCQ'];save('ciq_subject',D.subject);save('ciq_days',D.days);save('ciq_fmt',D.fmt);}
+  if(step===2){
+    const sub=document.getElementById('ob-subject').value.trim();
+    if(!sub){alert('Please enter your subject name first.');return;}
+    D.subject=sub;D.days=parseInt(document.getElementById('ob-days').value)||60;
+    D.fmt=D.obFmts.length?D.obFmts:['MCQ'];
+    save('cio_subject',D.subject);save('cio_days',D.days);save('cio_fmt',D.fmt);
+  }
   document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('ob'+step).classList.add('active');
 }
@@ -407,25 +818,49 @@ async function buildAndLaunch(){
   const syl=document.getElementById('ob-syllabus').value;
   let content=`Subject: ${D.subject}\nExam formats: ${D.fmt.join(', ')}\n\n`;
   if(syl)content+=`Syllabus/Topics:\n${syl}\n\n`;
-  for(const file of uploadedFiles){try{const text=await readText(file);content+=`\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;}catch(e){content+=`\n--- ${file.name} --- [binary file]\n`;}}
-  D.content=content;save('ciq_content',content);
-  try{const raw=await callAI(`From this course material for "${D.subject}", extract 8-14 main topics/chapters as a JSON array of short strings. Return ONLY the JSON array, nothing else.\n\nContent:\n${content.substring(0,3000)}`);const s=raw.indexOf('['),e=raw.lastIndexOf(']');D.topics=JSON.parse(raw.substring(s,e+1));}
-  catch(e){D.topics=defaultTopics(D.subject);}
-  save('ciq_topics',D.topics);save('ciq_onboarded','1');D.onboarded=true;
-  btn.innerHTML='✅ Knowledge Map Built!';btn.style.background='linear-gradient(135deg,var(--green),#3ab87a)';
-  setTimeout(()=>goTo('dash','slide'),1000);
+  for(const file of uploadedFiles){
+    try{const text=await readText(file);content+=`\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;}
+    catch(e){content+=`\n--- ${file.name} --- [binary file]\n`;}
+  }
+  D.content=content;save('cio_content',content);
+  try{
+    const raw=await callAI(`From this course material for "${D.subject}", extract 8-14 main topics as a JSON array of short strings. Return ONLY the JSON array.\n\nContent:\n${content.substring(0,3000)}`);
+    const s=raw.indexOf('['),e=raw.lastIndexOf(']');
+    D.topics=JSON.parse(raw.substring(s,e+1));
+  }catch(e){D.topics=defaultTopics(D.subject);}
+  save('cio_topics',D.topics);save('cio_onboarded','1');D.onboarded=true;
+  btn.innerHTML='✅ Knowledge Map Built!';
+  btn.style.background='linear-gradient(135deg,#66bb6a,#43a047)';
+  setTimeout(()=>{showApp();refreshDash();},1000);
 }
-function skipAndLaunch(){D.content='';D.topics=defaultTopics(D.subject||'General Study');save('ciq_content','');save('ciq_topics',D.topics);save('ciq_onboarded','1');D.onboarded=true;goTo('dash','slide');}
-function skipOnboard(){if(D.onboarded&&D.subject)goTo('dash','slide');else obGo(2);}
-function changeSubject(){document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));document.getElementById('ob2').classList.add('active');document.querySelector('.screen.active').classList.remove('active');const o=document.getElementById('screen-onboard');o.classList.add('active','slide-back');}
+
+function skipAndLaunch(){
+  D.content='';D.topics=defaultTopics(D.subject||'General Study');
+  save('cio_content','');save('cio_topics',D.topics);save('cio_onboarded','1');D.onboarded=true;
+  showApp();refreshDash();
+}
+function skipToApp(){if(D.onboarded&&D.subject){showApp();refreshDash();}else obGo(1);}
+function changeSub(){showLanding();document.querySelectorAll('.ob-step').forEach(s=>s.classList.remove('active'));document.getElementById('ob1').classList.add('active');}
 function defaultTopics(s){return[`${s} — Foundations & Core Concepts`,`${s} — Key Mechanisms & Processes`,`${s} — Classification & Taxonomy`,`${s} — Applied Principles`,`${s} — Case Studies & Scenarios`,`${s} — Regulations & Standards`,`${s} — Analytical Methods`,`${s} — Current Issues & Debates`];}
 
+// ═══════════════════════════════════════
+// FILE UPLOAD
+// ═══════════════════════════════════════
 let uploadedFiles=[];
 function handleFiles(f){uploadedFiles=[...uploadedFiles,...Array.from(f).slice(0,10)];renderFiles();}
-function renderFiles(){const wrap=document.getElementById('fileListWrap');if(!uploadedFiles.length){wrap.style.display='none';return;}wrap.style.display='flex';const icons={pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};document.getElementById('fileList').innerHTML=uploadedFiles.map((f,i)=>`<div class="file-row"><span style="font-size:20px">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span><div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-row-del" onclick="removeFile(${i})">✕</button></div>`).join('');}
+function renderFiles(){
+  const wrap=document.getElementById('fileListWrap');
+  if(!uploadedFiles.length){wrap.style.display='none';return;}
+  wrap.style.display='flex';
+  const icons={pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'};
+  document.getElementById('fileList').innerHTML=uploadedFiles.map((f,i)=>`<div class="file-row"><span style="font-size:20px">${icons[f.name.split('.').pop().toLowerCase()]||'📎'}</span><div class="file-row-info"><div class="file-row-name">${f.name}</div><div class="file-row-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-row-del" onclick="removeFile(${i})">✕</button></div>`).join('');
+}
 function removeFile(i){uploadedFiles.splice(i,1);renderFiles();}
 function readText(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsText(file);});}
 
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
 function refreshDash(){
   document.getElementById('dashSubject').textContent=D.subject||'No subject set';
   document.getElementById('dashMeta').textContent=`${D.days} days left · ${D.fmt.join(', ')}`;
@@ -433,14 +868,41 @@ function refreshDash(){
   document.getElementById('dsQs').textContent=D.totalQs;
   document.getElementById('examPill').classList.toggle('active',D.mode==='exam');
   document.getElementById('mastPill').classList.toggle('active',D.mode==='mastery');
-  if(D.scores.length){const avg=Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);document.getElementById('dsScore').textContent=avg+'%';const pct=Math.min(100,D.totalQs*2);document.getElementById('dashProg').style.width=pct+'%';document.getElementById('dashProgPct').textContent=pct+'% mastered';document.getElementById('dashProgTopics').textContent=`${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;}
+  if(D.scores.length){
+    const avg=Math.round(D.scores.reduce((a,b)=>a+b,0)/D.scores.length);
+    document.getElementById('dsScore').textContent=avg+'%';
+    const pct=Math.min(100,D.totalQs*2);
+    document.getElementById('dashProg').style.width=pct+'%';
+    document.getElementById('dashProgPct').textContent=pct+'% mastered';
+    document.getElementById('dashProgTopics').textContent=`${Math.min(D.topics.length,Math.floor(D.totalQs/3))} / ${D.topics.length} topics`;
+  }
   if(D.topics.length){document.getElementById('topicMapWrap').style.display='block';document.getElementById('topicMap').innerHTML=D.topics.map(t=>`<div class="topic-chip">${t}</div>`).join('');}
   updateUsage();
 }
-function setMode(m){D.mode=m;save('ciq_mode',m);refreshDash();}
-function updateUsage(){const left=Math.max(0,FREE_Q-D.qUsed);document.getElementById('usageText').textContent=left>0?`${left} free`:'Limit reached';document.getElementById('usageDot').className='usage-dot'+(left===0?' over':left<=5?' warn':'');document.getElementById('trainUsagePill').textContent=left>0?`${left} left`:'⚠ Limit';}
+function setMode(m){D.mode=m;save('cio_mode',m);refreshDash();}
+function updateUsage(){
+  const left=Math.max(0,FREE_Q-D.qUsed);
+  const txt=left>0?`${left} free`:'Limit reached';
+  const txt2=left>0?`${left} free questions`:'Upgrade for more';
+  const cls='usage-dot'+(left===0?' over':left<=5?' warn':'');
+  document.getElementById('usageText').textContent=txt;
+  document.getElementById('usageText2').textContent=txt2;
+  document.getElementById('usageDot').className=cls;
+  document.getElementById('usageDot2').className=cls;
+  document.getElementById('trainUsagePill').textContent=left>0?`${left} left`:'⚠ Limit';
+}
 
-async function initTrain(){D.sScore=0;D.sTotal=0;D.qCount=0;D.answered=false;document.getElementById('trainScore').textContent='0 / 0';document.getElementById('trainLabel').textContent='Question 1';document.getElementById('trainProg').style.width='5%';document.getElementById('trainActions').style.display='none';updateUsage();await genQ();}
+// ═══════════════════════════════════════
+// TRAINING
+// ═══════════════════════════════════════
+async function initTrain(){
+  D.sScore=0;D.sTotal=0;D.qCount=0;D.answered=false;
+  document.getElementById('trainScore').textContent='0 / 0';
+  document.getElementById('trainLabel').textContent='Question 1';
+  document.getElementById('trainProg').style.width='5%';
+  document.getElementById('trainActions').style.display='none';
+  updateUsage();await genQ();
+}
 
 async function genQ(){
   if(D.qUsed>=FREE_Q){showUpgrade();return;}
@@ -458,7 +920,7 @@ async function genQ(){
   const isTF=D.fmt.includes('True / False')&&Math.random()<0.3;
   const modeInstr=isMastery?'Generate a MASTERY-level question requiring deep reasoning, analysis, application to novel scenarios, or synthesis. Avoid simple recall.':'Generate a precise EXAM-style question that tests real understanding.';
   const typeInstr=isTF?'Return type "truefalse". Options must be exactly ["True","False"]. Correct is 0 (True) or 1 (False).':'Return type "mcq". Provide exactly 4 options. Only one is correct.';
-  const contentInstr=D.content?`You MUST base this question specifically on the student's own course materials below. Use specific facts, mechanisms, organisms, cases, or principles from this content:\n\n${D.content.substring(0,4000)}`:`Subject: "${D.subject}". Use your expert knowledge to generate a specific, high-quality question on: ${topic}`;
+  const contentInstr=D.content?`You MUST base this question specifically on the student's own course materials. Use specific facts, mechanisms, organisms, cases, or principles from this content:\n\n${D.content.substring(0,4000)}`:`Subject: "${D.subject}". Use your expert knowledge to generate a specific, high-quality question on: ${topic}`;
 
   const prompt=`You are an expert examiner for "${D.subject}".
 Topic: ${topic}
@@ -478,15 +940,15 @@ CRITICAL: Your entire response must be a single valid JSON object. Start with { 
       renderQ(qArea,q,topic);return;
     }catch(e){
       if(attempt<3){await new Promise(r=>setTimeout(r,600));qArea.innerHTML=`<div class="loading"><div class="spin"></div>Retrying (${attempt+1}/3)...</div>`;}
-      else{qArea.innerHTML=`<div style="background:rgba(247,106,106,.07);border:1px solid rgba(247,106,106,.25);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;animation:fadeUp .3s ease;"><div style="font-weight:700;color:var(--red);font-size:16px;">⚠ Could not generate question</div><div class="dim" style="line-height:1.65;">Error: <code style="font-size:12px;color:var(--text-2);background:var(--surface2);padding:2px 6px;border-radius:4px;">${e.message}</code></div><div class="dim">Check that your <strong>ANTHROPIC_API_KEY</strong> environment variable is set in Vercel and redeploy.</div><button class="btn btn-outline btn-sm" onclick="genQ()" style="width:100%">↻ Try Again</button></div>`;D.qCount--;}
+      else{qArea.innerHTML=`<div style="background:rgba(239,83,80,.07);border:1px solid rgba(239,83,80,.25);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;animation:fadeUp .3s ease;"><div style="font-weight:700;color:var(--red);font-size:16px;">⚠ Could not generate question</div><div class="dim" style="line-height:1.65;">Error: <code style="font-size:12px;color:var(--text-2);background:var(--surface2);padding:2px 6px;border-radius:4px;">${e.message}</code></div><button class="btn btn-outline btn-sm" onclick="genQ()" style="width:100%;margin-top:4px;">↻ Try Again</button></div>`;D.qCount--;}
     }
   }
 }
 
 function renderQ(container,q,topic){
   D.currentQ=q;const L=['A','B','C','D'];
-  container.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:4px;animation:fadeIn .3s ease;">${topic||D.subject}</div><div class="q-card"><div class="q-head"><div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div><div class="q-meta">Q${D.qCount}</div></div><div class="q-body"><div class="q-text">${q.question}</div><div class="opts" id="opts">${q.options.map((opt,i)=>`<div class="opt" id="opt${i}" onclick="pick(${i})"><div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):L[i]}</div><div class="opt-text">${opt}</div></div>`).join('')}</div><div class="feedback" id="fb"></div></div></div>`;
-  container.scrollTop = 0;
+  container.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-3);margin-bottom:4px;">${topic||D.subject}</div><div class="q-card"><div class="q-head"><div class="q-type">${q.type==='truefalse'?'✓✗  True / False':'◎  Multiple Choice'}${D.mode==='mastery'?' · Mastery':''}</div><div class="q-meta">Q${D.qCount}</div></div><div class="q-body"><div class="q-text">${q.question}</div><div class="opts" id="opts">${q.options.map((opt,i)=>`<div class="opt" id="opt${i}" onclick="pick(${i})"><div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):L[i]}</div><div class="opt-text">${opt}</div></div>`).join('')}</div><div class="feedback" id="fb"></div></div></div>`;
+  container.scrollTop=0;
 }
 
 function pick(i){
@@ -496,7 +958,7 @@ function pick(i){
   if(ok)D.sScore++;
   D.qUsed++;D.totalQs++;D.scores.push(ok?100:0);
   if(D.scores.length>100)D.scores.shift();
-  save('ciq_qused',D.qUsed);save('ciq_qs',D.totalQs);save('ciq_scores',D.scores);
+  save('cio_qused',D.qUsed);save('cio_qs',D.totalQs);save('cio_scores',D.scores);
   document.getElementById('trainScore').textContent=`${D.sScore} / ${D.sTotal}`;
   updateUsage();
   document.querySelectorAll('.opt').forEach((el,idx)=>{if(idx===D.currentQ.correct)el.classList.add('correct');else if(idx===i&&!ok)el.classList.add('wrong');});
@@ -508,6 +970,9 @@ function pick(i){
 }
 async function nextQ(){if(D.qUsed>=FREE_Q){showUpgrade();return;}await genQ();}
 
+// ═══════════════════════════════════════
+// TUTOR
+// ═══════════════════════════════════════
 function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
 async function sendMsg(){
   if(D.msgUsed>=FREE_MSG){showUpgrade();return;}
@@ -516,25 +981,48 @@ async function sendMsg(){
   addBub('user',text);D.chatHistory.push({role:'user',content:text});
   const tid='t'+Date.now();
   const el=document.createElement('div');el.className='msg ai';el.id=tid;
-  el.innerHTML=`<div class="msg-name">CognIQ Tutor</div><div class="msg-bub"><div class="dots"><span></span><span></span><span></span></div></div>`;
+  el.innerHTML=`<div class="msg-name">Cognio Tutor</div><div class="msg-bub"><div class="dots"><span></span><span></span><span></span></div></div>`;
   document.getElementById('chatBody').appendChild(el);scrollChat();
   const sys=`You are an expert tutor for "${D.subject}". The student has ${D.days} days until their exam covering: ${D.fmt.join(', ')}. Be educational, clear, and help the student truly understand — not just memorize. Use specific examples, mechanisms, and real-world context.${D.content?`\n\nStudent's course materials:\n${D.content.substring(0,3500)}`:''}`;
-  try{const reply=await callAIChat(sys,D.chatHistory.slice(-10));document.getElementById(tid)?.remove();D.chatHistory.push({role:'assistant',content:reply});D.msgUsed++;save('ciq_msgused',D.msgUsed);addBub('ai',reply);}
-  catch(e){document.getElementById(tid)?.remove();addBub('ai',`Sorry, something went wrong: ${e.message}`);}
+  try{
+    const reply=await callAIChat(sys,D.chatHistory.slice(-10));
+    document.getElementById(tid)?.remove();D.chatHistory.push({role:'assistant',content:reply});
+    D.msgUsed++;save('cio_msgused',D.msgUsed);addBub('ai',reply);
+  }catch(e){document.getElementById(tid)?.remove();addBub('ai',`Sorry, something went wrong: ${e.message}`);}
 }
-function addBub(role,text){const body=document.getElementById('chatBody');const d=document.createElement('div');d.className=`msg ${role}`;d.innerHTML=`<div class="msg-name">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bub">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;body.appendChild(d);scrollChat();}
+function addBub(role,text){
+  const body=document.getElementById('chatBody');const d=document.createElement('div');d.className=`msg ${role}`;
+  d.innerHTML=`<div class="msg-name">${role==='ai'?'Cognio Tutor':'You'}</div><div class="msg-bub">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+  body.appendChild(d);scrollChat();
+}
 function scrollChat(){const b=document.getElementById('chatBody');b.scrollTop=b.scrollHeight;}
-function clearChat(){D.chatHistory=[];document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">CognIQ Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;}
+function clearChat(){D.chatHistory=[];document.getElementById('chatBody').innerHTML=`<div class="msg ai"><div class="msg-name">Cognio Tutor</div><div class="msg-bub">Chat cleared. What would you like to work on?</div></div>`;}
 
+// ═══════════════════════════════════════
+// UPGRADE
+// ═══════════════════════════════════════
 function showUpgrade(){document.getElementById('upgradeOverlay').classList.add('show');}
 function closeUpgrade(){document.getElementById('upgradeOverlay').classList.remove('show');}
-function joinWaitlist(){const email=document.getElementById('upgradeEmail').value.trim();if(!email||!email.includes('@')){alert('Please enter a valid email.');return;}const list=JSON.parse(localStorage.getItem('ciq_waitlist')||'[]');list.push({email,subject:D.subject,date:new Date().toISOString()});save('ciq_waitlist',list);document.getElementById('upgradeOverlay').innerHTML=`<div class="upgrade-sheet" style="text-align:center;"><div style="font-size:52px;margin-bottom:18px;">🎉</div><div class="upgrade-title">You're on the list!</div><div class="upgrade-sub" style="margin-top:10px;">We'll email <strong>${email}</strong> when Pro launches.</div><button class="btn btn-primary" style="margin-top:28px;" onclick="closeUpgrade()">Continue Learning</button></div>`;}
+function joinWaitlist(){
+  const email=document.getElementById('upgradeEmail').value.trim();
+  if(!email||!email.includes('@')){alert('Please enter a valid email.');return;}
+  const list=JSON.parse(localStorage.getItem('cio_waitlist')||'[]');
+  list.push({email,subject:D.subject,date:new Date().toISOString()});
+  save('cio_waitlist',list);
+  document.getElementById('upgradeOverlay').innerHTML=`<div class="upgrade-sheet" style="text-align:center;"><div style="font-size:52px;margin-bottom:18px;">🎉</div><div class="upgrade-title">You're on the list!</div><div class="upgrade-sub" style="margin-top:10px;">We'll email <strong>${email}</strong> when Cognio Pro launches.</div><button class="btn btn-primary" style="margin-top:28px;" onclick="closeUpgrade()">Continue Learning</button></div>`;
+}
 
+// ═══════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════
 function loadSettings(){document.getElementById('set-days').value=D.days;document.getElementById('set-subject').value=D.subject;document.getElementById('set-q-used').textContent=`${D.qUsed} / ${FREE_Q} free`;document.getElementById('set-usage-bar').style.width=Math.min(100,(D.qUsed/FREE_Q)*100)+'%';}
-function saveDays(){D.days=parseInt(document.getElementById('set-days').value)||60;save('ciq_days',D.days);alert('✅ Saved!');}
-function saveSubject(){D.subject=document.getElementById('set-subject').value;save('ciq_subject',D.subject);alert('✅ Saved!');}
+function saveDays(){D.days=parseInt(document.getElementById('set-days').value)||60;save('cio_days',D.days);alert('✅ Saved!');}
+function saveSubject(){D.subject=document.getElementById('set-subject').value;save('cio_subject',D.subject);alert('✅ Saved!');}
 function resetAll(){if(confirm('Reset everything? Cannot be undone.')){localStorage.clear();location.reload();}}
 
+// ═══════════════════════════════════════
+// API
+// ═══════════════════════════════════════
 async function callAI(prompt){
   const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:1024})});
   const d=await r.json();
@@ -550,12 +1038,15 @@ async function callAIChat(system,messages){
   return d.content[0].text;
 }
 
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
 (function init(){
   const zone=document.getElementById('dropZone');
   zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
   zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
   zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');handleFiles(e.dataTransfer.files);});
-  if(D.onboarded&&D.subject)goTo('dash','slide');
+  if(D.onboarded&&D.subject){showApp();refreshDash();}
 })();
 </script>
 </body>
