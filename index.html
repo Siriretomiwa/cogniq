@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CognIQ — Cognitive Mastery Engine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3d;
+      --accent: #7c6af7;
+      --accent2: #f7c26a;
+      --accent3: #6af7c2;
+      --text: #e8e8f0;
+      --text-dim: #7a7a9a;
+      --danger: #f76a6a;
+      --success: #6af7a0;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+    .screen { display: none; flex-direction: column; flex: 1; padding: 24px 20px 32px; animation: fadeUp 0.4s ease; }
+    .screen.active { display: flex; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 0; position: sticky; top: 0; z-index: 10; background: linear-gradient(to bottom, var(--bg) 80%, transparent); }
+    .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+    .logo span { color: var(--accent); }
+    .badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+    .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--accent3); letter-spacing: 0.08em; text-transform: uppercase; }
+    .hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent3); }
+    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(32px, 8vw, 42px); line-height: 1.05; letter-spacing: -1px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.3px; }
+    h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 12px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 12px; text-align: center; }
+    .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 22px; color: var(--accent); }
+    .stat-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 16px 20px; border-radius: var(--radius-sm); border: none; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: #9180ff; }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-sm { padding: 10px 16px; font-size: 13px; width: auto; border-radius: 8px; }
+    .btn-icon { width: 44px; height: 44px; padding: 0; border-radius: 12px; flex-shrink: 0; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-group label { font-size: 13px; color: var(--text-dim); font-weight: 500; }
+    input[type=text], input[type=password], textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 120px; }
+    .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); }
+    .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(124,106,247,0.05); }
+    .upload-icon { font-size: 36px; margin-bottom: 12px; }
+    .upload-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+    .upload-sub { font-size: 13px; color: var(--text-dim); }
+    #fileInput { display: none; }
+    .file-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .file-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+    .file-icon { font-size: 20px; flex-shrink: 0; }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-size { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    .file-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 4px; }
+    .chat-area { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px; }
+    .msg { display: flex; flex-direction: column; gap: 4px; max-width: 88%; animation: fadeUp 0.3s ease; }
+    .msg.ai { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+    .msg-bubble { padding: 14px 16px; border-radius: 14px; font-size: 14px; line-height: 1.6; }
+    .msg.ai .msg-bubble { background: var(--surface2); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+    .msg.user .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
+    .msg-sender { font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 0 4px; }
+    .msg.user .msg-sender { text-align: right; }
+    .input-bar { display: flex; gap: 10px; align-items: flex-end; padding-top: 12px; border-top: 1px solid var(--border); }
+    .input-bar textarea { min-height: 48px; max-height: 120px; padding: 13px 16px; resize: none; flex: 1; }
+    .mode-pills { display: flex; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px; }
+    .mode-pill { flex: 1; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text-dim); border: none; background: none; font-family: 'DM Sans', sans-serif; }
+    .mode-pill.active { background: var(--accent); color: white; }
+    .progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent3)); transition: width 0.6s ease; }
+    .question-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .question-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .question-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+    .question-num { font-size: 12px; color: var(--text-dim); }
+    .question-body { padding: 20px; }
+    .question-text { font-size: 15px; line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; background: var(--surface2); }
+    .option:hover { border-color: var(--accent); }
+    .option.selected { border-color: var(--accent); background: rgba(124,106,247,0.12); }
+    .option.correct { border-color: var(--success); background: rgba(106,247,160,0.1); }
+    .option.wrong { border-color: var(--danger); background: rgba(247,106,106,0.1); }
+    .option-letter { width: 28px; height: 28px; border-radius: 8px; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; font-family: 'Syne', sans-serif; }
+    .option-text { font-size: 14px; line-height: 1.5; flex: 1; padding-top: 3px; }
+    .feedback-box { margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6; display: none; }
+    .feedback-box.show { display: block; }
+    .feedback-box.correct-fb { background: rgba(106,247,160,0.1); border: 1px solid var(--success); color: var(--success); }
+    .feedback-box.wrong-fb { background: rgba(247,106,106,0.1); border: 1px solid var(--danger); color: #ffaaaa; }
+    .bottom-nav { display: flex; border-top: 1px solid var(--border); background: var(--surface); position: sticky; bottom: 0; z-index: 10; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; cursor: pointer; transition: color 0.2s; color: var(--text-dim); border: none; background: none; font-family: 'DM Sans', sans-serif; }
+    .nav-item.active { color: var(--accent); }
+    .nav-icon { font-size: 20px; }
+    .nav-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .topic-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+    .chip.selected { background: rgba(124,106,247,0.15); border-color: var(--accent); color: var(--accent); }
+    .score-ring { position: relative; width: 100px; height: 100px; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--accent); }
+    .gap-12 { display: flex; flex-direction: column; gap: 12px; }
+    .gap-16 { display: flex; flex-direction: column; gap: 16px; }
+    .gap-20 { display: flex; flex-direction: column; gap: 20px; }
+    .text-dim { color: var(--text-dim); font-size: 13px; }
+    .text-accent { color: var(--accent); }
+    .text-success { color: var(--success); }
+    .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.3px; margin-bottom: 4px; }
+    .loading { display: flex; align-items: center; gap: 10px; color: var(--text-dim); font-size: 14px; padding: 20px 0; }
+    .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .dot-pulse { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
+    .dot-pulse span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+    .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+    .setup-banner { background: rgba(247,194,106,0.1); border: 1px solid rgba(247,194,106,0.3); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--accent2); line-height: 1.5; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="top-bar" id="topBar" style="display:none">
+    <div class="logo">Cogn<span>IQ</span></div>
+    <div class="badge" id="dayBadge">Day 1 of 60</div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div style="flex:1; display:flex; flex-direction:column; gap:32px; padding-top:8px;">
+      <div>
+        <div class="logo" style="font-size:26px; margin-bottom:24px;">Cogn<span style="color:var(--accent)">IQ</span></div>
+        <div class="hero-tag">Cognitive Mastery Engine</div>
+        <h1 style="margin-top:12px;">Master what<br/>you <em>actually</em><br/>need to know.</h1>
+        <p style="color:var(--text-dim); font-size:15px; line-height:1.6; margin-top:16px; max-width:340px;">Upload your materials. Get diagnosed. Train with AI that knows exactly where you're weak.</p>
+      </div>
+      <div id="setupBanner" class="setup-banner">
+        <strong>⚙️ Setup needed:</strong> Add your Anthropic API key in Settings to activate the full AI engine.
+      </div>
+      <div class="gap-12">
+        <button class="btn btn-primary" onclick="goTo('upload')">📂 Upload My Materials</button>
+        <button class="btn btn-secondary" onclick="goTo('dashboard')">📊 Go to Dashboard</button>
+        <button class="btn btn-ghost" onclick="goTo('settings')">⚙️ Settings & API Key</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-num" id="homeTopics">0</div><div class="stat-label">Topics</div></div>
+        <div class="stat-card"><div class="stat-num" id="homeScore">—</div><div class="stat-label">Avg Score</div></div>
+        <div class="stat-card"><div class="stat-num" id="homeDays">60</div><div class="stat-label">Days Left</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="screen" id="screen-upload">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+      <button class="btn btn-icon btn-ghost" onclick="goBack()">←</button>
+      <h2>Upload Materials</h2>
+    </div>
+    <div class="gap-20" style="flex:1">
+      <p class="text-dim">Upload your notes, slides, or textbooks. The AI will build your personal knowledge map.</p>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📚</div>
+        <div class="upload-title">Tap to upload files</div>
+        <div class="upload-sub" style="margin-top:6px;">PDF, DOCX, PPTX, TXT supported</div>
+      </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx,.txt,.doc,.ppt" onchange="handleFiles(this.files)">
+      <div id="fileListWrap" style="display:none">
+        <div class="card-label">Uploaded Files</div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+      <div class="input-group">
+        <label>Subject / Course Name</label>
+        <input type="text" id="subjectName" placeholder="e.g. Advanced Food Microbiology" value="Advanced Food Microbiology">
+      </div>
+      <div class="input-group">
+        <label>Paste your syllabus or key topics (recommended)</label>
+        <textarea id="syllabusText" placeholder="Paste your syllabus here, or list the main topics you need to cover..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="processUpload()" id="processBtn" disabled>
+        🧠 Build My Knowledge Map
+      </button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="screen" id="screen-dashboard">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <h2>Dashboard</h2>
+      <div class="badge" id="modeTag">Exam Mode</div>
+    </div>
+    <div class="gap-16" style="flex:1">
+      <div class="mode-pills">
+        <button class="mode-pill active" id="examPill" onclick="setMode('exam')">⚡ Exam Mode</button>
+        <button class="mode-pill" id="masteryPill" onclick="setMode('mastery')">🧠 Mastery Mode</button>
+      </div>
+      <div class="card">
+        <div class="card-label">Overall Progress</div>
+        <div class="progress-bar"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div>
+        <div style="display:flex; justify-content:space-between; margin-top:8px;">
+          <span class="text-dim" id="progressPct">0% complete</span>
+          <span class="text-dim" id="progressLabel">0 / 0 topics</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <div class="card" style="flex:1; align-items:center; display:flex; flex-direction:column; gap:8px;">
+          <div class="card-label">Avg Score</div>
+          <div class="score-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" stroke-width="8"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="var(--accent)" stroke-width="8"
+                stroke-dasharray="251" stroke-dashoffset="251" id="scoreRingCircle"
+                stroke-linecap="round" style="transition:stroke-dashoffset 1s ease"/>
+            </svg>
+            <div class="score-ring-num" id="scoreRingNum">—</div>
+          </div>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+          <div class="stat-card"><div class="stat-num text-success" id="statStrong">0</div><div class="stat-label">Strong Areas</div></div>
+          <div class="stat-card"><div class="stat-num" style="color:var(--danger)" id="statWeak">0</div><div class="stat-label">Weak Areas</div></div>
+          <div class="stat-card"><div class="stat-num" id="statQs">0</div><div class="stat-label">Questions Done</div></div>
+        </div>
+      </div>
+      <div class="section-title">Start Training</div>
+      <div class="gap-12">
+        <button class="btn btn-primary" onclick="goTo('train')">⚡ Start Practice Session</button>
+        <button class="btn btn-secondary" onclick="goTo('tutor')">💬 Ask AI Tutor</button>
+      </div>
+      <div id="topicsSection" style="display:none">
+        <div class="section-title" style="margin-bottom:12px;">Topic Map</div>
+        <div class="topic-chips" id="topicChips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAIN -->
+  <div class="screen" id="screen-train">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dashboard')">←</button>
+      <div style="flex:1">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="text-dim" id="trainLabel">Question 1</span>
+          <span class="text-dim" id="trainScore">Score: 0</span>
+        </div>
+        <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="trainProgress" style="width:10%"></div></div>
+      </div>
+    </div>
+    <div id="questionArea" style="flex:1; display:flex; flex-direction:column; gap:16px; overflow-y:auto; padding-bottom:16px;">
+      <div class="loading"><div class="spinner"></div>Generating your first question...</div>
+    </div>
+    <div id="trainActions" style="display:none; flex-direction:column; gap:10px; padding-top:12px; border-top:1px solid var(--border);">
+      <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('dashboard')" style="width:100%">End Session</button>
+    </div>
+  </div>
+
+  <!-- TUTOR -->
+  <div class="screen" id="screen-tutor" style="padding-bottom:0;">
+    <div style="display:flex; align-items:center; gap:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+      <button class="btn btn-icon btn-ghost" onclick="goTo('dashboard')">←</button>
+      <div><h3>AI Tutor</h3><div class="text-dim" style="font-size:12px;">Ask anything about your course</div></div>
+      <button class="btn btn-sm btn-ghost" onclick="clearChat()" style="margin-left:auto">Clear</button>
+    </div>
+    <div class="chat-area" id="chatArea" style="padding-top:16px;">
+      <div class="msg ai">
+        <div class="msg-sender">CognIQ Tutor</div>
+        <div class="msg-bubble">Hello! I'm your AI tutor for <strong id="tutorSubject">Advanced Food Microbiology</strong>. Ask me anything — concept explanations, case study analysis, exam prep, or tricky topics. What would you like to explore?</div>
+      </div>
+    </div>
+    <div class="input-bar" style="padding:12px 0 24px;">
+      <textarea id="chatInput" placeholder="Ask a question..." rows="1" onkeydown="handleChatKey(event)"></textarea>
+      <button class="btn btn-icon btn-primary" onclick="sendChat()">↑</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+      <button class="btn btn-icon btn-ghost" onclick="goBack()">←</button>
+      <h2>Settings</h2>
+    </div>
+    <div class="gap-20" style="flex:1">
+      <div class="card gap-16">
+        <div class="card-label">🔑 Anthropic API Key</div>
+        <div class="input-group">
+          <label>API Key</label>
+          <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+          <span class="text-dim">Get yours free at <strong>console.anthropic.com</strong> → API Keys</span>
+        </div>
+        <button class="btn btn-primary" onclick="saveApiKey()">Save API Key</button>
+      </div>
+      <div class="card gap-16">
+        <div class="card-label">📅 Exam Countdown</div>
+        <div class="input-group">
+          <label>Days until exam</label>
+          <input type="text" id="examDaysInput" placeholder="60" />
+        </div>
+        <button class="btn btn-secondary" onclick="saveExamDays()">Save</button>
+      </div>
+      <div class="card gap-16">
+        <div class="card-label">🎯 Subject</div>
+        <div class="input-group">
+          <label>Subject Name</label>
+          <input type="text" id="settingsSubject" />
+        </div>
+        <button class="btn btn-secondary" onclick="saveSubject()">Save</button>
+      </div>
+      <div class="card">
+        <div class="card-label">📊 Study Data</div>
+        <p class="text-dim" style="margin-bottom:12px;">Reset all progress and uploaded materials.</p>
+        <button class="btn btn-ghost" onclick="resetData()" style="color:var(--danger);border-color:var(--danger)">🗑 Reset All Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottomNav" style="display:none">
+    <button class="nav-item" id="nav-dashboard" onclick="goTo('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+    <button class="nav-item" id="nav-train" onclick="goTo('train')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
+    <button class="nav-item" id="nav-tutor" onclick="goTo('tutor')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
+    <button class="nav-item" id="nav-settings" onclick="goTo('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+  </nav>
+
+</div>
+
+<script>
+const S = {
+  apiKey: localStorage.getItem('ciq_key') || '',
+  subject: localStorage.getItem('ciq_subject') || 'Advanced Food Microbiology',
+  topics: JSON.parse(localStorage.getItem('ciq_topics') || '[]'),
+  content: localStorage.getItem('ciq_content') || '',
+  mode: localStorage.getItem('ciq_mode') || 'exam',
+  daysLeft: parseInt(localStorage.getItem('ciq_days') || '60'),
+  sessionScore: 0, sessionTotal: 0, qCount: 0,
+  currentQ: null, chatHistory: [], answered: false
+};
+
+// ── NAV ──
+let stack = ['home'];
+function goTo(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  const withNav = ['dashboard','train','tutor','settings'].includes(name);
+  document.getElementById('bottomNav').style.display = withNav ? 'flex' : 'none';
+  document.getElementById('topBar').style.display = withNav ? 'flex' : 'none';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const nav = document.getElementById('nav-' + name);
+  if (nav) nav.classList.add('active');
+  if (name !== stack[stack.length-1]) stack.push(name);
+  if (name === 'train') initTrain();
+  if (name === 'dashboard') refreshDash();
+  if (name === 'settings') loadSettings();
+  updateBadge();
+}
+function goBack() { stack.pop(); goTo(stack[stack.length-1] || 'home'); }
+
+function updateBadge() {
+  document.getElementById('dayBadge').textContent = `${S.daysLeft} days left`;
+  document.getElementById('homeDays').textContent = S.daysLeft;
+}
+
+// ── UPLOAD ──
+let files = [];
+function handleFiles(f) {
+  files = [...files, ...Array.from(f)];
+  renderFiles();
+  document.getElementById('processBtn').disabled = files.length === 0;
+}
+function renderFiles() {
+  const list = document.getElementById('fileList');
+  const wrap = document.getElementById('fileListWrap');
+  if (!files.length) { wrap.style.display='none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML = files.map((f,i) => `<div class="file-item"><div class="file-icon">${fileIcon(f.name)}</div><div class="file-info"><div class="file-name">${f.name}</div><div class="file-size">${(f.size/1024).toFixed(0)} KB</div></div><button class="file-remove" onclick="removeFile(${i})">✕</button></div>`).join('');
+}
+function fileIcon(n) { const e=n.split('.').pop().toLowerCase(); return {pdf:'📄',docx:'📝',doc:'📝',pptx:'📊',ppt:'📊',txt:'📃'}[e]||'📎'; }
+function removeFile(i) { files.splice(i,1); renderFiles(); document.getElementById('processBtn').disabled=files.length===0; }
+
+async function processUpload() {
+  const btn = document.getElementById('processBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Building Knowledge Map...';
+  const subj = document.getElementById('subjectName').value || S.subject;
+  const syl = document.getElementById('syllabusText').value;
+  S.subject = subj;
+  localStorage.setItem('ciq_subject', subj);
+
+  let content = `Subject: ${subj}\n\n`;
+  if (syl) content += `Syllabus:\n${syl}\n\n`;
+  for (const file of files) {
+    try {
+      const text = await new Promise((res,rej) => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsText(file); });
+      content += `\n--- ${file.name} ---\n${text.substring(0,6000)}\n`;
+    } catch(e) { content += `\n--- ${file.name} --- [non-text file]\n`; }
+  }
+  S.content = content;
+  localStorage.setItem('ciq_content', content);
+
+  if (S.apiKey) {
+    try {
+      const raw = await claude(`From this course material for "${subj}", extract 8-12 main topics. Return ONLY a JSON array. Example: ["Topic 1","Topic 2"]\n\nContent:\n${content.substring(0,3000)}`);
+      S.topics = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    } catch(e) { S.topics = defaultTopics(); }
+  } else { S.topics = defaultTopics(); }
+
+  localStorage.setItem('ciq_topics', JSON.stringify(S.topics));
+  btn.innerHTML = '✅ Knowledge Map Built!';
+  btn.style.background = 'var(--success)'; btn.style.color = '#000';
+  setTimeout(() => goTo('dashboard'), 1200);
+}
+
+function defaultTopics() {
+  return ['Microbial Growth Kinetics','Foodborne Pathogens','Food Spoilage Mechanisms','Fermentation Microbiology','HACCP & Food Safety Systems','Preservation & Hurdle Technology','Detection & Enumeration Methods','Mycotoxins & Mold Control'];
+}
+
+// ── DASHBOARD ──
+function refreshDash() {
+  document.getElementById('tutorSubject').textContent = S.subject;
+  document.getElementById('examPill').classList.toggle('active', S.mode==='exam');
+  document.getElementById('masteryPill').classList.toggle('active', S.mode==='mastery');
+  document.getElementById('modeTag').textContent = S.mode==='exam' ? '⚡ Exam Mode' : '🧠 Mastery Mode';
+  if (S.topics.length) {
+    document.getElementById('topicsSection').style.display = 'block';
+    document.getElementById('topicChips').innerHTML = S.topics.map(t=>`<div class="chip">${t}</div>`).join('');
+    document.getElementById('progressLabel').textContent = `0 / ${S.topics.length} topics`;
+    document.getElementById('homeTopics').textContent = S.topics.length;
+  }
+  const scores = JSON.parse(localStorage.getItem('ciq_scores') || '[]');
+  const qs = parseInt(localStorage.getItem('ciq_qs') || '0');
+  document.getElementById('statQs').textContent = qs;
+  if (scores.length) {
+    const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+    const offset = 251 - (251*avg/100);
+    document.getElementById('scoreRingCircle').style.strokeDashoffset = offset;
+    document.getElementById('scoreRingNum').textContent = avg+'%';
+    document.getElementById('homeScore').textContent = avg+'%';
+    document.getElementById('statStrong').textContent = scores.filter(s=>s>=70).length;
+    document.getElementById('statWeak').textContent = scores.filter(s=>s<50).length;
+    const pct = Math.min(100, qs*2);
+    document.getElementById('overallProgress').style.width = pct+'%';
+    document.getElementById('progressPct').textContent = pct+'% complete';
+  }
+}
+function setMode(m) { S.mode=m; localStorage.setItem('ciq_mode',m); refreshDash(); }
+
+// ── TRAINING ──
+async function initTrain() {
+  S.sessionScore=0; S.sessionTotal=0; S.qCount=0; S.answered=false;
+  document.getElementById('trainScore').textContent = 'Score: 0';
+  document.getElementById('trainLabel').textContent = 'Question 1';
+  document.getElementById('trainProgress').style.width = '10%';
+  document.getElementById('trainActions').style.display = 'none';
+  await genQuestion();
+}
+
+async function genQuestion() {
+  S.answered = false;
+  document.getElementById('trainActions').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  const qArea = document.getElementById('questionArea');
+  qArea.innerHTML = '<div class="loading"><div class="spinner"></div>Generating question...</div>';
+  S.qCount++;
+  document.getElementById('trainLabel').textContent = `Question ${S.qCount}`;
+  document.getElementById('trainProgress').style.width = Math.min(100, S.qCount*10)+'%';
+
+  const topic = S.topics.length ? S.topics[Math.floor(Math.random()*S.topics.length)] : S.subject;
+  const modeCtx = S.mode==='exam'
+    ? 'Generate an exam-style MCQ or True/False question. Be precise and exam-appropriate.'
+    : 'Generate a challenging mastery question requiring analysis, application, or scenario reasoning.';
+  const contentCtx = S.content ? `Base the question on this course material:\n${S.content.substring(0,3000)}` : `Subject: ${S.subject}`;
+
+  const prompt = `You are an expert examiner for "${S.subject}".
+Topic: ${topic}
+${modeCtx}
+${contentCtx}
+
+Return ONLY valid JSON, no other text:
+{
+  "type": "mcq",
+  "question": "question text",
+  "options": ["A: option text", "B: option text", "C: option text", "D: option text"],
+  "correct": 0,
+  "explanation": "clear explanation of why this is correct and others are wrong"
+}
+For true/false: options must be ["True", "False"] and correct is 0 or 1. Set type to "truefalse".`;
+
+  if (!S.apiKey) { renderDemo(qArea); return; }
+  try {
+    const raw = await claude(prompt);
+    const q = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    renderQ(qArea, q);
+  } catch(e) { renderDemo(qArea); }
+}
+
+function renderQ(container, q) {
+  S.currentQ = q;
+  const letters = ['A','B','C','D'];
+  container.innerHTML = `
+    <div class="question-card">
+      <div class="question-header">
+        <div class="question-type">${q.type==='truefalse'?'✓✗ True / False':'◎ Multiple Choice'}</div>
+        <div class="question-num">Q${S.qCount}</div>
+      </div>
+      <div class="question-body">
+        <div class="question-text">${q.question}</div>
+        <div class="options" id="opts">
+          ${q.options.map((opt,i)=>`
+            <div class="option" id="opt${i}" onclick="pick(${i})">
+              <div class="option-letter">${q.type==='truefalse'?(i===0?'T':'F'):letters[i]}</div>
+              <div class="option-text">${opt}</div>
+            </div>`).join('')}
+        </div>
+        <div class="feedback-box" id="fb"></div>
+      </div>
+    </div>`;
+}
+
+function renderDemo(container) {
+  renderQ(container, {
+    type: 'mcq',
+    question: 'Which water activity (aw) threshold inhibits the growth of most foodborne pathogenic bacteria?',
+    options: ['A: Below 0.99', 'B: Below 0.91', 'C: Below 0.85', 'D: Below 0.75'],
+    correct: 2,
+    explanation: 'Most foodborne pathogens cannot grow below aw 0.85. This is a key food safety control parameter used in determining shelf stability.'
+  });
+  const note = document.createElement('div');
+  note.className = 'setup-banner';
+  note.style.marginTop = '12px';
+  note.innerHTML = '<strong>Demo question</strong> — Add your API key in Settings to generate questions from your own materials.';
+  document.getElementById('questionArea').appendChild(note);
+}
+
+function pick(i) {
+  if (S.answered) return;
+  S.answered = true;
+  S.sessionTotal++;
+  const correct = i === S.currentQ.correct;
+  if (correct) S.sessionScore++;
+
+  // Track
+  const scores = JSON.parse(localStorage.getItem('ciq_scores') || '[]');
+  scores.push(correct ? 100 : 0);
+  if (scores.length > 100) scores.shift();
+  localStorage.setItem('ciq_scores', JSON.stringify(scores));
+  const qs = (parseInt(localStorage.getItem('ciq_qs') || '0')) + 1;
+  localStorage.setItem('ciq_qs', qs);
+
+  document.getElementById('trainScore').textContent = `Score: ${S.sessionScore}/${S.sessionTotal}`;
+  document.querySelectorAll('.option').forEach((el,idx) => {
+    if (idx===S.currentQ.correct) el.classList.add('correct');
+    else if (idx===i && !correct) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('fb');
+  fb.className = `feedback-box show ${correct?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML = correct
+    ? `✅ <strong>Correct!</strong> ${S.currentQ.explanation}`
+    : `❌ <strong>Incorrect.</strong> Correct: <strong>${S.currentQ.options[S.currentQ.correct]}</strong>. ${S.currentQ.explanation}`;
+  document.getElementById('trainActions').style.display = 'flex';
+  document.getElementById('nextBtn').style.display = 'flex';
+}
+
+async function nextQuestion() { await genQuestion(); }
+
+// ── TUTOR ──
+function handleChatKey(e) { if (e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();} }
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addMsg('user', text);
+  S.chatHistory.push({role:'user',content:text});
+
+  const thinkId = 'th'+Date.now();
+  const el = document.createElement('div');
+  el.className='msg ai'; el.id=thinkId;
+  el.innerHTML=`<div class="msg-sender">CognIQ Tutor</div><div class="msg-bubble"><div class="dot-pulse"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('chatArea').appendChild(el);
+  scrollChat();
+
+  if (!S.apiKey) {
+    document.getElementById(thinkId)?.remove();
+    addMsg('ai', `Great question! Add your Anthropic API key in Settings to get full AI tutor responses. I'll be able to explain concepts, walk through case studies, and help you prepare for your exam.`);
+    return;
+  }
+
+  const sys = `You are an expert tutor for "${S.subject}". The student has an exam in ${S.daysLeft} days covering MCQ, written essays, and case studies. Be clear, educational, and help them truly understand — not just memorize. Use examples and mechanisms where relevant.${S.content?`\n\nCourse context:\n${S.content.substring(0,3000)}`:''}`;
+
+  try {
+    const reply = await claudeChat(sys, S.chatHistory.slice(-8));
+    document.getElementById(thinkId)?.remove();
+    S.chatHistory.push({role:'assistant',content:reply});
+    addMsg('ai', reply);
+  } catch(e) {
+    document.getElementById(thinkId)?.remove();
+    addMsg('ai','Sorry, something went wrong. Please check your API key in Settings.');
+  }
+}
+function addMsg(role, text) {
+  const area = document.getElementById('chatArea');
+  const d = document.createElement('div');
+  d.className=`msg ${role}`;
+  d.innerHTML=`<div class="msg-sender">${role==='ai'?'CognIQ Tutor':'You'}</div><div class="msg-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+  area.appendChild(d);
+  scrollChat();
+}
+function scrollChat() { const a=document.getElementById('chatArea'); a.scrollTop=a.scrollHeight; }
+function clearChat() {
+  S.chatHistory=[];
+  document.getElementById('chatArea').innerHTML=`<div class="msg ai"><div class="msg-sender">CognIQ Tutor</div><div class="msg-bubble">Chat cleared! What would you like to work on?</div></div>`;
+}
+
+// ── CLAUDE API ──
+async function claude(prompt) {
+  const r = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  });
+  if (!r.ok) throw new Error('API '+r.status);
+  const d=await r.json(); return d.content[0].text;
+}
+async function claudeChat(system, messages) {
+  const r = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system,messages})
+  });
+  if (!r.ok) throw new Error('API '+r.status);
+  const d=await r.json(); return d.content[0].text;
+}
+
+// ── SETTINGS ──
+function loadSettings() {
+  document.getElementById('apiKeyInput').value = S.apiKey;
+  document.getElementById('examDaysInput').value = S.daysLeft;
+  document.getElementById('settingsSubject').value = S.subject;
+}
+function saveApiKey() {
+  S.apiKey = document.getElementById('apiKeyInput').value.trim();
+  localStorage.setItem('ciq_key', S.apiKey);
+  document.getElementById('setupBanner').style.display = S.apiKey ? 'none' : '';
+  alert('✅ API key saved! AI engine is now active.');
+}
+function saveExamDays() {
+  S.daysLeft = parseInt(document.getElementById('examDaysInput').value) || 60;
+  localStorage.setItem('ciq_days', S.daysLeft);
+  updateBadge();
+  alert('✅ Saved!');
+}
+function saveSubject() {
+  S.subject = document.getElementById('settingsSubject').value;
+  localStorage.setItem('ciq_subject', S.subject);
+  alert('✅ Subject saved!');
+}
+function resetData() {
+  if (confirm('Reset everything? This cannot be undone.')) { localStorage.clear(); location.reload(); }
+}
+
+// ── INIT ──
+(function init() {
+  updateBadge();
+  if (S.apiKey) document.getElementById('setupBanner').style.display = 'none';
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e=>{e.preventDefault();zone.classList.add('dragover');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
+})();
+</script>
+</body>
+</html>
