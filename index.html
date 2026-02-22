@@ -516,13 +516,17 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 <!-- ══════════════════════════════
      AUTH SCREEN
 ══════════════════════════════ -->
+<!-- ══════════════════════════════
+     AUTH SCREEN — email only
+══════════════════════════════ -->
 <div class="scr on" id="scr-auth">
-  <div class="auth-hero">
-    <div class="auth-logo-big">
-      <div class="auth-logo-icon-big">🧠</div>
-      Cogni<em style="font-style:normal;background:linear-gradient(135deg,#fff,#999,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">o</em>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px 0;">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:32px;letter-spacing:-.6px;margin-bottom:10px;animation:fadeUp .4s ease;">
+      Cogni<em style="font-style:normal;">o</em>
     </div>
-    <p class="auth-tagline">Adaptive mastery engine for advanced study.<br/>Questions that push you to real understanding.</p>
+    <p style="font-size:14px;color:var(--tx2);line-height:1.7;margin-bottom:22px;animation:fadeUp .4s .06s ease both;">
+      Adaptive mastery engine for advanced study.<br/>Enter your email to get started — no password needed.
+    </p>
     <div class="feat-pills" style="animation:fadeUp .4s .1s ease both;">
       <div class="feat-pill">⚡ Exam Mode</div>
       <div class="feat-pill">🧠 Mastery Mode</div>
@@ -531,69 +535,27 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
     </div>
   </div>
 
-  <div class="auth-card">
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="auth-tab on" id="atab-login" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" id="atab-signup" onclick="switchAuthTab('signup')">Create Account</button>
+  <div style="background:rgba(14,14,14,.98);border:1px solid var(--b2);border-radius:20px 20px 0 0;padding:26px 22px 42px;margin-top:auto;animation:slideUp .4s cubic-bezier(.22,1,.36,1);">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:5px;">Get started free</div>
+    <p style="font-size:12px;color:var(--tx3);margin-bottom:18px;">Your progress is saved automatically.</p>
+
+    <div id="auth-err" style="display:none;font-size:12px;color:var(--r1);padding:8px 12px;background:rgba(239,83,80,.07);border:1px solid rgba(239,83,80,.2);border-radius:8px;margin-bottom:12px;"></div>
+
+    <div class="field" style="margin-bottom:13px;">
+      <label>Email address</label>
+      <input type="email" id="auth-email-input" placeholder="you@email.com"
+        style="font-size:15px;"
+        onkeydown="if(event.key==='Enter')doSimpleAuth()"/>
     </div>
-
-    <!-- Error / Success -->
-    <div class="auth-err" id="auth-err"></div>
-    <div class="auth-success" id="auth-success"></div>
-
-    <!-- Login Form -->
-    <div id="auth-login-form" class="auth-form">
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="login-email" placeholder="you@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doEmailLogin()"/>
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input type="password" id="login-pw" placeholder="Your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doEmailLogin()"/>
-      </div>
-      <button class="btn btn-p" id="login-btn" onclick="doEmailLogin()">Sign In →</button>
-      <div style="text-align:center;">
-        <button style="background:none;border:none;color:var(--tx2);font-size:12px;cursor:pointer;font-family:'Space Grotesk',sans-serif;" onclick="switchAuthTab('magic')">Forgot password? Send magic link →</button>
-      </div>
-    </div>
-
-    <!-- Signup Form -->
-    <div id="auth-signup-form" class="auth-form" style="display:none;">
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="signup-email" placeholder="you@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doSignup()"/>
-      </div>
-      <div class="field">
-        <label>Password <span style="color:var(--tx3);font-weight:400;">(min 6 characters)</span></label>
-        <input type="password" id="signup-pw" placeholder="Choose a password" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSignup()"/>
-      </div>
-      <button class="btn btn-p" id="signup-btn" onclick="doSignup()">Create Account →</button>
-    </div>
-
-    <!-- Magic link form -->
-    <div id="auth-magic-form" class="auth-form" style="display:none;">
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="magic-email" placeholder="you@email.com" autocomplete="email" onkeydown="if(event.key==='Enter')doMagicLink()"/>
-      </div>
-      <button class="btn btn-p" id="magic-btn" onclick="doMagicLink()">Send Magic Link →</button>
-      <p style="text-align:center;font-size:12px;color:var(--tx3);">We'll email you a one-click sign-in link. No password needed.</p>
-    </div>
-
-    <div class="auth-or">or</div>
-
-    <!-- Google -->
-    <button class="btn-google" onclick="doGoogleAuth()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
+    <button class="btn btn-p" id="auth-submit-btn" onclick="doSimpleAuth()" style="width:100%;padding:13px;font-size:15px;">
+      Continue →
     </button>
-
-    <div class="auth-footer">
-      By continuing you agree to our terms. Your data is private and never sold.
-    </div>
+    <p style="text-align:center;font-size:11px;color:var(--tx3);margin-top:14px;line-height:1.6;">
+      By continuing you agree to our terms.<br/>Your data is private and never sold.
+    </p>
   </div>
 </div>
+
 
 <div class="scr" id="scr-ob">
   <div class="topbar">
@@ -2443,224 +2405,64 @@ async function callAIChat(system,messages){
   return data.content[0].text;
 }
 
-// ═══════════════════════ AUTH ═══════════════════════
+// ═══════════════════════ AUTH — simple email ═══════════════════════
 let AUTH_USER = null;
 
-function switchAuthTab(tab) {
-  ['login','signup','magic'].forEach(t => {
-    const btn = document.getElementById('atab-'+t);
-    const form = document.getElementById('auth-'+t+'-form');
-    if(btn) btn.classList.toggle('on', t===tab);
-    if(form) form.style.display = t===tab ? 'flex' : 'none';
-  });
-  // signup tab doesn't have its own button id — handle manually
-  document.getElementById('atab-login').classList.toggle('on', tab==='login');
-  document.getElementById('atab-signup').classList.toggle('on', tab==='signup');
-  hideAuthMessages();
-}
+function doSimpleAuth() {
+  const email = (document.getElementById('auth-email-input').value || '').trim();
+  const errEl = document.getElementById('auth-err');
+  errEl.style.display = 'none';
 
-function hideAuthMessages() {
-  document.getElementById('auth-err').style.display='none';
-  document.getElementById('auth-success').style.display='none';
-}
-
-function showAuthErr(msg) {
-  const el = document.getElementById('auth-err');
-  el.textContent = msg; el.style.display='block';
-  document.getElementById('auth-success').style.display='none';
-}
-
-function showAuthSuccess(msg) {
-  const el = document.getElementById('auth-success');
-  el.innerHTML = msg; el.style.display='block';
-  document.getElementById('auth-err').style.display='none';
-}
-
-function setAuthBtnLoading(btnId, loading, label) {
-  const btn = document.getElementById(btnId);
-  if(!btn) return;
-  btn.disabled = loading;
-  btn.innerHTML = loading
-    ? '<div class="auth-spinner"></div>'
-    : (label || btn.dataset.label || btn.textContent);
-  if(label) btn.dataset.label = label;
-}
-
-async function doEmailLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pw = document.getElementById('login-pw').value;
-  if(!email) return showAuthErr('Please enter your email.');
-  if(!pw) return showAuthErr('Please enter your password.');
-  hideAuthMessages();
-  setAuthBtnLoading('login-btn', true, 'Sign In →');
-  try {
-    const r = await fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'signin', email, password:pw })
-    });
-    const d = await r.json();
-    if(!r.ok) { showAuthErr(d.error || 'Sign in failed'); setAuthBtnLoading('login-btn',false,'Sign In →'); return; }
-    AUTH_USER = d.user;
-    saveSession(d.session, d.user);
-    onAuthSuccess(d.user);
-  } catch(e) {
-    showAuthErr('Connection error. Check your internet and try again.');
-    setAuthBtnLoading('login-btn', false, 'Sign In →');
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    errEl.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'block';
+    return;
   }
-}
 
-async function doSignup() {
-  const email = document.getElementById('signup-email').value.trim();
-  const pw = document.getElementById('signup-pw').value;
-  if(!email) return showAuthErr('Please enter your email.');
-  if(!pw || pw.length < 6) return showAuthErr('Password must be at least 6 characters.');
-  hideAuthMessages();
-  setAuthBtnLoading('signup-btn', true, 'Create Account →');
-  try {
-    const r = await fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'signup', email, password:pw, user_metadata: { subject: STATE.subj || '' } })
-    });
-    const d = await r.json();
-    if(!r.ok) { showAuthErr(d.error || 'Signup failed'); setAuthBtnLoading('signup-btn',false,'Create Account →'); return; }
-    if(d.needsConfirmation) {
-      showAuthSuccess('✉️ Check your inbox!<br/>We sent a confirmation link to <strong>' + email + '</strong>.<br/>Click it to activate your account.');
-      setAuthBtnLoading('signup-btn',false,'Create Account →');
-      return;
-    }
-    AUTH_USER = d.user;
-    saveSession(d.session, d.user);
-    onAuthSuccess(d.user);
-  } catch(e) {
-    showAuthErr('Connection error. Check your internet and try again.');
-    setAuthBtnLoading('signup-btn', false, 'Create Account →');
-  }
-}
+  const btn = document.getElementById('auth-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto;"></div>';
 
-async function doMagicLink() {
-  const email = document.getElementById('magic-email').value.trim();
-  if(!email) return showAuthErr('Please enter your email.');
-  hideAuthMessages();
-  setAuthBtnLoading('magic-btn', true, 'Send Magic Link →');
-  try {
-    const r = await fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'magic', email })
-    });
-    const d = await r.json();
-    if(!r.ok) { showAuthErr(d.error || 'Failed to send link'); setAuthBtnLoading('magic-btn',false,'Send Magic Link →'); return; }
-    showAuthSuccess('✉️ Magic link sent to <strong>' + email + '</strong>.<br/>Check your inbox and click the link to sign in.');
-    setAuthBtnLoading('magic-btn', false, 'Send Magic Link →');
-  } catch(e) {
-    showAuthErr('Connection error.');
-    setAuthBtnLoading('magic-btn', false, 'Send Magic Link →');
-  }
-}
+  // Save session locally — no backend needed
+  const user = { email, id: btoa(email).replace(/=/g,''), created_at: new Date().toISOString() };
+  AUTH_USER = user;
+  localStorage.setItem('cio_session', JSON.stringify({ email, user_id: user.id, saved_at: Date.now() }));
 
-async function doGoogleAuth() {
-  try {
-    const r = await fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'oauth_google' })
-    });
-    const d = await r.json();
-    if(d.url) window.location.href = d.url;
-    else showAuthErr(d.error || 'Google sign-in unavailable');
-  } catch(e) {
-    showAuthErr('Connection error.');
-  }
-}
-
-function saveSession(session, user) {
-  if(!session) return;
-  try {
-    localStorage.setItem('cio_session', JSON.stringify({
-      access_token: session.access_token,
-      refresh_token: session.refresh_token,
-      user_id: user?.id,
-      email: user?.email,
-      expires_at: Date.now() + ((session.expires_in || 3600) * 1000)
-    }));
-  } catch(e) {}
-}
-
-function loadSession() {
-  try { return JSON.parse(localStorage.getItem('cio_session')); }
-  catch(e) { return null; }
-}
-
-function clearSession() {
-  localStorage.removeItem('cio_session');
-  AUTH_USER = null;
-}
-
-async function verifySession(token) {
-  try {
-    const r = await fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'verify', access_token: token })
-    });
-    if(!r.ok) return null;
-    const d = await r.json();
-    return d.user || null;
-  } catch(e) { return null; }
+  // Brief visual pause then enter app
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = 'Continue →';
+    onAuthSuccess(user);
+  }, 400);
 }
 
 function onAuthSuccess(user) {
   AUTH_USER = user;
-  // Track user activity periodically
-  trackUser();
-  setInterval(trackUser, 5 * 60 * 1000);
-  // Go to onboarding if not set up, else dash
   const authScr = document.getElementById('scr-auth');
-  if(authScr) { authScr.classList.remove('on'); authScr.style.display='none'; }
-  if(STATE.onboarded && STATE.subj) {
-    goTo('dash','in');
+  if (authScr) { authScr.classList.remove('on'); }
+  if (STATE.onboarded && STATE.subj) {
+    goTo('dash', 'in');
   } else {
     const obScr = document.getElementById('scr-ob');
-    if(obScr) { obScr.classList.add('on'); obScr.style.removeProperty('display'); }
+    if (obScr) { obScr.classList.add('on'); }
   }
 }
 
-async function trackUser() {
-  if(!AUTH_USER) return;
-  try {
-    fetch('/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action:'track',
-        userId: AUTH_USER.id,
-        subject: STATE.subj || '',
-        questionsUsed: STATE.qUsed || 0,
-        sessionsCount: STATE.sesTotal || 0
-      })
-    });
-  } catch(e) {}
+function showAuthScreen() {
+  const ob = document.getElementById('scr-ob');
+  if (ob) ob.classList.remove('on');
+  const auth = document.getElementById('scr-auth');
+  if (auth) auth.classList.add('on');
 }
 
-// Handle OAuth callback (hash or query param from Supabase redirect)
-function handleOAuthCallback() {
-  const hash = window.location.hash;
-  const params = new URLSearchParams(window.location.search);
-  
-  // Supabase puts tokens in hash after OAuth
-  if(hash && hash.includes('access_token')) {
-    const hp = new URLSearchParams(hash.substring(1));
-    const token = hp.get('access_token');
-    const refresh = hp.get('refresh_token');
-    const expIn = parseInt(hp.get('expires_in') || '3600');
-    if(token) {
-      verifySession(token).then(user => {
-        if(user) {
-          saveSession({ access_token:token, refresh_token:refresh, expires_in:expIn }, user);
-          window.history.replaceState({}, '', window.location.pathname);
-          onAuthSuccess(user);
-        }
-      });
-      return true;
-    }
-  }
-  return false;
+function logOut() {
+  localStorage.removeItem('cio_session');
+  AUTH_USER = null;
+  STATE.onboarded = false;
+  set('cio_onboarded', '0');
+  const inp = document.getElementById('auth-email-input');
+  if (inp) inp.value = '';
+  showAuthScreen();
 }
 
 // ═══════════════════════ INIT ═══════════════════════
@@ -2671,46 +2473,23 @@ function handleOAuthCallback() {
     dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
     dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');handleFiles(e.dataTransfer.files);});
   }
-
-  // Handle OAuth redirect callback first
-  if(handleOAuthCallback()) return;
-
-  // Check for existing session
-  const session = loadSession();
-  if(session && session.access_token && session.expires_at > Date.now()) {
-    // Session looks valid — verify with server
-    verifySession(session.access_token).then(user => {
-      if(user) {
-        onAuthSuccess(user);
-      } else {
-        clearSession();
-        showAuthScreen();
-      }
-    });
-    // Optimistically show app while verifying (for fast load)
-    if(STATE.onboarded && STATE.subj) goTo('dash','in');
-    return;
-  }
-
-  // No valid session — show auth screen
+  // Check for saved email session
+  try {
+    const session = JSON.parse(localStorage.getItem('cio_session') || 'null');
+    if(session && session.email && session.user_id) {
+      AUTH_USER = { email: session.email, id: session.user_id };
+      if(STATE.onboarded && STATE.subj) { goTo('dash','in'); return; }
+      // Has session but not finished onboarding yet
+      const authScr = document.getElementById('scr-auth');
+      if(authScr) authScr.classList.remove('on');
+      const obScr = document.getElementById('scr-ob');
+      if(obScr) obScr.classList.add('on');
+      return;
+    }
+  } catch(e) {}
+  // No session — show auth screen
   showAuthScreen();
 })();
-
-function showAuthScreen() {
-  // Hide ob screen, show auth
-  const ob = document.getElementById('scr-ob');
-  if(ob) { ob.classList.remove('on'); }
-  const auth = document.getElementById('scr-auth');
-  if(auth) { auth.classList.add('on'); }
-}
-
-// Expose logout globally
-function logOut() {
-  clearSession();
-  STATE.onboarded=false;
-  set('cio_onboarded','0');
-  showAuthScreen();
-}
 </script>
 </body>
 </html>

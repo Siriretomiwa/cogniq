@@ -1,5 +1,5 @@
-// /api/auth.js — Supabase auth proxy (CommonJS for Vercel)
-module.exports = async function handler(req, res) {
+// /api/auth.js — Supabase auth proxy
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    return res.status(500).json({ error: 'Supabase not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to Vercel environment variables.' });
+    return res.status(500).json({ error: 'Supabase env vars not set. Add SUPABASE_URL + SUPABASE_ANON_KEY in Vercel.' });
   }
 
   const body = req.body || {};
@@ -100,7 +100,7 @@ module.exports = async function handler(req, res) {
     console.error('Auth error:', err);
     return res.status(500).json({ error: err.message });
   }
-};
+}
 
 async function upsertUser(url, serviceKey, user, metadata) {
   try {
@@ -115,7 +115,7 @@ async function upsertUser(url, serviceKey, user, metadata) {
       body: JSON.stringify({
         id: user.id,
         email: user.email,
-        subject: metadata.subject || '',
+        subject: (metadata && metadata.subject) || '',
         created_at: user.created_at || new Date().toISOString(),
         last_sign_in: new Date().toISOString()
       })

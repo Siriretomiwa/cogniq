@@ -1,5 +1,5 @@
-// /api/admin.js — admin dashboard data, password protected (CommonJS for Vercel)
-module.exports = async function handler(req, res) {
+// /api/admin.js — admin dashboard data, password protected
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return res.status(500).json({ error: 'Supabase service key not configured. Add SUPABASE_URL and SUPABASE_SERVICE_KEY to Vercel environment variables.' });
+    return res.status(500).json({ error: 'Supabase env vars not set. Add SUPABASE_URL + SUPABASE_SERVICE_KEY in Vercel.' });
   }
 
   const headers = {
@@ -115,4 +115,4 @@ module.exports = async function handler(req, res) {
     console.error('Admin error:', err);
     return res.status(500).json({ error: err.message });
   }
-};
+}
