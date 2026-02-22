@@ -1541,18 +1541,27 @@ async function startDiagnostic(){
   document.getElementById('diag-area').style.display='block';
   diagQuestions=[];diagIdx=0;diagScore=0;
   document.getElementById('diag-area').innerHTML='<div class="loader"><div class="spinner"></div>Generating diagnostic...</div>';
-  const prompt=`Create a 10-question diagnostic for "${STATE.subj}". Mix: 3 recall, 4 application, 3 synthesis questions across different topics.
-Return a JSON array of 10 objects:
-{"type":"mcq","bloomLevel":"recall|application|synthesis","question":"...","options":["A:...","B:...","C:...","D:..."],"correct":0,"topic":"short topic name"}
-Return ONLY the JSON array, no markdown.`;
-  try{
-    const raw=await callAI(prompt);
-    diagQuestions=parseJSONRobust(raw).slice(0,10);
-    if(!diagQuestions.length)throw new Error('Empty');
-    renderDiagQ();
-  }catch(err){
-    document.getElementById('diag-area').innerHTML=`<div class="dim" style="padding:12px;">Could not load diagnostic: ${err.message}.<br><br><button class="btn btn-o btn-sm" onclick="startDiagnostic()">Retry</button></div>`;
-    document.getElementById('diag-start-btns').style.display='block';
+  const topics=(STATE.topics||[]).slice(0,6).map(t=>t.split('—').pop().trim()).join(', ') || STATE.subj;
+  const prompt=`Generate 6 MCQ diagnostic questions for "${STATE.subj}". Cover: ${topics}.
+Mix: 2 recall, 2 application, 2 synthesis. Keep questions concise.
+Return ONLY a JSON array, no markdown, no explanation:
+[{"bloomLevel":"recall","question":"Q?","options":["A: opt","B: opt","C: opt","D: opt"],"correct":0,"topic":"Topic"},...]`;
+  let lastRaw='';
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      if(attempt>1)document.getElementById('diag-area').innerHTML=`<div class="loader"><div class="spinner"></div>Retrying (${attempt}/3)...</div>`;
+      lastRaw=await callAIHigh(prompt);
+      diagQuestions=parseJSONRobust(lastRaw);
+      if(!Array.isArray(diagQuestions)||!diagQuestions.length)throw new Error('Empty response');
+      diagQuestions=diagQuestions.filter(q=>q&&q.question&&q.options).slice(0,10);
+      if(!diagQuestions.length)throw new Error('No valid questions found');
+      renderDiagQ();
+      return;
+    }catch(err){
+      if(attempt<3){await new Promise(r=>setTimeout(r,700));continue;}
+      document.getElementById('diag-area').innerHTML=`<div class="dim" style="padding:12px;">Could not load diagnostic: ${err.message}.<br><br><button class="btn btn-o btn-sm" onclick="startDiagnostic()">Retry</button></div>`;
+      document.getElementById('diag-start-btns').style.display='block';
+    }
   }
 }
 
@@ -1582,7 +1591,8 @@ function pickDiag(i){
 }
 
 function showDiagResult(score){
-  const pct=Math.round((score/10)*100);
+  const total=diagQuestions.length||6;
+  const pct=Math.round((score/total)*100);
   STATE.baseline=pct;set('cio_baseline',pct);
   document.getElementById('diag-area').style.display='none';
   document.getElementById('diag-result').style.display='block';
@@ -2227,7 +2237,6 @@ function rateCard(grade){
 }
 
 function parseJSONRobust(raw){
-  // Strip markdown code fences (```json ... ``` or ``` ... ```)
   let cleaned=raw.replace(/```(?:json)?\s*/gi,'').replace(/```\s*/g,'').trim();
   // Try direct parse first
   try{return JSON.parse(cleaned);}catch{}
@@ -2235,8 +2244,23 @@ function parseJSONRobust(raw){
   const s=cleaned.indexOf('['),e=cleaned.lastIndexOf(']');
   if(s!==-1&&e!==-1&&e>s){
     try{return JSON.parse(cleaned.substring(s,e+1));}catch{}
+    // Array exists but may be truncated — extract complete objects from it
+    try{
+      const arrStr=cleaned.substring(s+1);
+      const items=[];let depth=0,start=-1,inStr=false,esc=false;
+      for(let i=0;i<arrStr.length;i++){
+        const c=arrStr[i];
+        if(esc){esc=false;continue;}
+        if(c==='\\'&&inStr){esc=true;continue;}
+        if(c==='"'&&!esc)inStr=!inStr;
+        if(inStr)continue;
+        if(c==='{'){if(depth===0)start=i;depth++;}
+        if(c==='}'){depth--;if(depth===0&&start!==-1){try{items.push(JSON.parse(arrStr.substring(start,i+1)));}catch{}start=-1;}}
+      }
+      if(items.length)return items;
+    }catch{}
   }
-  // Find outermost object (fallback)
+  // Find outermost object (single object fallback)
   const os=cleaned.indexOf('{'),oe=cleaned.lastIndexOf('}');
   if(os!==-1&&oe!==-1&&oe>os){
     try{return JSON.parse(cleaned.substring(os,oe+1));}catch{}
