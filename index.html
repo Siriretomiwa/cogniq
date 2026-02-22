@@ -1873,7 +1873,7 @@ async function showConceptPrimer(){
   document.getElementById('train-score').textContent='0 / 9';
   document.getElementById('train-prog').style.width='0%';
   try{
-    const raw=await callAI('You are a master teacher of "'+STATE.subj+'". Write a concept primer for the topic "'+topicName+'" within '+STATE.subj+'.\n\nCover concisely:\n1. Core definition or mechanism (2-3 sentences)\n2. Why it matters or real-world relevance (1-2 sentences)\n3. Most common exam misconception (1 sentence)\n\nMax 110 words. Bold key terms with **term**. No headers, plain paragraphs.');
+    const raw=await callAIHigh('You are a master teacher of "'+STATE.subj+'". Write a concept primer for the topic "'+topicName+'" within '+STATE.subj+'.\n\nCover concisely:\n1. Core definition or mechanism (2-3 sentences)\n2. Why it matters or real-world relevance (1-2 sentences)\n3. Most common exam misconception (1 sentence)\n\nMax 110 words. Bold key terms with **term**. No headers, plain paragraphs.');
     const body=raw.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
     qArea.innerHTML=dotsHtml+
       '<div class="primer-card">'+
@@ -1914,20 +1914,21 @@ async function generateQuestion(){
      bloomLevel==='application'?'Present a realistic scenario requiring concept application, not just recall.':
      'Complex novel scenario requiring synthesis of multiple concepts. Push for expert-level thinking.')+
     ' After answering, give a rich insight that deepens understanding.';
+  const bloomDescMap={easy:'recall and recognition (Bloom: Remember/Understand)',med:'application and analysis (Bloom: Apply/Analyze)',hard:'synthesis, evaluation, novel scenarios (Bloom: Evaluate/Create)'};
   const prompt=`You are a world-class examiner for "${STATE.subj}".
 Topic: ${topic}
-Bloom level: ${diffMap[STATE.difficulty]||'application'}
-Mode: ${isMast?'MASTERY — novel scenarios, synthesis, real-world application. Avoid pure recall.':'EXAM — precise, realistic, exam-convention terminology.'}
-${STATE.content?`Materials (ground question in these):\n${STATE.content.substring(0,3500)}`:
-`AI Knowledge Mode: expert-level ${STATE.subj} question using standard curriculum. Be specific, use real terminology, avoid vague generalities.`}
+Bloom level: ${bloomLevel} — ${bloomDesc}
+Mode: ${isMast?'MASTERY — novel scenarios, synthesis, real-world application.':'EXAM — precise, realistic, exam-convention terminology.'}
+${STATE.content?`Materials (ground question in these):\n${STATE.content.substring(0,2500)}`:
+`AI Knowledge Mode: expert-level ${STATE.subj} question. Use specific real terminology, avoid vague generalities.`}
 ${isTF?'Type: TRUE/FALSE — options=["True","False"], correct=0 or 1.':'Type: MCQ — exactly 4 options, one correct.'}
 
-Return ONLY valid JSON (no markdown, no commentary):
-{"type":"mcq","bloomLevel":"${bloomLevel}","question":"full question","options":["A: option","B: option","C: option","D: option"],"correct":0,"explanation":"WHY correct + why each wrong option is tempting","examTrap":"1-sentence trap","masteryInsight":"'+(isMast?'deeper conceptual insight or mechanism to deepen understanding':'')+'","errorType":"concept|trap|recall|apply","sourceNote":"","whySelected":"adaptive reason"}`;
+Return ONLY valid JSON, no markdown, no commentary:
+{"type":"mcq","bloomLevel":"${bloomLevel}","question":"full question text","options":["A: option","B: option","C: option","D: option"],"correct":0,"explanation":"why correct + why distractors are tempting","examTrap":"1-sentence trap","masteryInsight":"${isMast?'deeper insight to build understanding':''}","errorType":"concept|trap|recall|apply","sourceNote":"","whySelected":"adaptive reason"}`;
 
   for(let attempt=1;attempt<=3;attempt++){
     try{
-      const raw=await callAI(prompt);
+      const raw=await callAIHigh(prompt);
       const s=raw.indexOf('{'),e=raw.lastIndexOf('}');
       if(s===-1||e===-1)throw new Error('No JSON found');
       const q=JSON.parse(raw.substring(s,e+1));
