@@ -310,6 +310,82 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 .row{display:flex;gap:8px;}
 .section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.2px;}
 .dim{color:var(--tx2);font-size:13px;}
+
+/* === EXAM / MASTERY TOPBAR === */
+.topbar.exam{background:rgba(4,4,4,.98)!important;border-bottom-color:rgba(255,255,255,.07)!important;}
+.topbar.exam::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent)!important;}
+.topbar.mastery{background:rgba(4,10,5,.97)!important;border-bottom-color:rgba(102,187,106,.14)!important;}
+.topbar.mastery::after{background:linear-gradient(90deg,transparent,rgba(102,187,106,.22),transparent)!important;}
+/* === EXAM TIMER === */
+.exam-timer{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;
+  padding:4px 11px;border-radius:9px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(20,20,20,.9);color:#fff;min-width:50px;text-align:center;}
+.exam-timer.warn{color:var(--warn);border-color:rgba(245,166,35,.35);animation:blink 1s infinite;}
+.exam-timer.crit{color:var(--r1);border-color:rgba(239,83,80,.4);animation:blink .5s infinite;}
+/* === BIG MODE SELECTOR === */
+.mode-selector{display:grid;grid-template-columns:1fr 1fr;border-radius:14px;overflow:hidden;border:1px solid var(--b1);}
+.ms-btn{padding:16px 12px;text-align:center;cursor:pointer;border:none;font-family:'Space Grotesk',sans-serif;
+  background:rgba(14,14,14,.9);transition:all .28s;position:relative;}
+.ms-btn .ms-icon{font-size:26px;margin-bottom:7px;display:block;transition:transform .3s;}
+.ms-btn .ms-name{font-size:14px;font-weight:700;margin-bottom:4px;}
+.ms-btn .ms-desc{font-size:11px;color:var(--tx2);line-height:1.55;}
+.ms-btn.exam-sel:not(.on){border-right:1px solid var(--b1);}
+.ms-btn.exam-sel.on{background:rgba(255,255,255,.07);}
+.ms-btn.exam-sel.on .ms-name{color:#fff;}
+.ms-btn.exam-sel.on .ms-icon{transform:scale(1.12);}
+.ms-btn.exam-sel.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:#fff;}
+.ms-btn.mast-sel.on{background:rgba(102,187,106,.06);}
+.ms-btn.mast-sel.on .ms-name{color:var(--gr);}
+.ms-btn.mast-sel.on .ms-icon{transform:scale(1.12);}
+.ms-btn.mast-sel.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gr);}
+/* === MODE CONTEXT === */
+.mode-ctx{padding:12px 14px;border-radius:var(--Rs);font-size:13px;line-height:1.7;transition:all .28s;}
+.mode-ctx.exam{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);color:#ddd;}
+.mode-ctx.mast{background:rgba(102,187,106,.04);border:1px solid rgba(102,187,106,.14);color:#c8e6c9;}
+/* === MASTERY Q-CARD GLOW === */
+@keyframes mastPulse{0%,100%{box-shadow:0 0 0 0 rgba(102,187,106,0);}50%{box-shadow:0 0 22px 4px rgba(102,187,106,.13);}}
+.q-card.mastery{background:rgba(5,12,7,.98)!important;border:1px solid rgba(102,187,106,.15)!important;
+  animation:mastPulse 4s ease-in-out infinite,cardIn .38s cubic-bezier(.22,1,.36,1) both!important;}
+.q-card.exam{background:rgba(8,8,8,.99)!important;border:1px solid rgba(255,255,255,.09)!important;}
+/* === BLOOM BADGES === */
+.bloom-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;margin-bottom:10px;}
+.bloom-recall{background:rgba(129,212,250,.07);border:1px solid rgba(129,212,250,.18);color:#81d4fa;}
+.bloom-apply{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.17);color:var(--warn);}
+.bloom-synth{background:rgba(102,187,106,.07);border:1px solid rgba(102,187,106,.18);color:var(--gr);}
+/* === MASTERY INSIGHT === */
+.mastery-insight{margin-top:10px;padding:11px 13px;border-radius:var(--Rs);font-size:12px;line-height:1.72;
+  background:rgba(102,187,106,.05);border:1px solid rgba(102,187,106,.16);color:#c8e6c9;}
+/* === CONCEPT PRIMER === */
+.primer-card{background:rgba(4,12,6,.97);border:1px solid rgba(102,187,106,.2);border-radius:var(--R);
+  padding:18px;animation:cardIn .4s ease;}
+.primer-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;color:#c8e6c9;margin-bottom:10px;}
+.primer-body{font-size:14px;line-height:1.82;color:#b2dfdb;}
+.primer-body strong{color:#e8f5e9;}
+.drill-dots{display:flex;gap:4px;margin-bottom:13px;}
+.drill-dot{flex:1;height:3px;border-radius:2px;background:var(--b1);transition:background .3s;}
+.drill-dot.done{background:var(--gr);}.drill-dot.cur{background:var(--warn);}
+/* === MASTERY BANNER === */
+.mastery-banner{display:flex;align-items:center;gap:12px;padding:16px;border-radius:var(--R);
+  background:linear-gradient(135deg,rgba(102,187,106,.1),rgba(102,187,106,.04));
+  border:1px solid rgba(102,187,106,.3);animation:cardIn .5s ease;}
+.mastery-banner-icon{font-size:38px;animation:floaty 3s ease-in-out infinite;}
+/* === DEEP DRILL SCREEN === */
+.drill-topic-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.drill-topic-row:last-child{border-bottom:none;}
+.bloom-trio{display:flex;gap:3px;}
+.bloom-seg{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;
+  justify-content:center;font-size:9px;font-weight:700;}
+/* === UPGRADE TABS === */
+.upgrade-tabs{display:flex;border-bottom:1px solid var(--b1);margin-bottom:16px;flex-shrink:0;}
+.upgrade-tab{flex:1;padding:9px 4px;text-align:center;font-size:12px;font-weight:600;
+  cursor:pointer;color:var(--tx3);border:none;border-bottom:2px solid transparent;
+  background:none;font-family:'Space Grotesk',sans-serif;transition:all .2s;}
+.upgrade-tab.on{color:#fff;border-bottom-color:#fff;}
+.roadmap-layer{border:1px solid var(--b1);border-radius:var(--R);padding:14px;margin-bottom:9px;}
+.roadmap-layer.active{border-color:rgba(102,187,106,.3);background:rgba(102,187,106,.04);}
+.roadmap-layer.l2{border-color:rgba(245,166,35,.2);}
+.rl-tag{display:inline-flex;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;margin-top:7px;}
+
 </style>
 </head>
 <body>
@@ -492,7 +568,7 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
     <div class="g8" style="animation:cardIn .4s .17s ease both;">
       <button class="btn btn-p" onclick="goTo('train','in')">⚡ Start Practice Session</button>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <button class="btn btn-o" onclick="goTo('flash','in')">📋 Flashcards <span id="flash-due-count"></span></button>
+        <button class="btn btn-o" onclick="goTo('flash','in')">🔬 Deep Drill</button>
         <button class="btn btn-o" onclick="goTo('tutor','in')">💬 AI Tutor</button>
       </div>
     </div>
@@ -590,14 +666,22 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
         <div class="diff-btn hard" id="d-hard" onclick="setDiff('hard')">Hard</div>
       </div>
     </div>
-    <div>
-      <div class="card-label">Mode</div>
-      <div class="mode-wrap">
-        <button class="mode-btn on" id="exam-btn" onclick="setMode('exam')">⚡ Exam</button>
-        <button class="mode-btn" id="mast-btn" onclick="setMode('mastery')">🧠 Mastery</button>
-      </div>
+    <div class="mode-selector">
+      <button class="ms-btn exam-sel on" id="exam-btn" onclick="setMode('exam')">
+        <span class="ms-icon">⚡</span>
+        <div class="ms-name">Exam Mode</div>
+        <div class="ms-desc">Timed. No hints. Pressure. Questions match real exam style for your subject.</div>
+      </button>
+      <button class="ms-btn mast-sel" id="mast-btn" onclick="setMode('mastery')">
+        <span class="ms-icon">🧠</span>
+        <div class="ms-name">Mastery Mode</div>
+        <div class="ms-desc">Concept primer → recall → application → synthesis. You own each topic before moving on.</div>
+      </button>
     </div>
-    <button class="btn btn-p" onclick="beginSession()">Start Session →</button>
+    <div class="mode-ctx exam" id="mode-ctx-box">
+      <strong>⚡ Exam conditions.</strong> No explanations until you answer. Questions mirror real exam style and terminology. Timer. Score logged.
+    </div>
+    <button class="btn btn-p" id="begin-session-btn" onclick="beginSession()">Start Exam Session →</button>
   </div>
   <div class="train-scroll" id="train-q-wrap" style="display:none;">
     <div class="train-inner" id="q-area">
@@ -643,20 +727,19 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 
 <!-- FLASHCARDS -->
 <div class="scr" id="scr-flash">
-  <div class="topbar">
+  <div class="topbar mastery">
     <button class="btn btn-ic btn-g" onclick="goTo('dash','out')">←</button>
     <div style="flex:1;margin-left:10px;">
-      <div style="font-weight:600;font-size:14px;">Flashcards</div>
-      <div class="dim" style="font-size:11px;" id="flash-count-label">0 cards</div>
+      <div style="font-weight:600;font-size:14px;color:var(--gr);">Deep Drill</div>
+      <div class="dim" style="font-size:11px;">Concept → Recall → Application → Synthesis</div>
     </div>
-    <button class="btn btn-g btn-sm" onclick="generateFlashcards()">+ Auto-Generate</button>
   </div>
   <div class="sb g16" id="flash-body"></div>
   <nav class="bnav">
     <button class="nb" onclick="goTo('dash','out')"><span class="nav-icon">📊</span><span class="nav-label">Home</span></button>
     <button class="nb" onclick="goTo('train','in')"><span class="nav-icon">⚡</span><span class="nav-label">Train</span></button>
     <button class="nb" onclick="goTo('tutor','in')"><span class="nav-icon">💬</span><span class="nav-label">Tutor</span></button>
-    <button class="nb on"><span class="nav-icon">📋</span><span class="nav-label">Cards</span></button>
+    <button class="nb on" style="color:var(--gr);"><span class="nav-icon">🔬</span><span class="nav-label">Drill</span></button>
   </nav>
 </div>
 
@@ -747,26 +830,197 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 
 <!-- UPGRADE -->
 <div class="upgrade-overlay" id="upgrade-overlay">
-  <div class="upgrade-sheet">
-    <div style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.26);color:var(--gold);font-size:11px;font-weight:700;margin-bottom:12px;">⭐ Cognio Pro</div>
-    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.4px;margin-bottom:7px;">Unlock the full engine.</div>
-    <div class="dim" style="margin-bottom:14px;line-height:1.65;">Unlimited questions, essay grading, spaced repetition, full analytics.</div>
-    <div class="g8" style="margin-bottom:14px;">
-      <div class="perk"><span class="perk-icon">✓</span><span>Unlimited practice questions + tutor</span></div>
-      <div class="perk"><span class="perk-icon">✓</span><span>Essay grading with rubric feedback</span></div>
-      <div class="perk"><span class="perk-icon">✓</span><span>SM-2 spaced repetition scheduler</span></div>
-      <div class="perk"><span class="perk-icon">✓</span><span>Full mastery heatmap + mistake patterns</span></div>
-      <div class="perk"><span class="perk-icon">✓</span><span>Source-cited answers from your materials</span></div>
+  <div class="upgrade-sheet" style="max-height:88vh;padding-bottom:32px;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-shrink:0;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.26);color:var(--gold);font-size:11px;font-weight:700;margin-bottom:7px;">⭐ Cognio Pro</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.4px;">Unlock the full engine.</div>
+      </div>
+      <button onclick="closeUpgrade()" style="background:none;border:none;color:var(--tx3);font-size:20px;cursor:pointer;padding:4px;line-height:1;flex-shrink:0;">✕</button>
     </div>
-    <div class="field" style="margin-bottom:10px;"><label>Email</label><input type="email" id="upgrade-email" placeholder="you@email.com"/></div>
-    <button class="btn btn-p" onclick="joinWaitlist()">Join Waitlist — Free Early Access</button>
-    <button class="btn btn-g" style="margin-top:7px;" onclick="closeUpgrade()">Maybe Later</button>
+    <div class="upgrade-tabs">
+      <button class="upgrade-tab on" id="utab-pro" onclick="switchUpgradeTab('pro')">Pro Plan</button>
+      <button class="upgrade-tab" id="utab-roadmap" onclick="switchUpgradeTab('roadmap')">Roadmap</button>
+      <button class="upgrade-tab" id="utab-engine" onclick="switchUpgradeTab('engine')">The Engine</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding-bottom:8px;">
+    <!-- PRO TAB -->
+    <div id="utab-pro-content">
+      <div class="roadmap-layer active" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">🌱 Student Pro</div>
+            <div class="dim" style="font-size:12px;margin-top:2px;">$29/mo · Cancel anytime</div></div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">$29</div>
+        </div>
+        <div style="height:1px;background:var(--b1);margin:10px 0;"></div>
+        <div style="font-size:12px;color:var(--tx2);line-height:1.9;">
+          ✓ Unlimited adaptive questions<br>
+          ✓ Deep Drill mastery sessions<br>
+          ✓ Exam Mode + Mastery Mode with distinct UIs<br>
+          ✓ Full Bloom-level mastery tracking<br>
+          ✓ Mastery heatmap + error taxonomy<br>
+          ✓ AI study plan generator<br>
+          ✓ Unlimited tutor messages<br>
+          ✓ Source-cited answers from your materials
+        </div>
+      </div>
+      <div class="g8" style="margin-bottom:14px;">
+        <div class="perk"><span class="perk-icon">✓</span><span>Works for any advanced subject — medicine, law, finance, engineering, food micro</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Exam Mode + Mastery Mode with fully distinct UIs and question logic</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Early users lock in founder pricing forever</span></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;"><label>Your Email</label><input type="email" id="upgrade-email" placeholder="you@email.com"/></div>
+      <button class="btn btn-p" onclick="joinWaitlist()">Join Waitlist — Free Early Access</button>
+      <button class="btn btn-g" style="margin-top:7px;" onclick="closeUpgrade()">Maybe Later</button>
+    </div>
+    <!-- ROADMAP TAB -->
+    <div id="utab-roadmap-content" style="display:none;">
+      <p class="dim" style="margin-bottom:14px;line-height:1.65;">One adaptive engine. Four verticals. Your mastery data and progress move with you across every layer.</p>
+      <div class="roadmap-layer active">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🌱</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--gr);">Layer 1 — Student Mastery</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">MSc · Medicine · Law · Engineering · Finance · Any advanced subject.</div>
+            <div class="rl-tag" style="background:rgba(102,187,106,.1);border:1px solid rgba(102,187,106,.25);color:var(--gr);">✓ You are here · $29–59/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer l2">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🏅</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--warn);">Layer 2 — Professional Certifications</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">CFA · ACCA · CPA · Bar Exams · Medical Boards · AWS · CIMA. Syllabus-mapped question banks, past paper grading, exam-board strategy.</div>
+            <div class="rl-tag" style="background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.24);color:var(--warn);">Coming 2025 · $79–149/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🏢</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 3 — Corporate Performance</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Consultants · Analysts · PMs · Strategy Teams. Team dashboards, onboarding acceleration, skills gap mapping.</div>
+            <div class="rl-tag" style="background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.14);color:#aaa;">2026 · $200–500/seat/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🧪</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 4 — Executive Lab</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Founders · CTOs · Policy Leaders. Real-time intelligence synthesis, decision-quality mastery, bespoke curriculum.</div>
+            <div class="rl-tag" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#ccc;">Elite · $1,000+/mo</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:11px 13px;border-radius:var(--Rs);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);font-size:12px;color:var(--tx2);line-height:1.65;">All layers share the same adaptive Bloom engine, mastery tracking, and spaced repetition core.</div>
+      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
+    </div>
+    <!-- ENGINE TAB -->
+    <div id="utab-engine-content" style="display:none;">
+      <p class="dim" style="margin-bottom:14px;line-height:1.65;">Five systems powering every session — for food microbiology, law, finance, or anything else.</p>
+      <div class="g12">
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">01 — Adaptive Bloom Engine</div><div class="dim" style="font-size:12px;line-height:1.6;">Tracks mastery at three levels independently per topic: recall, application, synthesis. Targets your weakest Bloom level, not just your weakest topic.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">02 — Error Taxonomy Classifier</div><div class="dim" style="font-size:12px;line-height:1.6;">Every wrong answer is classified: concept gap, exam trap, recall failure, or misapplication. Patterns surface in analytics so you fix the right thing.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">03 — Deep Drill Protocol</div><div class="dim" style="font-size:12px;line-height:1.6;">Concept primer → 3 recall → 3 application → 3 synthesis. Topic isn't mastered until you clear all three Bloom levels above 75%.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">04 — Dual Mode UI</div><div class="dim" style="font-size:12px;line-height:1.6;">Exam Mode: clinical black, countdown timer, no explanations until you answer. Mastery Mode: green-tinted, concept primers, Bloom badges, insight after every question.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">05 — Diagnostic Study Planner</div><div class="dim" style="font-size:12px;line-height:1.6;">Baseline assessment seeds your mastery map. Plan adapts daily based on weak topics, hours available, and days to exam.</div></div>
+      </div>
+      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
+    </div>
+    </div>
+  </div>
+</div>x;">🌱 Student Pro</div>
+            <div class="dim" style="font-size:12px;margin-top:2px;">$29/mo · Cancel anytime</div></div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">$29</div>
+        </div>
+        <div style="height:1px;background:var(--b1);margin:10px 0;"></div>
+        <div style="font-size:12px;color:var(--tx2);line-height:1.9;">
+          ✓ Unlimited adaptive questions<br>
+          ✓ Deep Drill mastery sessions<br>
+          ✓ Exam Mode + Mastery Mode with distinct UIs<br>
+          ✓ Full Bloom-level mastery tracking<br>
+          ✓ Mastery heatmap + error taxonomy<br>
+          ✓ AI study plan generator<br>
+          ✓ Unlimited tutor messages<br>
+          ✓ Source-cited answers from your materials
+        </div>
+      </div>
+      <div class="g8" style="margin-bottom:14px;">
+        <div class="perk"><span class="perk-icon">✓</span><span>Works for any advanced subject — medicine, law, finance, engineering, food micro</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Exam Mode + Mastery Mode with fully distinct UIs and question logic</span></div>
+        <div class="perk"><span class="perk-icon">✓</span><span>Early users lock in founder pricing forever</span></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;"><label>Your Email</label><input type="email" id="upgrade-email" placeholder="you@email.com"/></div>
+      <button class="btn btn-p" onclick="joinWaitlist()">Join Waitlist — Free Early Access</button>
+      <button class="btn btn-g" style="margin-top:7px;" onclick="closeUpgrade()">Maybe Later</button>
+    </div>
+    <!-- ROADMAP TAB -->
+    <div id="utab-roadmap-content" style="display:none;">
+      <p class="dim" style="margin-bottom:14px;line-height:1.65;">One adaptive engine. Four verticals. Your mastery data and progress move with you across every layer.</p>
+      <div class="roadmap-layer active">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🌱</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--gr);">Layer 1 — Student Mastery</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">MSc · Medicine · Law · Engineering · Finance · Any advanced subject.</div>
+            <div class="rl-tag" style="background:rgba(102,187,106,.1);border:1px solid rgba(102,187,106,.25);color:var(--gr);">✓ You are here · $29–59/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer l2">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🏅</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--warn);">Layer 2 — Professional Certifications</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">CFA · ACCA · CPA · Bar Exams · Medical Boards · AWS · CIMA. Syllabus-mapped question banks, past paper grading, exam-board strategy.</div>
+            <div class="rl-tag" style="background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.24);color:var(--warn);">Coming 2025 · $79–149/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🏢</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 3 — Corporate Performance</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Consultants · Analysts · PMs · Strategy Teams. Team dashboards, onboarding acceleration, skills gap mapping.</div>
+            <div class="rl-tag" style="background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.14);color:#aaa;">2026 · $200–500/seat/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="roadmap-layer">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <span style="font-size:26px;flex-shrink:0;">🧪</span>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 4 — Executive Lab</div>
+            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Founders · CTOs · Policy Leaders. Real-time intelligence synthesis, decision-quality mastery, bespoke curriculum.</div>
+            <div class="rl-tag" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#ccc;">Elite · $1,000+/mo</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:11px 13px;border-radius:var(--Rs);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);font-size:12px;color:var(--tx2);line-height:1.65;">All layers share the same adaptive Bloom engine, mastery tracking, and spaced repetition core.</div>
+      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
+    </div>
+    <!-- ENGINE TAB -->
+    <div id="utab-engine-content" style="display:none;">
+      <p class="dim" style="margin-bottom:14px;line-height:1.65;">Five systems powering every session — for food microbiology, law, finance, or anything else.</p>
+      <div class="g12">
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">01 — Adaptive Bloom Engine</div><div class="dim" style="font-size:12px;line-height:1.6;">Tracks mastery at three levels independently per topic: recall, application, synthesis. Targets your weakest Bloom level, not just your weakest topic.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">02 — Error Taxonomy Classifier</div><div class="dim" style="font-size:12px;line-height:1.6;">Every wrong answer is classified: concept gap, exam trap, recall failure, or misapplication. Patterns surface in analytics so you fix the right thing.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">03 — Deep Drill Protocol</div><div class="dim" style="font-size:12px;line-height:1.6;">Concept primer → 3 recall → 3 application → 3 synthesis. Topic isn't mastered until you clear all three Bloom levels above 75%.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">04 — Dual Mode UI</div><div class="dim" style="font-size:12px;line-height:1.6;">Exam Mode: clinical black, countdown timer, no explanations until you answer. Mastery Mode: green-tinted, concept primers, Bloom badges, insight after every question.</div></div>
+        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">05 — Diagnostic Study Planner</div><div class="dim" style="font-size:12px;line-height:1.6;">Baseline assessment seeds your mastery map. Plan adapts daily based on weak topics, hours available, and days to exam.</div></div>
+      </div>
+      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
+    </div>
+    </div>
   </div>
 </div>
-</div>
 
-<script>
-// ═══════════════════════ CANVAS ENGINE ═══════════════════════
+<script>// ═══════════════════════ CANVAS ENGINE ═══════════════════════
 (function KNOWLEDGE_NETWORK(){
   const CV=document.getElementById('cvs'),CX=CV.getContext('2d');
   let W,H;
@@ -1246,8 +1500,27 @@ function recommendNextTopic(){
 }
 function setMode(m){
   STATE.mode=m;set('cio_mode',m);
-  document.getElementById('exam-btn').classList.toggle('on',m==='exam');
-  document.getElementById('mast-btn').classList.toggle('on',m==='mastery');
+  const isExam=m==='exam';
+  document.getElementById('exam-btn').classList.toggle('on',isExam);
+  document.getElementById('mast-btn').classList.toggle('on',!isExam);
+  // Update context box
+  const ctx=document.getElementById('mode-ctx-box');
+  if(ctx){
+    ctx.className='mode-ctx '+(isExam?'exam':'mast');
+    ctx.innerHTML=isExam?
+      '<strong>⚡ Exam conditions.</strong> No explanations until you answer. Questions mirror real '+STATE.subj+' exam style and terminology. Timer pressure. Score logged.':
+      '<strong style="color:#c8e6c9">🧠 Mastery conditions.</strong> Each topic begins with a concept primer. Questions cycle recall → application → synthesis. You will not move on until you truly own the topic.';
+  }
+  // Update start button
+  const bb=document.getElementById('begin-session-btn');
+  if(bb){
+    bb.textContent=isExam?'Start Exam Session →':'Start Mastery Session →';
+    bb.style.background=isExam?'':'linear-gradient(135deg,#1b5e20,#2e7d32)';
+    bb.style.color=isExam?'':'#c8e6c9';
+  }
+  // Update topbar tint
+  const tb=document.querySelector('#scr-train .topbar');
+  if(tb)tb.className='topbar '+(isExam?'exam':'mastery');
 }
 function updateUsageDisplay(){
   const left=Math.max(0,FREE_QUESTIONS-STATE.qUsed);
@@ -1270,8 +1543,7 @@ function initTrainScreen(){
     selectSession('weak');
     STATE.focusTopic='';
   }
-  document.getElementById('exam-btn').classList.toggle('on',STATE.mode==='exam');
-  document.getElementById('mast-btn').classList.toggle('on',STATE.mode==='mastery');
+  setMode(STATE.mode);
   updateUsageDisplay();
 }
 
@@ -1284,19 +1556,57 @@ function setDiff(d){
   ['easy','med','hard'].forEach(x=>{const el=document.getElementById('d-'+x);if(el)el.classList.toggle('on',x===d);});
 }
 
+let examTimerInt=null;
 function beginSession(){
   if(STATE.qUsed>=FREE_QUESTIONS){showUpgrade();return;}
   STATE.sesScore=0;STATE.sesTotal=0;STATE.qCount=0;STATE.answered=false;
   STATE.focusTopic=decodeURIComponent(document.getElementById('session-topic-sel').value)||'';
-  STATE.qTarget=STATE.sessionType==='exam'?20:10;
+  const isExam=STATE.mode==='exam';
+  STATE.qTarget=isExam?(STATE.sessionType==='exam'?20:10):9; // mastery: 9 questions (3 per bloom)
   document.getElementById('session-picker').style.display='none';
   document.getElementById('train-q-wrap').style.display='block';
   document.getElementById('train-score').textContent='0 / 0';
-  const labels={quick:'Quick Drill',exam:'Exam Simulation',weak:'Weak Spot Focus',deep:'Deep Mastery'};
-  document.getElementById('train-label').textContent=labels[STATE.sessionType]||'Session';
-  generateQuestion();
+  if(isExam){
+    const labels={quick:'⚡ Quick Drill',exam:'⚡ Exam Paper',weak:'⚡ Weak Spot Focus',deep:'⚡ Deep Mastery'};
+    document.getElementById('train-label').textContent=labels[STATE.sessionType]||'⚡ Exam';
+    startExamTimer();
+    generateQuestion();
+  } else {
+    clearExamTimer();
+    document.getElementById('train-label').textContent='🧠 Mastery';
+    showConceptPrimer();
+  }
+}
+function startExamTimer(){
+  clearExamTimer();
+  STATE._timerSecs=(STATE.sessionType==='exam'?20:10)*90;
+  tickTimer();
+  examTimerInt=setInterval(tickTimer,1000);
+}
+function clearExamTimer(){
+  if(examTimerInt){clearInterval(examTimerInt);examTimerInt=null;}
+  const pill=document.getElementById('train-pill');
+  if(pill){pill.textContent=Math.max(0,FREE_QUESTIONS-STATE.qUsed)+' left';pill.className='status-pill';pill.style.fontSize='10px';}
+}
+function tickTimer(){
+  STATE._timerSecs=Math.max(0,STATE._timerSecs-1);
+  const pill=document.getElementById('train-pill');if(!pill)return;
+  const mm=Math.floor(STATE._timerSecs/60),ss=String(STATE._timerSecs%60).padStart(2,'0');
+  pill.textContent=mm+':'+ss;pill.style.fontSize='14px';
+  pill.className=STATE._timerSecs<30?'exam-timer crit':STATE._timerSecs<90?'exam-timer warn':'exam-timer';
+  if(STATE._timerSecs===0){clearExamTimer();endSession();}
 }
 
+function startDeepDrill(enc){
+  STATE.focusTopic=decodeURIComponent(enc);
+  STATE.mode='mastery';set('cio_mode','mastery');
+  goTo('train','in');
+  setTimeout(()=>{
+    selectSession('deep');
+    setMode('mastery');
+    setTimeout(()=>beginSession(),50);
+  },250);
+}
 function endSession(){
   if(STATE.sesTotal>0)showSessionReport();
   else goTo('dash','out');
@@ -1317,6 +1627,29 @@ function selectNextTopic(){
   return STATE.topics[Math.floor(Math.random()*STATE.topics.length)];
 }
 
+
+async function showConceptPrimer(){
+  const qArea=document.getElementById('q-area');
+  const topic=selectNextTopic();
+  STATE._mastTopic=topic;STATE.qCount=0;
+  const topicName=topic.split('—')[1]?.trim()||topic.split(' ').slice(0,4).join(' ');
+  const dotsHtml='<div class="drill-dots">'+Array.from({length:9},(_,i)=>'<div class="drill-dot"></div>').join('')+'</div>';
+  qArea.innerHTML=dotsHtml+'<div class="loader"><div class="spinner" style="border-top-color:#66bb6a"></div>Loading concept primer for '+topicName+'...</div>';
+  document.getElementById('train-label').textContent='🧠 Mastery — '+topicName;
+  document.getElementById('train-score').textContent='0 / 9';
+  document.getElementById('train-prog').style.width='0%';
+  try{
+    const raw=await callAI('You are a master teacher of "'+STATE.subj+'". Write a concept primer for the topic "'+topicName+'" within '+STATE.subj+'.\n\nCover concisely:\n1. Core definition or mechanism (2-3 sentences)\n2. Why it matters or real-world relevance (1-2 sentences)\n3. Most common exam misconception (1 sentence)\n\nMax 110 words. Bold key terms with **term**. No headers, plain paragraphs.');
+    const body=raw.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+    qArea.innerHTML=dotsHtml+
+      '<div class="primer-card">'+
+        '<div class="primer-title">'+topicName+'</div>'+
+        '<div class="primer-body">'+body+'</div>'+
+      '</div>'+
+      '<button class="btn" style="background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#c8e6c9;border:none;width:100%;padding:13px;border-radius:11px;font-family:Space Grotesk,sans-serif;font-size:14px;font-weight:600;cursor:pointer;" onclick="generateQuestion()">Begin Questions — Recall First →</button>';
+  }catch(e){generateQuestion();}
+}
+
 async function generateQuestion(){
   if(STATE.qUsed>=FREE_QUESTIONS){showUpgrade();return;}
   STATE.answered=false;
@@ -1327,9 +1660,26 @@ async function generateQuestion(){
   document.getElementById('train-prog').style.width=Math.min(100,(STATE.qCount/STATE.qTarget)*100)+'%';
   const topic=selectNextTopic();
   const isTF=STATE.fmt.includes('True / False')&&Math.random()<0.22;
+  const isExam=STATE.mode==='exam';
   const isMast=STATE.mode==='mastery'||STATE.sessionType==='deep';
-  const diffMap={easy:'recall and recognition (Bloom: Remember/Understand)',med:'application and analysis (Bloom: Apply/Analyze)',hard:'synthesis, evaluation, novel scenarios (Bloom: Evaluate/Create)'};
-  const bloomLevel=STATE.difficulty==='easy'?'recall':STATE.difficulty==='hard'?'synthesis':'application';
+  // Mastery: cycle recall(1-3) → apply(4-6) → synth(7-9)
+  let bloomLevel,bloomDesc;
+  if(isMast){
+    const qn=STATE.qCount+1;
+    bloomLevel=qn<=3?'recall':qn<=6?'application':'synthesis';
+    bloomDesc=bloomLevel==='recall'?'recall and recognition (Bloom: Remember/Understand)':bloomLevel==='application'?'application to real scenarios (Bloom: Apply/Analyze)':'synthesis, evaluation, novel scenarios (Bloom: Evaluate/Create)';
+  }else{
+    const diffMap={easy:'recall and recognition (Bloom: Remember/Understand)',med:'application and analysis (Bloom: Apply/Analyze)',hard:'synthesis, evaluation, novel scenarios (Bloom: Evaluate/Create)'};
+    bloomLevel=STATE.difficulty==='easy'?'recall':STATE.difficulty==='hard'?'synthesis':'application';
+    bloomDesc=diffMap[STATE.difficulty]||'application and analysis';
+  }
+  const modeInstr=isExam?
+    'EXAM MODE: Strict. Question must look exactly like a real '+STATE.subj+' exam question. Precise terminology. No preamble. Realistic deceptive distractors. No pedagogical tone.':
+    'MASTERY MODE (Bloom: '+bloomLevel+'): '+
+    (bloomLevel==='recall'?'Test fundamental definitions and mechanisms. Clear and fair.':
+     bloomLevel==='application'?'Present a realistic scenario requiring concept application, not just recall.':
+     'Complex novel scenario requiring synthesis of multiple concepts. Push for expert-level thinking.')+
+    ' After answering, give a rich insight that deepens understanding.';
   const prompt=`You are a world-class examiner for "${STATE.subj}".
 Topic: ${topic}
 Bloom level: ${diffMap[STATE.difficulty]||'application'}
@@ -1339,7 +1689,7 @@ ${STATE.content?`Materials (ground question in these):\n${STATE.content.substrin
 ${isTF?'Type: TRUE/FALSE — options=["True","False"], correct=0 or 1.':'Type: MCQ — exactly 4 options, one correct.'}
 
 Return ONLY valid JSON (no markdown, no commentary):
-{"type":"mcq","bloomLevel":"${bloomLevel}","question":"full question","options":["A: option","B: option","C: option","D: option"],"correct":0,"explanation":"WHY correct + why each wrong option is tempting","examTrap":"1-sentence trap or common mistake","errorType":"concept|trap|recall|apply","sourceNote":"cite material if used, else empty string","whySelected":"why Cognio picked this topic now"}`;
+{"type":"mcq","bloomLevel":"${bloomLevel}","question":"full question","options":["A: option","B: option","C: option","D: option"],"correct":0,"explanation":"WHY correct + why each wrong option is tempting","examTrap":"1-sentence trap","masteryInsight":"'+(isMast?'deeper conceptual insight or mechanism to deepen understanding':'')+'","errorType":"concept|trap|recall|apply","sourceNote":"","whySelected":"adaptive reason"}`;
 
   for(let attempt=1;attempt<=3;attempt++){
     try{
@@ -1367,19 +1717,32 @@ Return ONLY valid JSON (no markdown, no commentary):
 function renderQuestion(container,q,topic){
   STATE.currentQ={...q,topic};
   const L=['A','B','C','D'];
-  const why=q.whySelected?`<span class="q-why" onclick="alert('${q.whySelected.replace(/'/g,"\\'")}')">ℹ Why</span>`:'';
-  container.innerHTML=`
-    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);animation:fadeIn .28s ease;">${shortTopic(topic)}</div>
-    <div class="q-card">
-      <div class="q-head" style="position:relative;">
-        <div class="q-type">${q.type==='truefalse'?'✓✗ True/False':'◎ Multiple Choice'} · <span style="color:var(--tx3)">${q.bloomLevel||''}</span></div>
-        <div class="q-meta">Q${STATE.qCount} ${why}</div>
+  const isExam=STATE.mode==='exam';
+  const isMast=STATE.mode==='mastery';
+  const why=q.whySelected&&!isExam?`<span class="q-why" onclick="alert('${q.whySelected.replace(/'/g,"\\'")}')">ℹ Why</span>`:'';
+  // Bloom badge for mastery mode
+  const bLevel=q.bloomLevel||'recall';
+  const bloomBadge=isMast?`<div class="bloom-badge bloom-${bLevel}">${bLevel==='recall'?'◎ Recall':bLevel==='application'?'⬡ Apply':'★ Synthesis'}</div>`:'';
+  // Drill dots for mastery
+  const dotHtml=isMast?'<div class="drill-dots">'+Array.from({length:9},(_,i)=>'<div class="drill-dot'+(i<STATE.qCount-1?' done':i===STATE.qCount-1?' cur':'')+'"style="flex:1;height:3px;border-radius:2px;background:'+(i<STATE.qCount-1?'var(--gr)':i===STATE.qCount-1?'var(--warn)':'var(--b1)')+';transition:background .3s;"></div>').join('')+'</div>':'' ;
+  const cardClass=isExam?'q-card exam':'q-card mastery';
+  const optClass=isExam?'opt exam':'opt mast';
+  container.innerHTML=dotHtml+
+    `<div style="display:flex;justify-content:space-between;align-items:center;animation:fadeIn .28s ease;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${isExam?'var(--tx3)':'rgba(102,187,106,.6)'};">${shortTopic(topic)}</div>
+      ${why}
+    </div>
+    <div class="${cardClass}">
+      <div class="q-head" style="padding:11px 16px;border-bottom:1px solid ${isExam?'rgba(255,255,255,.06)':'rgba(102,187,106,.1)'};background:${isExam?'rgba(255,255,255,.02)':'rgba(102,187,106,.03)'};">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:${isExam?'#777':'rgba(102,187,106,.7)'}">${q.type==='truefalse'?'✓✗ True/False':'◎ Multiple Choice'}${isExam?' · Exam':' · Mastery'}</div>
+        <div class="q-meta">Q${STATE.qCount}/${STATE.qTarget}</div>
       </div>
       <div class="q-body">
+        ${bloomBadge}
         <div class="q-text">${q.question}</div>
-        ${q.sourceNote?`<div style="font-size:11px;color:var(--tx3);margin-bottom:11px;">📎 ${q.sourceNote}</div>`:''}
+        ${q.sourceNote?`<div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">📎 ${q.sourceNote}</div>`:''}
         <div class="opts">${q.options.map((opt,i)=>`
-          <div class="opt" id="opt-${i}" onclick="pickAnswer(${i})">
+          <div class="${optClass}" id="opt-${i}" onclick="pickAnswer(${i})">
             <div class="opt-letter">${q.type==='truefalse'?(i===0?'T':'F'):L[i]}</div>
             <div class="opt-text">${opt}</div>
           </div>`).join('')}
@@ -1535,6 +1898,42 @@ let currentFlashIdx=0,flashQueue=[];
 
 function renderFlashScreen(){
   const body=document.getElementById('flash-body');
+  if(!body)return;
+  if(!STATE.topics.length){body.innerHTML='<div class="card" style="text-align:center;padding:22px;"><p class="dim">Complete onboarding first to unlock Deep Drill.</p></div>';return;}
+  const weakest=STATE.topics.slice().sort((a,b)=>{
+    const ma=STATE.mastery[a]||{},mb=STATE.mastery[b]||{};
+    return(((ma.recall||0)+(ma.apply||0)+(ma.synth||0))/3)-(((mb.recall||0)+(mb.apply||0)+(mb.synth||0))/3);
+  })[0];
+  const topicRows=STATE.topics.map(t=>{
+    const m=STATE.mastery[t]||{};
+    const r=Math.round(m.recall||0),a=Math.round(m.apply||0),s=Math.round(m.synth||0);
+    const avg=Math.round((r+a+s)/3);
+    const getColor=v=>v>=70?'#66bb6a':v>=40?'#f5a623':v>=1?'#ef5350':'#333';
+    return '<div class="drill-topic-row">'+
+      '<div style="flex:1;min-width:0;">'+
+        '<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+shortTopic(t)+'</div>'+
+        '<div style="display:flex;gap:5px;margin-top:3px;">'+
+          '<span style="font-size:10px;color:#81d4fa;">R:'+r+'%</span>'+
+          '<span style="font-size:10px;color:var(--warn);">A:'+a+'%</span>'+
+          '<span style="font-size:10px;color:var(--gr);">S:'+s+'%</span>'+
+        '</div>'+
+      '</div>'+
+      '<button class="btn btn-sm '+(avg>=75?'btn-o':'btn-dng')+'" onclick="startDeepDrill(\''+encodeURIComponent(t)+'\')">'+
+        (avg>=75?'Revisit \u2192':'Drill \u2192')+'</button>'+
+    '</div>';
+  }).join('');
+  body.innerHTML=
+    '<div class="card" style="background:rgba(4,12,6,.95);border-color:rgba(102,187,106,.15);animation:cardIn .4s ease;">'+
+      '<div class="card-label" style="color:rgba(102,187,106,.6);">🔬 Deep Drill Protocol</div>'+
+      '<p class="dim" style="line-height:1.65;margin-bottom:12px;">Structured path to mastery: concept primer → 3 recall questions → 3 application scenarios → 3 synthesis challenges. You earn mastery when all three Bloom levels hit 75%+.</p>'+
+      (weakest?'<button class="btn" style="background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#c8e6c9;border:none;padding:12px;border-radius:11px;font-family:Space Grotesk,sans-serif;font-size:13px;font-weight:600;cursor:pointer;width:100%;" onclick="startDeepDrill(\''+encodeURIComponent(weakest)+'\')">🎯 Drill Weakest: '+shortTopic(weakest)+' \u2192</button>':'')+ 
+    '</div>'+
+    '<div class="section-title" style="margin-bottom:8px;">All Topics</div>'+
+    '<div class="card" style="padding:4px 14px;">'+topicRows+'</div>';
+  return; // stop here
+}
+function _unusedOldFlash(){
+  const body=document.getElementById('flash-body');
   const due=STATE.flashcards.filter(isDue);
   const all=STATE.flashcards;
   document.getElementById('flash-count-label').textContent=`${all.length} cards · ${due.length} due`;
@@ -1624,47 +2023,49 @@ function parseJSONRobust(raw){
 async function generateFlashcards(){
   const body=document.getElementById('flash-body');
   body.innerHTML='<div class="loader"><div class="spinner"></div>Generating flashcards...</div>';
-  const topics=STATE.topics.slice(0,6);
-  const prompt=`Create 12 flashcards for the subject "${STATE.subj}" covering: ${topics.map(t=>t.split('—')[1]?.trim()||t).join(', ')}.
-
-Rules:
-- Front: a specific exam question or key term (1 sentence)
-- Back: clear concise answer with the key details needed (2-4 sentences max)
-- Cover a mix of recall, application, and synthesis
-
-You MUST respond with ONLY a raw JSON array. No markdown. No backticks. No explanation. Start your response with [ and end with ].
-
-[{"front":"...","back":"...","topic":"..."},...]`;
-
+  const topicNames=STATE.topics.slice(0,4).map(t=>t.split('\u2014')[1]?.trim()||t).join(', ');
+  // Use a simple non-JSON prompt, then ask for JSON separately for reliability
+  const prompt='Generate 6 flashcards for the subject "'+STATE.subj+'" on these topics: '+topicNames+'.\n\nFormat: respond with ONLY a JSON array, no markdown, no explanation.\nEach item: {"front":"short question or term","back":"concise answer under 25 words","topic":"topic name"}\n\nRespond starting with [ and ending with ]';
+  let lastRaw='(none)';
   for(let attempt=1;attempt<=3;attempt++){
     try{
-      const raw=await callAI(prompt);
-      const cards=parseJSONRobust(raw);
-      if(!Array.isArray(cards)||!cards.length)throw new Error('Empty or invalid array');
-      const newCards=cards.map(c=>({
+      lastRaw=await callAIHigh(prompt);
+      const cards=parseJSONRobust(lastRaw);
+      if(!Array.isArray(cards)||!cards.length)throw new Error('Not an array');
+      const newCards=cards.filter(c=>c&&c.front&&c.back).map(c=>({
         id:Date.now()+Math.random(),
-        front:c.front||c.question||'?',
-        back:c.back||c.answer||'?',
-        topic:c.topic||STATE.subj,
+        front:String(c.front).trim(),
+        back:String(c.back).trim(),
+        topic:String(c.topic||STATE.subj).trim(),
         interval:1,repetitions:0,easeFactor:2.5,dueDate:Date.now()
       }));
+      if(!newCards.length)throw new Error('No valid cards found');
       STATE.flashcards=[...STATE.flashcards,...newCards];
       set('cio_flash',STATE.flashcards);
       renderFlashScreen();
       return;
     }catch(err){
       if(attempt<3){
-        body.innerHTML=`<div class="loader"><div class="spinner"></div>Retrying (${attempt+1}/3)...</div>`;
-        await new Promise(r=>setTimeout(r,800));
+        body.innerHTML='<div class="loader"><div class="spinner"></div>Retrying ('+attempt+'/3)...</div>';
+        await new Promise(r=>setTimeout(r,900));
       } else {
-        body.innerHTML=`<div style="padding:14px;background:rgba(239,83,80,.06);border:1px solid rgba(239,83,80,.2);border-radius:var(--R);">
-          <div style="font-weight:700;color:var(--r1);margin-bottom:6px;">⚠ Could not generate flashcards</div>
-          <div class="dim" style="font-size:12px;margin-bottom:10px;">${err.message}</div>
-          <button class="btn btn-o btn-sm" onclick="generateFlashcards()">↻ Try Again</button>
-        </div>`;
+        const preview=lastRaw.substring(0,150).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        body.innerHTML='<div style="padding:14px;background:rgba(239,83,80,.06);border:1px solid rgba(239,83,80,.2);border-radius:var(--R);">'+
+          '<div style="font-weight:700;color:var(--r1);margin-bottom:6px;">Failed: '+err.message+'</div>'+
+          '<div style="font-size:10px;color:var(--tx3);font-family:monospace;background:rgba(0,0,0,.4);padding:6px 8px;border-radius:5px;margin-bottom:10px;word-break:break-all;">'+preview+'</div>'+
+          '<button class="btn btn-o btn-sm" onclick="generateFlashcards()">Try Again</button></div>';
       }
     }
   }
+}
+
+async function callAIHigh(prompt){
+  const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({messages:[{role:'user',content:prompt}],max_tokens:2048})});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'HTTP '+res.status);
+  if(!data.content?.[0]?.text)throw new Error('Empty AI response');
+  return data.content[0].text;
 }
 
 // ═══════════════════════ ANALYTICS ═══════════════════════
@@ -1716,7 +2117,15 @@ function renderAnalytics(){
 }
 
 // ═══════════════════════ UPGRADE ═══════════════════════
-function showUpgrade(){document.getElementById('upgrade-overlay').classList.add('on');}
+function showUpgrade(){document.getElementById('upgrade-overlay').classList.add('on');switchUpgradeTab('pro');}
+function switchUpgradeTab(tab){
+  ['pro','roadmap','engine'].forEach(t=>{
+    const btn=document.getElementById('utab-'+t);
+    const content=document.getElementById('utab-'+t+'-content');
+    if(btn)btn.classList.toggle('on',t===tab);
+    if(content)content.style.display=t===tab?'block':'none';
+  });
+}
 function closeUpgrade(){document.getElementById('upgrade-overlay').classList.remove('on');}
 function joinWaitlist(){
   const email=document.getElementById('upgrade-email').value.trim();
