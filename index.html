@@ -13,8 +13,16 @@
   --R:16px;--Rs:11px;--max:590px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;background:#0a0a0a;}
-body{color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:15px;display:flex;justify-content:center;}
+html,body{height:100%;background:#0a0a0a;}
+body{color:var(--tx);font-family:'Space Grotesk',sans-serif;font-size:15px;
+  display:flex;justify-content:center;overflow:hidden;
+  /* Desktop: show centered column with side gutters */
+}
+@media(min-width:600px){
+  body{background:#0a0a0a;}
+  #app{border-left:1px solid rgba(255,255,255,.06);border-right:1px solid rgba(255,255,255,.06);}
+  .upgrade-overlay{align-items:flex-end;}
+}
 #cvs{position:fixed;inset:0;z-index:0;pointer-events:none;}
 body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:.4;}
@@ -385,6 +393,92 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 .roadmap-layer.active{border-color:rgba(102,187,106,.3);background:rgba(102,187,106,.04);}
 .roadmap-layer.l2{border-color:rgba(245,166,35,.2);}
 .rl-tag{display:inline-flex;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;margin-top:7px;}
+
+
+/* ═══ RESPONSIVE FIXES ═══ */
+/* Desktop — properly centered app column */
+@media(min-width:601px){
+  #app{
+    box-shadow:0 0 60px rgba(0,0,0,.8),
+               -1px 0 0 rgba(255,255,255,.06),
+               1px 0 0 rgba(255,255,255,.06);
+  }
+  .upgrade-overlay{justify-content:center;align-items:center;}
+  .upgrade-sheet{
+    border-radius:24px!important;
+    border-bottom:1px solid var(--b2)!important;
+    max-height:80vh!important;
+  }
+  /* Wider mode selector on desktop */
+  .mode-sel .ms-desc{font-size:12px;}
+}
+/* Small mobile — tighten spacing */
+@media(max-width:380px){
+  .topbar{padding:11px 14px 9px;}
+  .sb{padding:12px 13px 90px;}
+  .hero-title{font-size:26px;}
+  .stat-val{font-size:20px;}
+  .session-grid{grid-template-columns:1fr 1fr;}
+  .mode-selector{grid-template-columns:1fr;}
+  .ms-btn.exam-sel:not(.on){border-right:none;border-bottom:1px solid var(--b1);}
+}
+/* Ensure upgrade sheet never shows white */
+.upgrade-sheet{
+  background:linear-gradient(180deg,#1c1c1c,#111111)!important;
+  color:var(--tx)!important;
+}
+.upgrade-overlay{
+  z-index:1000!important;
+}
+/* Fix the train scroll container height */
+.train-scroll{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  min-height:0;
+}
+/* Fix settings scroll */
+#scr-settings .sb{
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+/* Fix chat on desktop */
+.chat-body{
+  -webkit-overflow-scrolling:touch;
+}
+/* Upgrade tab active indicator */
+.upgrade-tab.on{
+  color:#fff;
+  border-bottom:2px solid #fff;
+}
+/* Roadmap layer cards — ensure text is visible */
+.roadmap-layer{
+  background:rgba(20,20,20,.95);
+}
+.roadmap-layer .dim{
+  color:#888;
+}
+
+
+/* === UPGRADE MODAL TEXT FIX === */
+#upgrade-overlay *{color:inherit;}
+#upgrade-overlay .dim{color:#888!important;}
+#upgrade-overlay h1,#upgrade-overlay strong{color:#f0f0f0;}
+#upgrade-overlay .perk{color:#ccc;}
+#upgrade-overlay .perk-icon{color:var(--gr)!important;}
+#upgrade-overlay input{
+  background:rgba(28,28,28,.95)!important;
+  color:#f0f0f0!important;
+  border-color:#3a3a3a!important;
+}
+#upgrade-overlay input::placeholder{color:#555!important;}
+#upgrade-overlay .btn-p{background:#fff!important;color:#0a0a0a!important;}
+#upgrade-overlay .btn-g{
+  background:rgba(28,28,28,.9)!important;
+  color:#888!important;
+  border:1px solid #333!important;
+}
 
 </style>
 </head>
@@ -790,29 +884,15 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
       </div>
     </div>
     <div class="card g12">
-      <div class="card-label">📋 Flashcards</div>
-      <div style="display:flex;justify-content:space-between;"><span class="dim">Total cards</span><span id="set-flash-count" style="font-weight:600;">0</span></div>
-      <div style="display:flex;justify-content:space-between;"><span class="dim">Due for review</span><span id="set-flash-due" style="font-weight:600;color:var(--warn);">0</span></div>
-      <button class="btn btn-o btn-sm" onclick="goTo('flash','in')">Review Flashcards →</button>
+      <div class="card-label">🔬 Deep Drill</div>
+      <div style="display:flex;justify-content:space-between;"><span class="dim">Topics tracked</span><span id="set-flash-count" style="font-weight:600;">—</span></div>
+      <div style="display:flex;justify-content:space-between;"><span class="dim">Mastery avg</span><span id="set-flash-due" style="font-weight:600;color:var(--gr);">—</span></div>
+      <button class="btn btn-o btn-sm" onclick="goTo('flash','in')">Open Deep Drill →</button>
     </div>
-    <div>
-      <div class="section-title" style="margin-bottom:8px;">🚀 Roadmap</div>
-      <div class="g12">
-        <div class="layer-card l1"><div class="layer-icon">🌱</div><div style="flex:1;"><div class="layer-title">Layer 1 — Student Mastery</div><div class="layer-sub">MSc, Law, Medicine, Engineering, Certs</div><div class="layer-badge" style="background:rgba(102,187,106,.1);color:#a5d6a7;border:1px solid rgba(102,187,106,.25);">✓ You are here · $29–$59/mo</div></div></div>
-        <div class="layer-card l2"><div class="layer-icon">🧠</div><div style="flex:1;"><div class="layer-title">Layer 2 — Certifications</div><div class="layer-sub">CFA, ACCA, AWS, Bar Exams, Medical Boards</div><div class="layer-badge" style="background:rgba(245,166,35,.09);color:#ffd54f;border:1px solid rgba(245,166,35,.25);">Coming Soon · $79–$149/mo</div></div></div>
-        <div class="layer-card l3"><div class="layer-icon">🏢</div><div style="flex:1;"><div class="layer-title">Layer 3 — Corporate</div><div class="layer-sub">Consultants, Analysts, PMs, Strategists</div><div class="layer-badge" style="background:rgba(200,200,200,.06);color:#ccc;border:1px solid rgba(200,200,200,.14);">2026 · $200–$500/seat</div></div></div>
-        <div class="layer-card l4"><div class="layer-icon">🧪</div><div style="flex:1;"><div class="layer-title">Layer 4 — Executive Lab</div><div class="layer-sub">Founders, CTOs, Strategists, Policy Leaders</div><div class="layer-badge" style="background:rgba(255,255,255,.05);color:#e0e0e0;border:1px solid rgba(255,255,255,.14);">Elite · $1000+/mo</div></div></div>
-      </div>
-    </div>
-    <div>
-      <div class="section-title" style="margin-bottom:8px;">🧬 Core Engine</div>
-      <div class="engine-card">
-        <div class="engine-row"><div class="engine-num">01</div><div><div class="engine-name">Knowledge Graph Engine</div><div class="engine-desc">Maps concept relationships + prerequisite chains</div></div></div>
-        <div class="engine-row"><div class="engine-num">02</div><div><div class="engine-name">Adaptive Bloom Engine</div><div class="engine-desc">Mastery per recall / application / synthesis (Bloom)</div></div></div>
-        <div class="engine-row"><div class="engine-num">03</div><div><div class="engine-name">SM-2 Spaced Repetition</div><div class="engine-desc">Optimal review intervals based on performance</div></div></div>
-        <div class="engine-row"><div class="engine-num">04</div><div><div class="engine-name">Error Taxonomy Tracker</div><div class="engine-desc">Classifies mistakes: concept gap, trap, recall, apply</div></div></div>
-        <div class="engine-row"><div class="engine-num">05</div><div><div class="engine-name">Diagnostic + Study Planner</div><div class="engine-desc">Baseline score → personalised daily plan</div></div></div>
-      </div>
+    <div class="card" style="background:rgba(245,166,35,.04);border-color:rgba(245,166,35,.2);">
+      <div class="card-label" style="color:var(--gold);">⭐ Cognio Pro</div>
+      <p class="dim" style="margin-bottom:11px;line-height:1.65;">One adaptive engine. Four verticals — Student Mastery, Certifications, Corporate, Executive Lab. Your data moves with you.</p>
+      <button class="btn btn-p btn-sm" onclick="showUpgrade()" style="width:100%;">View Roadmap + Upgrade →</button>
     </div>
     <div class="card">
       <div class="card-label">🗄️ Data</div>
@@ -830,7 +910,7 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
 
 <!-- UPGRADE -->
 <div class="upgrade-overlay" id="upgrade-overlay">
-  <div class="upgrade-sheet" style="max-height:88vh;padding-bottom:32px;display:flex;flex-direction:column;overflow:hidden;">
+  <div class="upgrade-sheet" style="max-height:88vh;padding-bottom:0;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#1c1c1c,#111);border-radius:24px 24px 0 0;border:1px solid #333;border-bottom:none;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-shrink:0;">
       <div>
         <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.26);color:var(--gold);font-size:11px;font-weight:700;margin-bottom:7px;">⭐ Cognio Pro</div>
@@ -843,7 +923,7 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
       <button class="upgrade-tab" id="utab-roadmap" onclick="switchUpgradeTab('roadmap')">Roadmap</button>
       <button class="upgrade-tab" id="utab-engine" onclick="switchUpgradeTab('engine')">The Engine</button>
     </div>
-    <div style="flex:1;overflow-y:auto;padding-bottom:8px;">
+    <div style="flex:1;overflow-y:auto;padding:0 0 36px;-webkit-overflow-scrolling:touch;">
     <!-- PRO TAB -->
     <div id="utab-pro-content">
       <div class="roadmap-layer active" style="margin-bottom:12px;">
@@ -933,189 +1013,262 @@ textarea{resize:vertical;min-height:78px;}::placeholder{color:var(--tx3);}
     </div>
     </div>
   </div>
-</div>x;">🌱 Student Pro</div>
-            <div class="dim" style="font-size:12px;margin-top:2px;">$29/mo · Cancel anytime</div></div>
-          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">$29</div>
-        </div>
-        <div style="height:1px;background:var(--b1);margin:10px 0;"></div>
-        <div style="font-size:12px;color:var(--tx2);line-height:1.9;">
-          ✓ Unlimited adaptive questions<br>
-          ✓ Deep Drill mastery sessions<br>
-          ✓ Exam Mode + Mastery Mode with distinct UIs<br>
-          ✓ Full Bloom-level mastery tracking<br>
-          ✓ Mastery heatmap + error taxonomy<br>
-          ✓ AI study plan generator<br>
-          ✓ Unlimited tutor messages<br>
-          ✓ Source-cited answers from your materials
-        </div>
-      </div>
-      <div class="g8" style="margin-bottom:14px;">
-        <div class="perk"><span class="perk-icon">✓</span><span>Works for any advanced subject — medicine, law, finance, engineering, food micro</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Exam Mode + Mastery Mode with fully distinct UIs and question logic</span></div>
-        <div class="perk"><span class="perk-icon">✓</span><span>Early users lock in founder pricing forever</span></div>
-      </div>
-      <div class="field" style="margin-bottom:10px;"><label>Your Email</label><input type="email" id="upgrade-email" placeholder="you@email.com"/></div>
-      <button class="btn btn-p" onclick="joinWaitlist()">Join Waitlist — Free Early Access</button>
-      <button class="btn btn-g" style="margin-top:7px;" onclick="closeUpgrade()">Maybe Later</button>
-    </div>
-    <!-- ROADMAP TAB -->
-    <div id="utab-roadmap-content" style="display:none;">
-      <p class="dim" style="margin-bottom:14px;line-height:1.65;">One adaptive engine. Four verticals. Your mastery data and progress move with you across every layer.</p>
-      <div class="roadmap-layer active">
-        <div style="display:flex;gap:11px;align-items:flex-start;">
-          <span style="font-size:26px;flex-shrink:0;">🌱</span>
-          <div style="flex:1;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--gr);">Layer 1 — Student Mastery</div>
-            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">MSc · Medicine · Law · Engineering · Finance · Any advanced subject.</div>
-            <div class="rl-tag" style="background:rgba(102,187,106,.1);border:1px solid rgba(102,187,106,.25);color:var(--gr);">✓ You are here · $29–59/mo</div>
-          </div>
-        </div>
-      </div>
-      <div class="roadmap-layer l2">
-        <div style="display:flex;gap:11px;align-items:flex-start;">
-          <span style="font-size:26px;flex-shrink:0;">🏅</span>
-          <div style="flex:1;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--warn);">Layer 2 — Professional Certifications</div>
-            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">CFA · ACCA · CPA · Bar Exams · Medical Boards · AWS · CIMA. Syllabus-mapped question banks, past paper grading, exam-board strategy.</div>
-            <div class="rl-tag" style="background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.24);color:var(--warn);">Coming 2025 · $79–149/mo</div>
-          </div>
-        </div>
-      </div>
-      <div class="roadmap-layer">
-        <div style="display:flex;gap:11px;align-items:flex-start;">
-          <span style="font-size:26px;flex-shrink:0;">🏢</span>
-          <div style="flex:1;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 3 — Corporate Performance</div>
-            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Consultants · Analysts · PMs · Strategy Teams. Team dashboards, onboarding acceleration, skills gap mapping.</div>
-            <div class="rl-tag" style="background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.14);color:#aaa;">2026 · $200–500/seat/mo</div>
-          </div>
-        </div>
-      </div>
-      <div class="roadmap-layer">
-        <div style="display:flex;gap:11px;align-items:flex-start;">
-          <span style="font-size:26px;flex-shrink:0;">🧪</span>
-          <div style="flex:1;">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">Layer 4 — Executive Lab</div>
-            <div class="dim" style="font-size:11px;margin-top:2px;line-height:1.6;">Founders · CTOs · Policy Leaders. Real-time intelligence synthesis, decision-quality mastery, bespoke curriculum.</div>
-            <div class="rl-tag" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:#ccc;">Elite · $1,000+/mo</div>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:12px;padding:11px 13px;border-radius:var(--Rs);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);font-size:12px;color:var(--tx2);line-height:1.65;">All layers share the same adaptive Bloom engine, mastery tracking, and spaced repetition core.</div>
-      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
-    </div>
-    <!-- ENGINE TAB -->
-    <div id="utab-engine-content" style="display:none;">
-      <p class="dim" style="margin-bottom:14px;line-height:1.65;">Five systems powering every session — for food microbiology, law, finance, or anything else.</p>
-      <div class="g12">
-        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">01 — Adaptive Bloom Engine</div><div class="dim" style="font-size:12px;line-height:1.6;">Tracks mastery at three levels independently per topic: recall, application, synthesis. Targets your weakest Bloom level, not just your weakest topic.</div></div>
-        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">02 — Error Taxonomy Classifier</div><div class="dim" style="font-size:12px;line-height:1.6;">Every wrong answer is classified: concept gap, exam trap, recall failure, or misapplication. Patterns surface in analytics so you fix the right thing.</div></div>
-        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">03 — Deep Drill Protocol</div><div class="dim" style="font-size:12px;line-height:1.6;">Concept primer → 3 recall → 3 application → 3 synthesis. Topic isn't mastered until you clear all three Bloom levels above 75%.</div></div>
-        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">04 — Dual Mode UI</div><div class="dim" style="font-size:12px;line-height:1.6;">Exam Mode: clinical black, countdown timer, no explanations until you answer. Mastery Mode: green-tinted, concept primers, Bloom badges, insight after every question.</div></div>
-        <div class="roadmap-layer"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:4px;">05 — Diagnostic Study Planner</div><div class="dim" style="font-size:12px;line-height:1.6;">Baseline assessment seeds your mastery map. Plan adapts daily based on weak topics, hours available, and days to exam.</div></div>
-      </div>
-      <button class="btn btn-p" style="margin-top:13px;" onclick="switchUpgradeTab('pro')">Get Early Access →</button>
-    </div>
-    </div>
-  </div>
 </div>
 
 <script>// ═══════════════════════ CANVAS ENGINE ═══════════════════════
-(function KNOWLEDGE_NETWORK(){
+(function BOOKNET(){
   const CV=document.getElementById('cvs'),CX=CV.getContext('2d');
   let W,H;
   const rnd=(a,b)=>a+Math.random()*(b-a);
-  const BOOKS=['📖','📚','📝','📋','📄','🗒️','📓','📔'];
-  const LABELS=['Biology','Law','Physics','History','Finance','Chemistry','Medicine','Logic','Ethics','Math'];
+  const randInt=(a,b)=>Math.floor(rnd(a,b));
+
+  // Book color palettes — muted, premium
+  const PALETTES=[
+    {spine:'#1a237e',cover:'#283593',page:'#e8eaf6',title:'#7986cb'},
+    {spine:'#1b5e20',cover:'#2e7d32',page:'#e8f5e9',title:'#81c784'},
+    {spine:'#4a148c',cover:'#6a1b9a',page:'#f3e5f5',title:'#ce93d8'},
+    {spine:'#b71c1c',cover:'#c62828',page:'#ffebee',title:'#ef9a9a'},
+    {spine:'#e65100',cover:'#f57c00',page:'#fff3e0',title:'#ffcc02'},
+    {spine:'#006064',cover:'#00838f',page:'#e0f7fa',title:'#80deea'},
+    {spine:'#37474f',cover:'#546e7a',page:'#eceff1',title:'#b0bec5'},
+    {spine:'#880e4f',cover:'#ad1457',page:'#fce4ec',title:'#f48fb1'},
+    {spine:'#33691e',cover:'#558b2f',page:'#f1f8e9',title:'#aed581'},
+    {spine:'#263238',cover:'#37474f',page:'#eceff1',title:'#78909c'},
+  ];
+
+  const SUBJECTS=['Physiology','Microbiology','Biochemistry','Pathology','Pharmacology',
+    'Contract Law','Tort Law','Equity','Criminal Law','Evidence',
+    'Finance','Economics','Derivatives','Statistics','Accounting',
+    'Organic Chem','Thermodynamics','Quantum Mech','Genetics','Anatomy'];
+
   function resize(){W=CV.width=window.innerWidth;H=CV.height=window.innerHeight;}
   window.addEventListener('resize',()=>{resize();boot();});resize();
+
   function drawBG(){
     CX.fillStyle='#0a0a0a';CX.fillRect(0,0,W,H);
-    const vg=CX.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.72);
-    vg.addColorStop(0,'rgba(20,20,20,0)');vg.addColorStop(1,'rgba(0,0,0,.55)');
-    CX.fillStyle=vg;CX.fillRect(0,0,W,H);
+    const g=CX.createRadialGradient(W*.5,H*.45,0,W*.5,H*.45,Math.max(W,H)*.7);
+    g.addColorStop(0,'rgba(18,18,22,0)');g.addColorStop(1,'rgba(0,0,0,.6)');
+    CX.fillStyle=g;CX.fillRect(0,0,W,H);
   }
-  class BookNode{
+
+  class Book{
     constructor(){
-      this.x=rnd(60,W-60);this.y=rnd(60,H-60);
-      this.emoji=BOOKS[Math.floor(Math.random()*BOOKS.length)];
-      this.label=LABELS[Math.floor(Math.random()*LABELS.length)];
-      this.size=rnd(17,29);this.vx=rnd(-.16,.16);this.vy=rnd(-.16,.16);
-      this.t=rnd(0,Math.PI*2);this.ts=rnd(.008,.02);
-      this.alpha=rnd(.45,.86);this.glowing=false;this.glowT=0;
-      this.showLabel=Math.random()<.4;
+      this.reset(true);
+    }
+    reset(init){
+      this.x=rnd(60,W-60);
+      this.y=init?rnd(60,H-60):H+80;
+      this.w=rnd(18,32);           // spine width
+      this.h=this.w*rnd(1.8,2.8);  // height
+      this.depth=this.w*rnd(.18,.32); // perspective depth
+      this.tilt=rnd(-0.22,0.22);   // slight rotation in radians
+      this.vx=rnd(-.12,.12);
+      this.vy=rnd(-.1,.1);
+      this.t=rnd(0,Math.PI*2);
+      this.ts=rnd(.006,.016);
+      this.alpha=rnd(.28,.72);
+      this.pal=PALETTES[randInt(0,PALETTES.length)];
+      this.label=SUBJECTS[randInt(0,SUBJECTS.length)];
+      this.showTitle=Math.random()<.55;
+      this.glowing=false;this.glowT=0;
+      this.openAmt=0; // for open-book animation
     }
     tick(){
       this.x+=this.vx;this.y+=this.vy;this.t+=this.ts;
-      if(this.x<50)this.vx=Math.abs(this.vx);if(this.x>W-50)this.vx=-Math.abs(this.vx);
-      if(this.y<50)this.vy=Math.abs(this.vy);if(this.y>H-50)this.vy=-Math.abs(this.vy);
-      if(this.glowing){this.glowT+=.055;if(this.glowT>=1){this.glowing=false;this.glowT=0;}}
+      if(this.x<40)this.vx=Math.abs(this.vx);
+      if(this.x>W-40)this.vx=-Math.abs(this.vx);
+      if(this.y<40)this.vy=Math.abs(this.vy);
+      if(this.y>H-40)this.vy=-Math.abs(this.vy);
+      if(this.glowing){
+        this.glowT+=.04;
+        this.openAmt=Math.min(.6,this.openAmt+.04);
+        if(this.glowT>=1){this.glowing=false;this.glowT=0;}
+      } else {
+        this.openAmt=Math.max(0,this.openAmt-.025);
+      }
     }
     draw(){
-      const b=0.85+0.15*Math.sin(this.t),a=this.alpha*b,sz=this.size*b;
-      const gb=this.glowing?(1-this.glowT)*.48:0;
-      if(gb>0){
-        const h=CX.createRadialGradient(this.x,this.y,0,this.x,this.y,sz*2.7);
-        h.addColorStop(0,`rgba(255,255,255,${.09+gb*.26})`);h.addColorStop(1,'transparent');
-        CX.beginPath();CX.arc(this.x,this.y,sz*2.7,0,Math.PI*2);CX.fillStyle=h;CX.fill();
+      const bob=Math.sin(this.t)*2.8;
+      const a=this.alpha*(0.82+0.18*Math.sin(this.t*1.3));
+      CX.save();
+      CX.globalAlpha=a;
+      CX.translate(this.x, this.y+bob);
+      CX.rotate(this.tilt);
+
+      const w=this.w, h=this.h, d=this.depth;
+      const sw=w*0.14; // spine strip width
+
+      // Glow halo when active
+      if(this.glowT>0){
+        const gb=(1-this.glowT)*.5;
+        const gh=CX.createRadialGradient(0,0,0,0,0,w*3.5);
+        gh.addColorStop(0,`rgba(255,255,255,${gb*.18})`);
+        gh.addColorStop(1,'transparent');
+        CX.fillStyle=gh;
+        CX.beginPath();CX.ellipse(0,0,w*3.5,h*1.6,0,0,Math.PI*2);CX.fill();
       }
-      CX.save();CX.globalAlpha=a;CX.font=`${sz}px serif`;
-      CX.textAlign='center';CX.textBaseline='middle';CX.fillText(this.emoji,this.x,this.y);CX.restore();
-      if(this.showLabel){
-        CX.save();CX.globalAlpha=a*.38;CX.font='600 9px "Space Grotesk",sans-serif';
-        CX.textAlign='center';CX.textBaseline='top';CX.fillStyle='#fff';
-        CX.fillText(this.label.toUpperCase(),this.x,this.y+sz*.6+3);CX.restore();
+
+      // ── TOP face (perspective illusion) ──
+      CX.beginPath();
+      CX.moveTo(-w/2,-h/2);
+      CX.lineTo(w/2,-h/2);
+      CX.lineTo(w/2+d,-h/2-d*.7);
+      CX.lineTo(-w/2+d,-h/2-d*.7);
+      CX.closePath();
+      CX.fillStyle=this._shade(this.pal.cover, 1.4);
+      CX.fill();
+
+      // ── RIGHT side face (depth) ──
+      CX.beginPath();
+      CX.moveTo(w/2,-h/2);
+      CX.lineTo(w/2,h/2);
+      CX.lineTo(w/2+d,h/2-d*.7);
+      CX.lineTo(w/2+d,-h/2-d*.7);
+      CX.closePath();
+      CX.fillStyle=this._shade(this.pal.spine, .65);
+      CX.fill();
+
+      // ── FRONT cover ──
+      CX.fillStyle=this.pal.cover;
+      CX.fillRect(-w/2,-h/2,w,h);
+
+      // ── Spine strip (left edge) ──
+      const spg=CX.createLinearGradient(-w/2,-h/2,-w/2+sw,-h/2);
+      spg.addColorStop(0,this._shade(this.pal.spine,.7));
+      spg.addColorStop(1,this.pal.spine);
+      CX.fillStyle=spg;
+      CX.fillRect(-w/2,-h/2,sw,h);
+
+      // ── Page block (right edge, very thin) ──
+      CX.fillStyle=this.pal.page;
+      CX.fillRect(w/2-2,-h/2+2,2,h-4);
+      // page lines
+      CX.strokeStyle=`rgba(0,0,0,.08)`;
+      CX.lineWidth=.4;
+      for(let i=1;i<6;i++){
+        CX.beginPath();
+        CX.moveTo(w/2-2,-h/2+2+(h-4)*i/6);
+        CX.lineTo(w/2,-h/2+2+(h-4)*i/6);
+        CX.stroke();
       }
+
+      // ── Cover decoration ──
+      // thin border inset
+      CX.strokeStyle=`rgba(255,255,255,.12)`;
+      CX.lineWidth=.8;
+      CX.strokeRect(-w/2+sw+2,-h/2+3,w-sw-4,h-6);
+
+      // horizontal rule under title area
+      const ruleY=-h/2+h*.3;
+      CX.beginPath();
+      CX.moveTo(-w/2+sw+3,ruleY);CX.lineTo(w/2-3,ruleY);
+      CX.strokeStyle=`rgba(255,255,255,.18)`;
+      CX.lineWidth=.7;CX.stroke();
+
+      // ── Title text ──
+      if(this.showTitle&&w>20){
+        CX.save();
+        CX.fillStyle=this.pal.title;
+        CX.globalAlpha=.9;
+        const fs=Math.max(4, w*.19);
+        CX.font=`700 ${fs}px "Space Grotesk",sans-serif`;
+        CX.textAlign='center';
+        CX.textBaseline='middle';
+        // Clip to cover area
+        CX.beginPath();CX.rect(-w/2+sw+1,-h/2+1,w-sw-2,h-2);CX.clip();
+        // Write vertically (rotate text)
+        CX.rotate(-Math.PI/2);
+        const words=this.label.split(' ');
+        if(words.length>1&&w<26){
+          // abbreviate
+          CX.fillText(words[0].substring(0,4).toUpperCase(),(h/2-h*.2)*-1,0);
+        } else {
+          CX.fillText(this.label.toUpperCase().substring(0,8),(h/2-h*.2)*-1,0);
+        }
+        CX.restore();
+      }
+
+      // ── Open book animation ──
+      if(this.openAmt>0){
+        const oa=this.openAmt;
+        // left page flap
+        CX.save();
+        CX.translate(-w/2,0);
+        CX.rotate(-oa*1.1);
+        CX.fillStyle=`rgba(${this._hexToRgb(this.pal.page)},.${Math.round(oa*8)})`;
+        CX.fillRect(-w*.8,-h*.46,w*.8,h*.92);
+        CX.restore();
+      }
+
+      CX.restore();
     }
     glow(){this.glowing=true;this.glowT=0;}
+    _shade(hex, factor){
+      const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+      return `rgb(${Math.min(255,Math.round(r*factor))},${Math.min(255,Math.round(g*factor))},${Math.min(255,Math.round(b*factor))})`;
+    }
+    _hexToRgb(hex){
+      const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+      return `${r},${g},${b}`;
+    }
   }
+
   function drawConnections(nodes){
     for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
       const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d>200)continue;
-      const s=1-d/200,act=nodes[i].glowing||nodes[j].glowing;
+      if(d>190)continue;
+      const s=1-d/190,act=nodes[i].glowing||nodes[j].glowing;
       CX.beginPath();CX.moveTo(nodes[i].x,nodes[i].y);CX.lineTo(nodes[j].x,nodes[j].y);
-      CX.strokeStyle=act?`rgba(255,255,255,${s*.24})`:`rgba(255,255,255,${s*.065})`;
-      CX.lineWidth=act?1:.5;CX.stroke();
+      CX.strokeStyle=act?`rgba(255,255,255,${s*.2})`:`rgba(255,255,255,${s*.055})`;
+      CX.lineWidth=act?1:.4;CX.stroke();
     }
   }
+
   class Packet{
-    constructor(f,t){this.f=f;this.t=t;this.p=0;this.sp=rnd(.009,.022);this.done=false;}
+    constructor(f,t){this.f=f;this.t=t;this.p=0;this.sp=rnd(.008,.02);this.done=false;}
     tick(){this.p+=this.sp;if(this.p>=1){this.done=true;this.t.glow();}}
     draw(){
       const x=this.f.x+(this.t.x-this.f.x)*this.p,y=this.f.y+(this.t.y-this.f.y)*this.p;
       const g=CX.createRadialGradient(x,y,0,x,y,6);
-      g.addColorStop(0,'rgba(255,255,255,.86)');g.addColorStop(.4,'rgba(255,255,255,.28)');g.addColorStop(1,'transparent');
+      g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.5,'rgba(255,255,255,.22)');g.addColorStop(1,'transparent');
       CX.beginPath();CX.arc(x,y,6,0,Math.PI*2);CX.fillStyle=g;CX.fill();
-      CX.beginPath();CX.arc(x,y,1.6,0,Math.PI*2);CX.fillStyle='rgba(255,255,255,.9)';CX.fill();
+      CX.beginPath();CX.arc(x,y,1.5,0,Math.PI*2);CX.fillStyle='rgba(255,255,255,.92)';CX.fill();
     }
   }
+
   class Dust{
     constructor(init){
       this.x=rnd(0,W);this.y=init?rnd(0,H):H+3;
-      this.r=rnd(.3,1.1);this.vy=rnd(.05,.27);this.vx=rnd(-.07,.07);
-      this.a=rnd(.03,.15);this.t=rnd(0,Math.PI*2);this.ts=rnd(.005,.017);
+      this.r=rnd(.25,1);this.vy=rnd(.04,.24);this.vx=rnd(-.06,.06);
+      this.a=rnd(.02,.12);this.t=rnd(0,Math.PI*2);this.ts=rnd(.005,.016);
     }
     tick(){this.y-=this.vy;this.x+=this.vx;this.t+=this.ts;if(this.y<-3){this.y=H+3;this.x=rnd(0,W);}}
     draw(){CX.beginPath();CX.arc(this.x,this.y,this.r,0,Math.PI*2);CX.fillStyle=`rgba(255,255,255,${this.a*(0.4+0.6*Math.sin(this.t))})`;CX.fill();}
   }
-  class PulseRing{
-    constructor(x,y){this.x=x;this.y=y;this.r=4;this.a=.52;this.done=false;}
-    tick(){this.r+=2;this.a-=.011;if(this.a<=0)this.done=true;}
-    draw(){CX.beginPath();CX.arc(this.x,this.y,this.r,0,Math.PI*2);CX.strokeStyle=`rgba(255,255,255,${this.a})`;CX.lineWidth=1;CX.stroke();}
-  }
-  let nodes=[],dust=[],packets=[],pulses=[];
+
+  let nodes=[],dust=[],packets=[];
   function boot(){
-    const c=Math.floor((W*H)/28000);
-    nodes=Array.from({length:Math.max(12,Math.min(c,40))},()=>new BookNode());
-    dust=Array.from({length:150},()=>new Dust(true));packets=[];pulses=[];
+    const c=Math.floor((W*H)/30000);
+    nodes=Array.from({length:Math.max(10,Math.min(c,28))},()=>new Book());
+    dust=Array.from({length:120},()=>new Dust(true));
+    packets=[];
   }
   boot();
-  function nearest(from){let b=null,bd=Infinity;for(const n of nodes){if(n===from)continue;const d=Math.hypot(n.x-from.x,n.y-from.y);if(d<220&&d<bd){bd=d;b=n;}}return b;}
-  setInterval(()=>{const s=nodes[Math.floor(Math.random()*nodes.length)];s.glow();pulses.push(new PulseRing(s.x,s.y));const d=nearest(s);if(d)packets.push(new Packet(s,d));},720);
+
+  function nearest(from){
+    let b=null,bd=Infinity;
+    for(const n of nodes){if(n===from)continue;const d=Math.hypot(n.x-from.x,n.y-from.y);if(d<220&&d<bd){bd=d;b=n;}}
+    return b;
+  }
+
+  setInterval(()=>{
+    const s=nodes[Math.floor(Math.random()*nodes.length)];
+    s.glow();
+    const d=nearest(s);if(d)packets.push(new Packet(s,d));
+  },900);
+
   function frame(){
     CX.clearRect(0,0,W,H);drawBG();drawConnections(nodes);
-    pulses=pulses.filter(p=>{p.tick();p.draw();return!p.done;});
     packets=packets.filter(p=>{p.tick();p.draw();return!p.done;});
     nodes.forEach(n=>{n.tick();n.draw();});
     dust.forEach(d=>{d.tick();d.draw();});
