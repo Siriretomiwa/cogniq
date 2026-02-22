@@ -1,7 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/admin", "destination": "/admin.html" }
+  "routes": [
+    { "src": "/admin", "dest": "/admin.html" }
   ]
 }
 
